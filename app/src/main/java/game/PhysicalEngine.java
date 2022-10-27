@@ -6,7 +6,7 @@ import java.awt.geom.Point2D;
 
 public class PhysicalEngine {
 
-    List<Physical> physicalObjects;
+    List<Physical> physicalObjects = new ArrayList<>();
 
     public PhysicalEngine() {
         super();
