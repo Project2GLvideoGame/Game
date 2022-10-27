@@ -1,32 +1,31 @@
 package game;
 
+import java.awt.Rectangle;
+
 public class Physical {
 
-    private double x;
-    private double y;
     private double speed = 0;
     private Rectangle rectangle;
 
-    public Physical(double x, double y, double width, double height) {
-        this.x = x;
-        this.y = y;
-        this.rectangle = new Rectangle(width, height);
+    public Physical(int x, int y, int width, int height) {
+        this.rectangle = new Rectangle(x, y, width, height);
     }
 
-    public double getX() {
-        return x;
+    public int getX() {
+        return (int) rectangle.getLocation().getX();
     }
 
-    public double getY() {
-        return y;
+    public int getY() {
+        return (int) rectangle.getLocation().getY();
     }
 
-    public void setX(double x) {
-        this.x = x;
+    public void setX(int x) {
+        rectangle.setLocation(x, getY());
     }
 
-    public void setY(double y) {
-        this.y = y;
+    public void setY(int y) {
+        rectangle.setLocation(getX(), y);
+
     }
 
     public double getSpeed() {
@@ -39,7 +38,6 @@ public class Physical {
 
     public Rectangle getBoxCollider() {
         return rectangle;
-
     }
 
     public void setBoxCollider(Rectangle rectangle) {

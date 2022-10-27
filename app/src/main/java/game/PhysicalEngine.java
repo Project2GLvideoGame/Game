@@ -18,9 +18,16 @@ public class PhysicalEngine {
 
     public List<Physical> isCollision(Physical physical) {
         List<Physical> collidedObjects = new ArrayList<>();
-
+        for (Physical physicalObject : physicalObjects) {
+            if (!physicalObject.equals(physical) && isCollided(physical, physicalObject)) {
+                collidedObjects.add(physicalObject);
+            }
+        }
         return collidedObjects;
+    }
 
+    private boolean isCollided(Physical obj1, Physical obj2) {
+        return obj2.getBoxCollider().intersects(obj1.getBoxCollider());
     }
 
     public void setPosition(Physical physical, Point2D.Double abs) {
