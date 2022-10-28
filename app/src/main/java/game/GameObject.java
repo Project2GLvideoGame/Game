@@ -9,5 +9,8 @@ public class GameObject {
     public GameObject(Displayable displayable) {
         this.displayable = displayable;
     }
-    
+
+    public Displayable getDisplayable() {
+        return displayable;
+    }
 }

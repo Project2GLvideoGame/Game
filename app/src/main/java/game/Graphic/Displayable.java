@@ -1,28 +1,36 @@
 package game.Graphic;
 
+import javafx.scene.image.ImageView;
+
 public class Displayable {
 
-    double x, y;
+    private final ImageView asset;
 
-    public Displayable(double x, double y) {
-        this.x = x;
-        this.y = y;
+    public Displayable(ImageView asset, double x, double y, int height, int width) {
+        this.asset = asset;
+        this.asset.setX(x);
+        this.asset.setY(y);
+        this.asset.setFitHeight(height);
+        this.asset.setFitWidth(width);
     }
 
     public double getX() {
-        return x;
+        return asset.getX();
     }
 
     public double getY() {
-        return y;
+        return asset.getY();
     }
 
     public void setX(double x) {
-        this.x = x;
+        asset.setX(x);
     }
 
     public void setY(double y) {
-        this.y = y;
+        asset.setY(y);
     }
-    
+
+    public ImageView getAsset() {
+        return asset;
+    }
 }
