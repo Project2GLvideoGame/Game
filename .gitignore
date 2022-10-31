@@ -1,6 +1,9 @@
 # Compiled class file
 *.class
 
+# ignore bin
+*/bin
+
 # Mac only files
 .DS_STORE
 # Log file

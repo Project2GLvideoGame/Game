@@ -1,4 +1,4 @@
-package game;
+package game.Physic;
 
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -9,7 +9,7 @@ public class Physical {
     private double acceleration;
     private Rectangle rectangle;
     private Point destination;
-    private boolean useDestination;
+    //private boolean useDestination;
     private double direction; // 0=Nord, sens trigo <==> N=0, O=90, S=180, E=270
 
     public Physical(int x, int y, int width, int height) {
