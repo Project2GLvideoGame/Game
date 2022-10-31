@@ -4,6 +4,9 @@
 # ignore bin
 */bin
 
+# ignore .vscode
+.vscode
+
 # Mac only files
 .DS_STORE
 # Log file
