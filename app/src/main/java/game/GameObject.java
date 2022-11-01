@@ -9,6 +9,7 @@ import game.Physic.Physical;
 public class GameObject{
         
     private List<Component> components = new ArrayList<>();
+    public Class<Displayable> getComponent;
     
     public GameObject(Displayable displayable){
         components.add(displayable);
@@ -16,7 +17,6 @@ public class GameObject{
 
     public GameObject(Physical physical){
         components.add(physical);
-
     }
 
     public GameObject(Displayable displayable, Physical physical) {
@@ -24,7 +24,7 @@ public class GameObject{
         components.add(physical);
     }
     
-    public <T> T getComponent(Class<T> class1){
+    public <T extends Component> T getComponent(Class<T> class1){
         for(Component component : components)
             if(class1.isAssignableFrom(component.getClass()))
                 return (T)component;
