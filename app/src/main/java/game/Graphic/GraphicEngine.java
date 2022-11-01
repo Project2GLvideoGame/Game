@@ -11,6 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class GraphicEngine extends Application {
@@ -25,7 +26,7 @@ public class GraphicEngine extends Application {
 
     //Initialise les gameObject Initialement présent dans la scène 
     private void createContent() {
-        GameObject g = new GameObject(new Displayable(new ImageView("shrek.jpeg"), 150, 150, 100, 100));
+        GameObject g = new GameObject(new Displayable(new ImageView("pacman_run.gif"), width/2 - 32, height/2 - 32, 64, 64));
         Button btn = new Button("TestButton");
         btn.setOnAction(this::actionEvent);
 
@@ -39,6 +40,7 @@ public class GraphicEngine extends Application {
     public void start(Stage stage) throws Exception {
         createContent();
         stage.setScene(new Scene(mainGroup, width, height));
+        stage.getScene().setFill(Color.web("#5b60e5"));
         stage.show();
     }
 
