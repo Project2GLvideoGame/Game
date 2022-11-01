@@ -1,5 +1,6 @@
-package Input.State;
-import Input.InputEngine;
+package game.Input.State;
+
+import game.Input.InputEngine;
 
 public interface State {
 

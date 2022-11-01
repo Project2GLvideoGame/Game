@@ -1,6 +1,6 @@
-package Input.State;
+package game.Input.State;
 
-import Input.InputEngine;
+import game.Input.InputEngine;
 
 public class MainMenuState implements State {
 
@@ -30,8 +30,10 @@ public class MainMenuState implements State {
 
     @Override
     public void pause(InputEngine input) {
-        // TODO Auto-generated method stub
+        input.changeState(new MainMenuState());
         
     }
+
+    
     
 }

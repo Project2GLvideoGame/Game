@@ -1,22 +1,16 @@
-package Input.State;
+package game.Input.State;
 
-import Input.InputEngine;
+import game.Input.InputEngine;
 
 public class GameState implements State {
 
     @Override
     public void up(InputEngine input) {
-        // TODO Auto-generated method stub
-        System.out.println("UP");
         
     }
 
     @Override
     public void right(InputEngine input) {
-        // TODO Auto-generated method stub
-        System.out.println("DOWN");
-
-        
     }
 
     @Override
@@ -33,10 +27,9 @@ public class GameState implements State {
 
     @Override
     public void pause(InputEngine input) {
-        // TODO Auto-generated method stub
-        System.out.println("PAUSE");
-
+        input.changeState(new MainMenuState());
         
     }
+
     
 }
