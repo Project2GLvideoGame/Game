@@ -1,49 +1,49 @@
 package game.Physic;
 
-import java.awt.Point;
-import java.awt.Rectangle;
 
 import game.Component;
+import javafx.scene.paint.Color;
 
-public class Physical extends Component{
+public class Physical extends Component {
 
     private double speed;
     private double acceleration;
     private Rectangle rectangle;
-    private Point destination;
-    //private boolean useDestination;
+    private Coordinate destination;
+    private boolean useDestination;
     private double direction; // 0=Nord, sens trigo <==> N=0, O=90, S=180, E=270
 
     public Physical(int x, int y, int width, int height) {
         this.rectangle = new Rectangle(x, y, width, height);
         this.speed=0;
         this.acceleration = 0;
-        destination = new Point(0,0);
-        //useDestination = false;
+        destination = new Coordinate(0,0);
+        useDestination = false;
         direction = 0;
     }
 
-    public int getX() {
-        return (int) rectangle.getLocation().getX();
+    public double getX() {
+        return rectangle.getX();
     }
 
-    public int getY() {
-        return (int) rectangle.getLocation().getY();
+    public double getY() {
+        return rectangle.getY();
     }
-    public Point getCoordinate() {
-        return rectangle.getLocation();
-    }
-
-    public void setX(int x) {
-        rectangle.setLocation(x, getY());
+    public Coordinate getCoordinate() {
+        return new Coordinate(rectangle.getX(), rectangle.getY());
     }
 
-    public void setY(int y) {
-        rectangle.setLocation(getX(), y);
+    public void setX(double x) {
+        rectangle.setX(x);
+    }
+
+    public void setY(double y) {
+        rectangle.setY(y);
     }
     
-    public void setCoordinate(int x, int y) {
-        rectangle.setLocation(x, y);
+    public void setCoordinate(double x, double y) {
+        rectangle.setX(x);
+        rectangle.setY(y);
     }
 
     public double getSpeed() {
@@ -54,13 +54,6 @@ public class Physical extends Component{
         this.speed = speed;
     }
     
-    public double getAcceleration() {
-        return this.acceleration;
-    }
-    
-    public void setAcceleration(double acceleration) {
-        this.acceleration = acceleration;
-    }
 
     public Rectangle getBoxCollider() {
         return rectangle;
@@ -70,11 +63,11 @@ public class Physical extends Component{
         this.rectangle = rectangle;
     }
 
-    public void setDestinationCoord(Point destination){
+    public void setDestinationCoord(Coordinate destination){
         this.destination = destination;
     }
 
-    public Point getDestination(){
+    public Coordinate getDestination(){
         return this.destination;
     }
 
@@ -86,7 +79,25 @@ public class Physical extends Component{
         return this.direction;
     }
 
+    
 
+
+    // public double getAcceleration() {
+    //     return this.acceleration;
+    // }
+    
+    // public void setAcceleration(double acceleration) {
+    //     this.acceleration = acceleration;
+    // }
+
+
+
+    public javafx.scene.shape.Rectangle printBoxCollider(){
+        javafx.scene.shape.Rectangle rec = new javafx.scene.shape.Rectangle(rectangle.getX(), rectangle.getY(), rectangle.getWidth(), rectangle.getHeight());
+        rec.setFill(Color.GREEN);
+        rec.setOpacity(0.5);
+        return rec;
+    }
 
 
 
