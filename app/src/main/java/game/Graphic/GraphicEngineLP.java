@@ -19,20 +19,43 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 public class GraphicEngineLP extends Application {
-    private final int width = 700;
-    private final int height = 700;
-    List<Displayable> displayables = new ArrayList<>();
-    List<Scene> scenes = new ArrayList<>();
-    static ImageView i_shrek;
-    static ImageView i_mur;
+    private final int Windowwidth = 700;
+    private final int Windowheight = 700;
     static PhysicalEngine pe;
-    static Physical  shrek_physical = new Physical(100, 0, 150, 150);
-    static Physical mur_physical = new Physical(100, 600, 500, 50);
+    
+    static ImageView i_shrek = new ImageView("shrek.jpeg");
+    static GameObject shrek = new GameObject(
+        new Physical(100, 100, 50, 50),
+        new Displayable(i_shrek, 100, 100, 50, 50)
+        );
+    
+    static ImageView i_mur_sud = new ImageView("shrek.jpeg");
+    static GameObject mur_sud = new GameObject(
+        new Physical(100, 600, 500, 50),
+        new Displayable(i_mur_sud, 100, 600, 50, 500)
+        );
+
+    static ImageView i_mur_nord = new ImageView("shrek.jpeg");
+    static GameObject mur_nord = new GameObject(
+        new Physical(100, 0, 500, 50),
+        new Displayable(i_mur_nord, 100, 0, 50, 500)
+        );
+
+    static ImageView i_mur_est = new ImageView("shrek.jpeg");
+    static GameObject mur_est = new GameObject(
+        new Physical(650, 20, 50, 600),
+        new Displayable(i_mur_est, 650, 20, 600, 50)
+        );
+
+    static ImageView i_mur_ouest = new ImageView("shrek.jpeg");
+    static GameObject mur_ouest = new GameObject(
+        new Physical(0, 20, 50, 600),
+        new Displayable(i_mur_ouest, 0, 20, 600, 50)
+        );
+
+
 
     public static void main(String[] args) {
-        shrek_physical.setSpeed(0);
-        //p.setAcceleration(0.07);
-        //p.setDirection(95);
         launch(args);
     }
 
@@ -40,11 +63,6 @@ public class GraphicEngineLP extends Application {
     public void start(Stage stage) throws Exception {
         
         var root = new Group();
-        i_shrek = new ImageView("shrek.jpeg");
-        GameObject shrek = new GameObject(new Displayable(i_shrek, 100, 0, 150, 150));
-        i_mur = new ImageView("shrek.jpeg");
-        GameObject mur   = new GameObject(new Displayable(i_mur, 100, 600, 50, 500));
-        
         TextArea textArea = new TextArea();
         textArea.setText("200");
         textArea.setPrefSize(30, 30);
@@ -60,11 +78,10 @@ public class GraphicEngineLP extends Application {
                 }
             }
             private void do_it(){
-                shrek_physical.setSpeed(10);
-                shrek_physical.setDirection(Double.parseDouble(textArea.getText()));
-                pe.compute(shrek_physical);
-                i_shrek.relocate(shrek_physical.getX(), shrek_physical.getY());
-
+                shrek.getComponent(Physical.class).setSpeed(4);
+                 try{shrek.getComponent(Physical.class).setDirection(Double.parseDouble(textArea.getText()));} catch (Exception e) {shrek.getComponent(Physical.class).setDirection(0);}
+                pe.compute(shrek.getComponent(Physical.class));
+                i_shrek.relocate(shrek.getComponent(Physical.class).getX(), shrek.getComponent(Physical.class).getY());
             }
         };
         
@@ -77,22 +94,32 @@ public class GraphicEngineLP extends Application {
             public void handle(ActionEvent event) {
                 animation.start();
                 pe = new PhysicalEngine();
-                pe.addPhysicalObject(mur_physical);
-                pe.addPhysicalObject(shrek_physical);
+                pe.addPhysicalObject(mur_sud.getComponent(Physical.class));
+                pe.addPhysicalObject(mur_nord.getComponent(Physical.class));
+                pe.addPhysicalObject(mur_est.getComponent(Physical.class));
+                pe.addPhysicalObject(mur_ouest.getComponent(Physical.class));
+                pe.addPhysicalObject(shrek.getComponent(Physical.class));
             }
         });
         
         
         
         root.getChildren().add(shrek.getComponent(Displayable.class).getAsset());
-        root.getChildren().add(mur.getComponent(Displayable.class).getAsset());
+        root.getChildren().add(mur_sud.getComponent(Displayable.class).getAsset());
+        root.getChildren().add(mur_nord.getComponent(Displayable.class).getAsset());
+        root.getChildren().add(mur_est.getComponent(Displayable.class).getAsset());
+        root.getChildren().add(mur_ouest.getComponent(Displayable.class).getAsset());
+
         root.getChildren().add(btn_update);
         root.getChildren().add(textArea);
-        //root.getChildren().add(pe.physicalObjects.get(1).printBoxCollider());
-        setVisibility(shrek.getComponent(Displayable.class), true);
-        stage.setScene(new Scene(root, width, height));
+        stage.setScene(new Scene(root, Windowwidth, Windowheight));
         stage.show();
     }
+
+
+
+
+
 
 
     public void setVisibility(Displayable displayable, boolean value) {

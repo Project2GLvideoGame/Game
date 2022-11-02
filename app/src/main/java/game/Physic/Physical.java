@@ -6,12 +6,12 @@ import javafx.scene.paint.Color;
 
 public class Physical extends Component {
 
-    private double speed;
-    private double acceleration;
     private Rectangle rectangle;
+    private double speed;
+    private double direction; // 0=Nord, sens trigo <==> N=0, O=90, S=180, E=270
     private Coordinate destination;
     private boolean useDestination;
-    private double direction; // 0=Nord, sens trigo <==> N=0, O=90, S=180, E=270
+    private double acceleration;
 
     public Physical(int x, int y, int width, int height) {
         this.rectangle = new Rectangle(x, y, width, height);
@@ -29,6 +29,7 @@ public class Physical extends Component {
     public double getY() {
         return rectangle.getY();
     }
+
     public Coordinate getCoordinate() {
         return new Coordinate(rectangle.getX(), rectangle.getY());
     }
@@ -44,6 +45,11 @@ public class Physical extends Component {
     public void setCoordinate(double x, double y) {
         rectangle.setX(x);
         rectangle.setY(y);
+    }
+
+    public void setCoordinate(Coordinate coord) {
+        rectangle.setX(coord.getX());
+        rectangle.setY(coord.getY());
     }
 
     public double getSpeed() {
@@ -63,23 +69,22 @@ public class Physical extends Component {
         this.rectangle = rectangle;
     }
 
-    public void setDestinationCoord(Coordinate destination){
-        this.destination = destination;
-    }
-
-    public Coordinate getDestination(){
-        return this.destination;
-    }
-
-    public void setDirection(double direction){
-        this.direction = (direction>=360)? 0:((direction<0)? 0:direction);
-    }
-
+    
     public double getDirection(){
         return this.direction;
     }
-
     
+    public void setDirection(double direction){
+        this.direction = (direction>=360)? 0:((direction<0)? 0:direction);
+    }
+    
+    public Coordinate getDestination(){
+        return this.destination;
+    }
+    
+    public void setDestinationCoord(Coordinate destination){
+        this.destination = destination;
+    }
 
 
     // public double getAcceleration() {
@@ -103,3 +108,5 @@ public class Physical extends Component {
 
 
 }
+
+//TODO: les params de Displayable et Physical sont pas dans le mem ordre
