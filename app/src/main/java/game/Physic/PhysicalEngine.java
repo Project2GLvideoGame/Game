@@ -122,7 +122,7 @@ public class PhysicalEngine {
         double delta_x = r*Math.cos(alphaRad);
         return delta_x;
     }
-
+    
     //TODO: regarde une seule colision
     private Coordinate positionAfterCollision(Physical physical, double initialX, double initialY, List<Collision> collisions){
         Coordinate beforeCollsionCoord = new Coordinate(initialX, initialY);
@@ -142,38 +142,23 @@ public class PhysicalEngine {
         double correctionOnY = physical.getY()+opY*overlapRect.getHeight(); // - car javaFX axex y inversé
         Coordinate coordTryY = new Coordinate(physical.getX(), correctionOnY);
         
-        //physical.setCoordinate(coordTryX);
+        physical.setCoordinate(coordTryX);
         if(physical.getBoxCollider().isTouching(collision.obstacle.getBoxCollider()) ){
             double deltaCorrectionY = deltaYFromDeltaX(opX*overlapRect.getWidth(), physical.getDirection()+180+90); // Nord décalé
-            System.out.println("111111");
+            //System.out.println("111111");
             return new Coordinate(correctionOnX, physical.getY()-deltaCorrectionY);
         }
         
-        //physical.setCoordinate(coordTryY);
+        physical.setCoordinate(coordTryY);
         if( physical.getBoxCollider().isTouching(collision.obstacle.getBoxCollider()) ){
             double deltaCorrectionX = deltaXFromDeltaY(-opY*overlapRect.getHeight(), physical.getDirection()+180+90);
-            System.out.println("22222222");
+            //System.out.println("22222222");
             return new Coordinate(physical.getX()+deltaCorrectionX, correctionOnY);
         }
         
         //physical.setCoordinate(new Coordinate(0, 0));
         System.out.println("33333");
-        
-        // System.out.println(physical.getY()+physical.getBoxCollider().getHeight());
-        // physical.setCoordinate(coordTryY);
-        // System.out.println(opY*overlapRect.getHeight());
-        // System.out.println(physical.getY()+physical.getBoxCollider().getHeight());
-        // System.out.println(collision.obstacle.getBoxCollider().getY());
-        // System.out.println();
-        
-        System.out.println(physical.getY());
-        physical.setCoordinate(coordTryY);
-        System.out.println(opY*overlapRect.getY());
-        System.out.println(physical.getY());
-        System.out.println(collision.obstacle.getBoxCollider().getY()+collision.obstacle.getBoxCollider().getHeight());
-        System.out.println();
-        
-        return new Coordinate(350, 350);
+        return beforeCollsionCoord;
     }
 
 
@@ -204,6 +189,7 @@ public class PhysicalEngine {
             physical.setCoordinate(noCollisionCoord);
             Coordinate withCollisionCoord = positionAfterCollision(physical, x, y, collisions);
             physical.setCoordinate(withCollisionCoord);
+            physical.setSpeed(0);
         }
 
         previousTime = currentTime;

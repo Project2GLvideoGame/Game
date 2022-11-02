@@ -83,13 +83,12 @@ public class Rectangle {
         double x3 = other.x;
         double y3 = other.y;
         double x4 = x3+other.width;
-        double y4 = y3+other.width;
+        double y4 = y3+other.height;
 
         double x5 = Math.max(x1, x3);
         double y5 = Math.max(y1, y3);
         double x6 = Math.min(x2, x4);
         double y6 = Math.min(y2, y4);
-
         return new Rectangle(x5, y5, x6-x5, y6-y5);
     }
 
