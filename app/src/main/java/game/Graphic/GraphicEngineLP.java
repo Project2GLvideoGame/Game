@@ -23,6 +23,7 @@ public class GraphicEngineLP extends Application {
     private final int Windowheight = 700;
     static PhysicalEngine pe;
     
+
     static ImageView i_shrek = new ImageView("shrek.jpeg");
     static GameObject shrek = new GameObject(
         new Physical(100, 100, 50, 50),
@@ -31,26 +32,26 @@ public class GraphicEngineLP extends Application {
     
     static ImageView i_mur_sud = new ImageView("shrek.jpeg");
     static GameObject mur_sud = new GameObject(
-        new Physical(100, 600, 500, 50),
-        new Displayable(i_mur_sud, 100, 600, 50, 500)
+        new Physical(20, 600, 700, 50),
+        new Displayable(i_mur_sud, 20, 600, 50, 700)
         );
 
     static ImageView i_mur_nord = new ImageView("shrek.jpeg");
     static GameObject mur_nord = new GameObject(
-        new Physical(100, 0, 500, 50),
-        new Displayable(i_mur_nord, 100, 0, 50, 500)
+        new Physical(20, 0, 700, 50),
+        new Displayable(i_mur_nord, 20, 0, 50, 700)
         );
 
     static ImageView i_mur_est = new ImageView("shrek.jpeg");
     static GameObject mur_est = new GameObject(
-        new Physical(650, 20, 50, 600),
-        new Displayable(i_mur_est, 650, 20, 600, 50)
+        new Physical(650, 20, 50, 700),
+        new Displayable(i_mur_est, 650, 20, 700, 50)
         );
 
     static ImageView i_mur_ouest = new ImageView("shrek.jpeg");
     static GameObject mur_ouest = new GameObject(
-        new Physical(0, 20, 50, 600),
-        new Displayable(i_mur_ouest, 0, 20, 600, 50)
+        new Physical(0, 20, 50, 700),
+        new Displayable(i_mur_ouest, 0, 20, 700, 50)
         );
 
 
@@ -78,16 +79,41 @@ public class GraphicEngineLP extends Application {
                 }
             }
             private void do_it(){
-                shrek.getComponent(Physical.class).setSpeed(4);
-                 try{shrek.getComponent(Physical.class).setDirection(Double.parseDouble(textArea.getText()));} catch (Exception e) {shrek.getComponent(Physical.class).setDirection(0);}
+                shrek.getComponent(Physical.class).setSpeed(10);
+                //try{shrek.getComponent(Physical.class).setDirection(Double.parseDouble(textArea.getText()));} catch (Exception e) {shrek.getComponent(Physical.class).setDirection(0);}
                 pe.compute(shrek.getComponent(Physical.class));
                 i_shrek.relocate(shrek.getComponent(Physical.class).getX(), shrek.getComponent(Physical.class).getY());
             }
         };
         
         
+        Button btn_up = new Button();
+        btn_up.setPadding(new Insets(5, 5, 5, 5));
+        btn_up.setText("up");
+        btn_up.setOnAction(new EventHandler<ActionEvent>() {@Override public void handle(ActionEvent event) {shrek.getComponent(Physical.class).setDirection(0);shrek.getComponent(Physical.class).setSpeed(4); }});
+        btn_up.setLayoutX(250);
+
+        Button btn_down = new Button();
+        btn_down.setPadding(new Insets(5, 5, 5, 5));
+        btn_down.setText("down");
+        btn_down.setOnAction(new EventHandler<ActionEvent>() {@Override public void handle(ActionEvent event) {shrek.getComponent(Physical.class).setDirection(180);shrek.getComponent(Physical.class).setSpeed(4);}});
+        btn_down.setLayoutX(50);
+
+        Button btn_droite = new Button();
+        btn_droite.setPadding(new Insets(5, 5, 5, 5));
+        btn_droite.setText("droite");
+        btn_droite.setOnAction(new EventHandler<ActionEvent>() {@Override public void handle(ActionEvent event) {shrek.getComponent(Physical.class).setDirection(270);shrek.getComponent(Physical.class).setSpeed(4);}});
+        btn_droite.setLayoutX(100);
+
+        Button btn_gauche = new Button();
+        btn_gauche.setPadding(new Insets(5, 5, 5, 5));
+        btn_gauche.setText("gauche");
+        btn_gauche.setOnAction(new EventHandler<ActionEvent>() {@Override public void handle(ActionEvent event) {shrek.getComponent(Physical.class).setDirection(90);shrek.getComponent(Physical.class).setSpeed(4);}});
+        btn_gauche.setLayoutX(150);
+
+
         Button btn_update = new Button();
-        btn_update.setPadding(new Insets(50, 0, 0, 50));
+        btn_update.setPadding(new Insets(5, 5, 5, 5));
         btn_update.setText("start");
         btn_update.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -101,6 +127,7 @@ public class GraphicEngineLP extends Application {
                 pe.addPhysicalObject(shrek.getComponent(Physical.class));
             }
         });
+        btn_update.setLayoutX(200);
         
         
         
@@ -110,6 +137,11 @@ public class GraphicEngineLP extends Application {
         root.getChildren().add(mur_est.getComponent(Displayable.class).getAsset());
         root.getChildren().add(mur_ouest.getComponent(Displayable.class).getAsset());
 
+
+        root.getChildren().add(btn_up);
+        root.getChildren().add(btn_down);
+        root.getChildren().add(btn_droite);
+        root.getChildren().add(btn_gauche);
         root.getChildren().add(btn_update);
         root.getChildren().add(textArea);
         stage.setScene(new Scene(root, Windowwidth, Windowheight));
