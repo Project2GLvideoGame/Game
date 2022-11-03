@@ -37,7 +37,7 @@ public class InputEngine {
             public void handle(KeyEvent event) {
                 eventSwitch(event);
             }
-    };
+        };
 
         eventHandlerReleased =  new EventHandler<KeyEvent>() {
             @Override
@@ -66,7 +66,7 @@ public class InputEngine {
                     currentState.left(InputEngine.this);
                         break;
 
-                    case P:
+                    case ESCAPE:
                     currentState.pause(InputEngine.this);
                     break;
                     
