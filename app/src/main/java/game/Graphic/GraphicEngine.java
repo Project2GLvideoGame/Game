@@ -20,10 +20,11 @@ public class GraphicEngine extends Application {
     List<Scene> scenes = new ArrayList<>();
 
     private Parent createContent() {
+
         GameObject g = new GameObject(new Displayable(new ImageView("shrek.jpeg"), 150, 150, 100, 100));
         Group group = new Group();
-        group.getChildren().add(g.getDisplayable().getAsset());
-        setVisibility(g.getDisplayable(), false);
+        group.getChildren().add(g.getComponent(Displayable.class).getAsset());
+        
         return group;
     }
     @Override

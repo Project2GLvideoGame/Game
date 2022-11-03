@@ -3,7 +3,9 @@ package game.Physic;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-public class Physical {
+import game.Component;
+
+public class Physical extends Component{
 
     private double speed;
     private double acceleration;
@@ -17,7 +19,7 @@ public class Physical {
         this.speed=0;
         this.acceleration = 0;
         destination = new Point(0,0);
-        useDestination = false;
+        //useDestination = false;
         direction = 0;
     }
 

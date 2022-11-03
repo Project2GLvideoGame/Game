@@ -1,8 +1,9 @@
 package game.Graphic;
 
+import game.Component;
 import javafx.scene.image.ImageView;
 
-public class Displayable {
+public class Displayable extends Component{
 
     private final ImageView asset;
 
