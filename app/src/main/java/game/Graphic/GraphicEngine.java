@@ -5,13 +5,17 @@ import java.util.List;
 
 import game.GameObject;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class GraphicEngine extends Application {
+    
+    Group mainGroup = new Group();
 
     private final int width = 700;
     private final int height = 700;
@@ -19,18 +23,28 @@ public class GraphicEngine extends Application {
     List<Displayable> displayables = new ArrayList<>();
     List<Scene> scenes = new ArrayList<>();
 
-    private Parent createContent() {
+    //Initialise les gameObject Initialement présent dans la scène 
+    private void createContent() {
+        GameObject g = new GameObject(new Displayable(new ImageView("pacman_run.gif"), width/2 - 32, height/2 - 32, 64, 64));
+        Button btn = new Button("TestButton");
+        btn.setOnAction(this::actionEvent);
 
-        GameObject g = new GameObject(new Displayable(new ImageView("shrek.jpeg"), 150, 150, 100, 100));
-        Group group = new Group();
-        group.getChildren().add(g.getComponent(Displayable.class).getAsset());
-        
-        return group;
+        mainGroup.getChildren().add(g.getComponent(Displayable.class).getAsset());
+        displayables.add(g.getComponent(Displayable.class));
+
+        mainGroup.getChildren().add(btn);
     }
+
     @Override
     public void start(Stage stage) throws Exception {
-        stage.setScene(new Scene(createContent(), width, height));
+        createContent();
+        stage.setScene(new Scene(mainGroup, width, height));
+        stage.getScene().setFill(Color.web("#5b60e5"));
         stage.show();
+    }
+
+    private void actionEvent(ActionEvent event){
+        scale(displayables.get(0), displayables.get(0).getAsset().getScaleX() + 0.2d);
     }
 
     public void setPosition(Displayable displayable, double x, double y) {
@@ -49,5 +63,10 @@ public class GraphicEngine extends Application {
 
     public void setVisibility(Displayable displayable, boolean value) {
         displayable.getAsset().setVisible(value);
+    }
+
+    public void addChildren(Displayable displayable){
+        mainGroup.getChildren().add(displayable.getAsset());
+        displayables.add(displayable);
     }
 }

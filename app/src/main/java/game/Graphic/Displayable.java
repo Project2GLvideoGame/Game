@@ -9,6 +9,7 @@ public class Displayable extends Component{
 
     public Displayable(ImageView asset, double x, double y, int height, int width) {
         this.asset = asset;
+        this.asset.setSmooth(false);
         this.asset.setX(x);
         this.asset.setY(y);
         this.asset.setFitHeight(height);
