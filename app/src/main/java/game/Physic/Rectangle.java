@@ -9,7 +9,7 @@ public class Rectangle {
 
     double x, y, width, height;
 
-    public Rectangle(double x, double y, double width, double height) {
+    public Rectangle(double x, double y, double height, double width) {
         assert height>0 : "!height>0";
         assert width>0 : "!width>0";
         this.x=x;
