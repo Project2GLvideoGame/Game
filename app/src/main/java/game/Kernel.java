@@ -64,7 +64,7 @@ public class Kernel extends Application {
                         timeline.setCycleCount(Animation.INDEFINITE);
                     }
                     timeline.play();
-                    System.out.println(go.getComponent(Physical.class).getX() + " " + go.getComponent(Physical.class).getY());
+                    //System.out.println(go.getComponent(Physical.class).getX() + " " + go.getComponent(Physical.class).getY());
                 }
                 try {
                     Thread.sleep(delay);
@@ -118,4 +118,7 @@ public class Kernel extends Application {
     public void movePlayer(int direction) {
         player.getComponent(Physical.class).setDirection(direction);
     }
+
+    public GameObject getPlayer(){return player;}
+    public GraphicEngine getGraphicEngine(){return graphicEngine;}
 }

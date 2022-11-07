@@ -62,7 +62,6 @@ public class PhysicalEngine {
         physical.setCoordinate(new Coordinate(round(CollisonCoord.getX()+correctionOnX,6), round(CollisonCoord.getY()+correctionOnY,6) ));
         if(physical.getBoxCollider().isTouching(collision.obstacle.getBoxCollider())){
             // System.out.println("coorX: "+correctionOnX+"  corrY: "+correctionOnY);
-            System.out.println("111111");
             return;
         }
         
@@ -73,7 +72,6 @@ public class PhysicalEngine {
         physical.setCoordinate(new Coordinate( Math.round(CollisonCoord.getX()+correctionOnX), Math.round(CollisonCoord.getY()+correctionOnY)));
         if( physical.getBoxCollider().isTouching(collision.obstacle.getBoxCollider()) ){
             // System.out.println("coorX: "+correctionOnX+"  corrY: "+correctionOnY);
-            System.out.println("22222222");
             return;
         }
     

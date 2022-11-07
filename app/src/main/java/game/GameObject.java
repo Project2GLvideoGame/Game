@@ -9,7 +9,6 @@ import game.Physic.Physical;
 public class GameObject{
         
     private List<Component> components = new ArrayList<>();
-    public Class<Displayable> getComponent;
     
     public GameObject(Component ...in_components){
         for (Component component : in_components) {

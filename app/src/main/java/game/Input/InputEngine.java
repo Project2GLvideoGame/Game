@@ -50,6 +50,7 @@ public class InputEngine {
                     break;
                     
                     default:
+                    System.out.println(event.getCode());
                         break;
 
                 }            
@@ -78,8 +79,9 @@ public class InputEngine {
                     currentState.left(InputEngine.this);
                         break;
 
-                    case ESCAPE:
+                    case P:
                     currentState.pause(InputEngine.this);
+                    System.out.println(event.getCode());
                     break;
                     
                     default:
