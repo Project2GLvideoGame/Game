@@ -1,46 +1,53 @@
 package game.Physic;
 
+
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.math.*;
 
 public class PhysicalEngine {
 
 
-    List<Physical> physicalObjects = new ArrayList<>();
+    public List<Physical> physicalObjects = new ArrayList<>();
+    long previousTime;
+
 
     public PhysicalEngine() {
-        super();
+        previousTime = System.nanoTime(); //TODO pas exact
     }
 
     public void addPhysicalObject(Physical physical) {
         physicalObjects.add(physical);
     }
 
-    public List<Physical> isCollision(Physical physical) {
-        List<Physical> collidedObjects = new ArrayList<>();
+    //TODO: recevoir des Coordinate a tester en plus, pour appeler isCollided()
+    public List<Collision> allCollision(Physical physical) {
+        List<Collision> collidedObjects = new ArrayList<>();
         for (Physical physicalObject : physicalObjects) {
-            if (!physicalObject.equals(physical) && isCollided(physical, physicalObject)) {
-                collidedObjects.add(physicalObject);
+            if (physicalObject!=physical && isCollided(physical, physicalObject)) {
+                collidedObjects.add(
+                    new Collision(physical.getBoxCollider().intersection(physicalObject.getBoxCollider()),
+                    physical,
+                    physicalObject
+                    ));
             }
         }
         return collidedObjects;
     }
 
+    //TODO: utiliser des Coordinate plutot que le obxColider pour obj1
     private boolean isCollided(Physical obj1, Physical obj2) {
         return obj2.getBoxCollider().intersects(obj1.getBoxCollider());
     }
 
 
-    //#region LP
+//#region LP
     
 
-    private double computeDirection(Point source, Point destination){
+    private double computeDirection(Coordinate source, Coordinate destination){
         // calculate the angle theta from the deltaY and deltaX values
         // (atan2 returns radians values from [-PI,PI])
-        // 0 currently points EAST.  
+        // 0 currently Coordinates EAST.  
         // NOTE: By preserving Y and X param order to atan2,  we are expecting 
         // a CLOCKWISE angle direction.  
         double theta = Math.atan2(destination.y - source.y, destination.x - source.x);
@@ -62,7 +69,7 @@ public class PhysicalEngine {
     return (angle<0)? angle+360:angle;
     }
 
-    public void setDestination(Physical physical, Point destination) {
+    public void setDestination(Physical physical, Coordinate destination) {
         physical.setDestinationCoord(destination);
         double direction = computeDirection(physical.getCoordinate(), destination);
         physical.setDirection(direction);
@@ -74,7 +81,7 @@ public class PhysicalEngine {
 
 
     /* Téléportation */
-    public void setCoordinate(Physical physical, int x, int y) {
+    public void setCoordinate(Physical physical, double x, double y) {
         physical.setCoordinate(x, y);
     }
 
@@ -83,63 +90,127 @@ public class PhysicalEngine {
         physical.setSpeed(absSpeed);
     }
 
-    public void setAcceleration(Physical physical, double absAcceleration) {
-        physical.setAcceleration(absAcceleration);
-    }
+    // public void setAcceleration(Physical physical, double absAcceleration) {
+    //     physical.setAcceleration(absAcceleration);
+    // }
 
 
     /* Déf mathématique*/
-    private static Point polarToCartesian(double angleDeg, double radius){
-        //System.out.printf("[DEBUG] angleDeg: %f  radius: %f\n", angleDeg, radius);
+    private static Coordinate polarToCartesianMath(double angleDeg, double radius){
         double angleInRadians = Math.toRadians(angleDeg);
         double x = radius * Math.cos(angleInRadians);
         double y = radius * Math.sin(angleInRadians);
+        return new Coordinate(x, y);
+    }
+
+    /* Adaptation à notre origine au nord */
+    private static Coordinate polarToCartesian(double direction, double radius){
+        return polarToCartesianMath(direction+90, radius);
+    }
+
+
+    private double deltaYFromDeltaX(double deltaCorrectionX, double alpha){
+        double alphaRad = Math.toRadians(alpha);
+        double r = Math.abs(deltaCorrectionX/Math.cos(alphaRad));
+        double delta_y = r*Math.sin(alphaRad);
+        return delta_y;
+    }
+
+    private double deltaXFromDeltaY(double deltaCorrectionY, double alpha){
+        double alphaRad = Math.toRadians(alpha);
+        double r = Math.abs(deltaCorrectionY/Math.sin(alphaRad));
+        double delta_x = r*Math.cos(alphaRad);
+        return delta_x;
+    }
+    
+    //TODO: regarde une seule colision
+    private Coordinate positionAfterCollision(Physical physical, double initialX, double initialY, List<Collision> collisions){
+        Coordinate beforeCollsionCoord = new Coordinate(initialX, initialY);
+        if(collisions.isEmpty()) return beforeCollsionCoord;
         
-        return new Point( (int)x, (int)y );
+        double deltaX = physical.getX()-initialX;
+        int opX = oppositeSign(deltaX);
+        double deltaY = physical.getY()-initialY;
+        int opY = oppositeSign(deltaY);
+
+
+        Collision collision = collisions.get(0);
+        Rectangle overlapRect = collision.overlap;
+
+        double correctionOnX = physical.getX()+opX*overlapRect.getWidth();
+        Coordinate coordTryX = new Coordinate(correctionOnX, physical.getY());
+        double correctionOnY = physical.getY()+opY*overlapRect.getHeight(); // - car javaFX axex y inversé
+        Coordinate coordTryY = new Coordinate(physical.getX(), correctionOnY);
+        
+        physical.setCoordinate(coordTryX);
+        if(physical.getBoxCollider().isTouching(collision.obstacle.getBoxCollider()) ){
+            double deltaCorrectionY = deltaYFromDeltaX(opX*overlapRect.getWidth(), physical.getDirection()+180+90); // Nord décalé
+            //System.out.println("111111");
+            return new Coordinate(correctionOnX, physical.getY()-deltaCorrectionY);
+        }
+        
+        physical.setCoordinate(coordTryY);
+        if( physical.getBoxCollider().isTouching(collision.obstacle.getBoxCollider()) ){
+            double deltaCorrectionX = deltaXFromDeltaY(-opY*overlapRect.getHeight(), physical.getDirection()+180+90);
+            //System.out.println("22222222");
+            return new Coordinate(physical.getX()+deltaCorrectionX, correctionOnY);
+        }
+        
+        //physical.setCoordinate(new Coordinate(0, 0));
+        System.out.println("33333");
+        return beforeCollsionCoord;
     }
 
-    /* Adaptation à notre originine au nord */
-    private static Point computeDelta(double direction, double radius){
-        return polarToCartesian(direction+90, radius);
+
+    private int oppositeSign(double n){
+        return (n>0)? -1:1;
     }
 
 
-    public void update(Physical physical) {        
-        //TODO: utiliser la destination Point destination = physical.getDestination();
-        //TODO: update d'abord position ou acceleration ?
+    public void compute(Physical physical) {
+        long currentTime = System.nanoTime();
+        long elapsedTime = (currentTime-previousTime)/10_000_000;
         
         double speed = physical.getSpeed();
-        int x = physical.getX();
-        int y = physical.getY();
-        double distance = speed;
-        Point delta = computeDelta(physical.getDirection(), distance);
+        double x = physical.getX();
+        double y = physical.getY();
+        double distance  = speed*elapsedTime;
+        Coordinate delta = polarToCartesian(physical.getDirection(), distance);
 
         //update coordonnées grace à la vitesse
-        physical.setCoordinate(x+delta.x, y+delta.y);
-        System.out.printf("[DEBUG] %d  %d\n", delta.x, delta.y);
-
-
-        //update vitesse grace a l'acceleration
-        physical.setSpeed(speed+physical.getAcceleration());
-
-        //check colision : si collision on annule le déplacement
-        if (!isCollision(physical).isEmpty()){
-            physical.setCoordinate(x, y);
-            System.out.printf("collision!!\n");
+    //    System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX(), physical.getY());
+    //    System.out.printf("[DEBUG] %f  %f\n", delta.x, delta.y);
+        Coordinate noCollisionCoord = new Coordinate(x+delta.x, y-delta.y); //y inversé dans le graphique(JavaFX)
+        physical.setCoordinate(noCollisionCoord); 
+        
+        List<Collision> collisions = allCollision(physical);
+        if (! collisions.isEmpty()){
+        //    System.out.printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Collision!!\n");
+            physical.setCoordinate(noCollisionCoord);
+            Coordinate withCollisionCoord = positionAfterCollision(physical, x, y, collisions);
+            physical.setCoordinate(withCollisionCoord);
+            physical.setSpeed(0);
         }
 
+        previousTime = currentTime;
     }
 
 
 
 
+//TODO: update d'abord position ou acceleration ?
+//TODO:  entre 2 compute() on peu traverser un mur
+//TODO: coder acceleration avec des forces
+//TODO fn(angle, distance)
+//TODO fn(x, y)
+//TODO coder destination
+//TODO: rotation 90 pour la collision
+// - au lieu de + sur l'axe Y
 
 
 
 
 
 
-
-
-    //#endregion
+//#endregion
 }

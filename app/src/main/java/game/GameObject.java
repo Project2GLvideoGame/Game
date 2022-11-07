@@ -11,26 +11,20 @@ public class GameObject{
     private List<Component> components = new ArrayList<>();
     public Class<Displayable> getComponent;
     
-    public GameObject(Displayable displayable){
-        components.add(displayable);
-    }
-
-    public GameObject(Physical physical){
-        components.add(physical);
-    }
-
-    public GameObject(Displayable displayable, Physical physical) {
-        components.add(displayable);
-        components.add(physical);
+    public GameObject(Component ...in_components){
+        for (Component component : in_components) {
+            components.add(component);
+        }
     }
     
     public <T extends Component> T getComponent(Class<T> class1){
-        for(Component component : components)
+        for(Component component : components)    
             if(class1.isAssignableFrom(component.getClass()))
                 return (T)component;
-        
         return null;
     }   
+
+
 
 
 }
