@@ -2,12 +2,6 @@ package game;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import game.Graphic.Displayable;
-import game.Graphic.GraphicEngine;
-import game.Input.InputEngine;
-import game.Physic.Physical;
-import game.Physic.PhysicalEngine;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -18,13 +12,18 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class Kernel extends Application implements Runnable{
+import game.Graphic.*;
+import game.Physic.*;
+import game.Input.*;
 
-    List<GameObject> gameObjects = new ArrayList<>();
-    GameObject player = new GameObject(new Physical(350-64, 350-32, 60, 64), new Displayable(new ImageView("pacman_run.gif"), 350-32, 350-32, 64, 64));
-    GraphicEngine graphicEngine = new GraphicEngine();
-    PhysicalEngine physicalEngine = new PhysicalEngine();
-    Timeline timeline;
+public class Kernel extends Application {
+
+    private static Timeline timeline;
+    private static List<GameObject> gameObjects = new ArrayList<>();
+    private static GraphicEngine graphicEngine = new GraphicEngine();
+    private static PhysicalEngine physicalEngine = new PhysicalEngine();
+    private InputEngine inputEngine = new InputEngine(this);
+    private GameObject player = new GameObject(new Physical(350-64, 350-32, 60, 64), new Displayable(new ImageView("pacman_run.gif"), 350-32, 350-32, 64, 64));
 
     static ImageView i_mur_sud = new ImageView("wall.jpg");
     static GameObject mur_sud = new GameObject(
@@ -50,16 +49,45 @@ public class Kernel extends Application implements Runnable{
         new Displayable(i_mur_ouest, 0, 20, 50, 700)
         );
 
+    private static class Update implements Runnable {
+        long delay = 20;
+
+        @Override
+        public void run() {
+            while(true) {
+                for(GameObject go : gameObjects) {
+                    physicalEngine.compute(go.getComponent(Physical.class));
+                    if (timeline == null) {
+                        // Timeline sert au Thread créé par JavaFX, c'est un ensemble de tâches à effectuer (ou KeyFrames).
+                        // Chaque KeyFrame a un délai au bout duquel il est soumis au Thread de JavaFX.
+                        timeline = new Timeline(new KeyFrame(Duration.millis(1), event -> graphicEngine.relocate(go.getComponent(Displayable.class), go.getComponent(Physical.class).getX(), go.getComponent(Physical.class).getY())));
+                        timeline.setCycleCount(Animation.INDEFINITE);
+                    }
+                    timeline.play();
+                    System.out.println(go.getComponent(Physical.class).getX() + " " + go.getComponent(Physical.class).getY());
+                }
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void update() {
+        Thread thread = new Thread(new Update());
+        thread.start();
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
         graphicEngine.init(stage);
 
-        InputEngine inputEngine = new InputEngine(this);
         Scene scene = graphicEngine.getScene();
 
         scene.addEventFilter(KeyEvent.KEY_PRESSED ,inputEngine.eventHandlerPressed);
         scene.addEventFilter(KeyEvent.KEY_RELEASED ,inputEngine.eventHandlerReleased);
-        
         
         physicalEngine.addPhysicalObject(player.getComponent(Physical.class));
         graphicEngine.addChildren(player.getComponent(Displayable.class));
@@ -84,37 +112,10 @@ public class Kernel extends Application implements Runnable{
         gameObjects.add(mur_ouest);
         gameObjects.add(mur_sud);
         
-        Thread thread = new Thread(this);
-        thread.start();
-    }
-    
-    @Override
-    public void run() {
-        while(true){
-
-            for(GameObject go : gameObjects){
-                physicalEngine.compute(go.getComponent(Physical.class));
-                if (timeline == null) {
-                    // Timeline submits events to the JavaFX Thread currently running in the background
-                    timeline = new Timeline(new KeyFrame(Duration.millis(1), event -> graphicEngine.relocate(go.getComponent(Displayable.class), go.getComponent(Physical.class).getX(), go.getComponent(Physical.class).getY())));
-                    timeline.setCycleCount(Animation.INDEFINITE);
-                }
-                timeline.play();
-                System.out.println(go.getComponent(Physical.class).getX() + " " + go.getComponent(Physical.class).getY());
-            }
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-
-
+        update();
     }
 
-    public void movePlayer(int direction){
+    public void movePlayer(int direction) {
         player.getComponent(Physical.class).setDirection(direction);
     }
-
 }
