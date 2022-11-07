@@ -1,9 +1,11 @@
 package game.Graphic;
 
-import javafx.event.EventHandler;
+import javafx.scene.Parent;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.event.EventHandler;
 import game.GameObject;
+import game.Physic.Coordinate;
 import game.Physic.Physical;
 import game.Physic.PhysicalEngine;
 import javafx.animation.AnimationTimer;
@@ -11,16 +13,17 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class GraphicEngineLP extends Application {
     private final int Windowwidth = 700;
     private final int Windowheight = 700;
+    private double speed = 10;
     static PhysicalEngine pe;
     
 
@@ -56,6 +59,7 @@ public class GraphicEngineLP extends Application {
 
 
 
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -64,6 +68,17 @@ public class GraphicEngineLP extends Application {
     public void start(Stage stage) throws Exception {
         
         var root = new Group();
+        root.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                //shrek.getComponent(Physical.class).setDirection(new Coordinate(event.getSceneX(), event.getSceneY()));
+                shrek.getComponent(Physical.class).setDestinationCoord(new Coordinate(event.getSceneX(), event.getSceneY()));
+                shrek.getComponent(Physical.class).setUseDestination(true);
+                shrek.getComponent(Physical.class).setSpeed(speed);
+            }
+        });
+
+
         TextArea textArea = new TextArea();
         textArea.setText("200");
         textArea.setPrefSize(30, 30);
@@ -73,15 +88,13 @@ public class GraphicEngineLP extends Application {
             private long lastUpdate = 0 ;
             @Override
             public void handle(long now) {
-                if (now - lastUpdate >= 0) {
+                if (now - lastUpdate >= 1000) {
                     lastUpdate = now ;
                     do_it();
                 }
             }
             private void do_it(){
-                shrek.getComponent(Physical.class).setSpeed(10);
-                //try{shrek.getComponent(Physical.class).setDirection(Double.parseDouble(textArea.getText()));} catch (Exception e) {shrek.getComponent(Physical.class).setDirection(0);}
-                pe.compute(shrek.getComponent(Physical.class));
+                pe.computeAll();
                 i_shrek.relocate(shrek.getComponent(Physical.class).getX(), shrek.getComponent(Physical.class).getY());
             }
         };
@@ -90,25 +103,25 @@ public class GraphicEngineLP extends Application {
         Button btn_up = new Button();
         btn_up.setPadding(new Insets(5, 5, 5, 5));
         btn_up.setText("up");
-        btn_up.setOnAction(new EventHandler<ActionEvent>() {@Override public void handle(ActionEvent event) {shrek.getComponent(Physical.class).setDirection(0);shrek.getComponent(Physical.class).setSpeed(4); }});
+        btn_up.setOnAction(new EventHandler<ActionEvent>() {@Override public void handle(ActionEvent event) {shrek.getComponent(Physical.class).setDirection(0);shrek.getComponent(Physical.class).setSpeed(speed);shrek.getComponent(Physical.class).setUseDestination(false); }});
         btn_up.setLayoutX(250);
 
         Button btn_down = new Button();
         btn_down.setPadding(new Insets(5, 5, 5, 5));
         btn_down.setText("down");
-        btn_down.setOnAction(new EventHandler<ActionEvent>() {@Override public void handle(ActionEvent event) {shrek.getComponent(Physical.class).setDirection(180);shrek.getComponent(Physical.class).setSpeed(4);}});
+        btn_down.setOnAction(new EventHandler<ActionEvent>() {@Override public void handle(ActionEvent event) {shrek.getComponent(Physical.class).setDirection(180);shrek.getComponent(Physical.class).setSpeed(speed);shrek.getComponent(Physical.class).setUseDestination(false);}});
         btn_down.setLayoutX(50);
 
         Button btn_droite = new Button();
         btn_droite.setPadding(new Insets(5, 5, 5, 5));
         btn_droite.setText("droite");
-        btn_droite.setOnAction(new EventHandler<ActionEvent>() {@Override public void handle(ActionEvent event) {shrek.getComponent(Physical.class).setDirection(270);shrek.getComponent(Physical.class).setSpeed(4);}});
+        btn_droite.setOnAction(new EventHandler<ActionEvent>() {@Override public void handle(ActionEvent event) {shrek.getComponent(Physical.class).setDirection(270);shrek.getComponent(Physical.class).setSpeed(speed);shrek.getComponent(Physical.class).setUseDestination(false);}});
         btn_droite.setLayoutX(100);
 
         Button btn_gauche = new Button();
         btn_gauche.setPadding(new Insets(5, 5, 5, 5));
         btn_gauche.setText("gauche");
-        btn_gauche.setOnAction(new EventHandler<ActionEvent>() {@Override public void handle(ActionEvent event) {shrek.getComponent(Physical.class).setDirection(90);shrek.getComponent(Physical.class).setSpeed(4);}});
+        btn_gauche.setOnAction(new EventHandler<ActionEvent>() {@Override public void handle(ActionEvent event) {shrek.getComponent(Physical.class).setDirection(90);shrek.getComponent(Physical.class).setSpeed(speed);shrek.getComponent(Physical.class).setUseDestination(false);}});
         btn_gauche.setLayoutX(150);
 
 
@@ -131,13 +144,18 @@ public class GraphicEngineLP extends Application {
         
         
         
+        ImageView fond = new ImageView("shrek.jpeg");
+        fond.setX(0);
+        fond.setY(0);
+        fond.setFitHeight(Windowheight);
+        fond.setFitWidth(Windowwidth);
+
+        root.getChildren().add(fond);
         root.getChildren().add(shrek.getComponent(Displayable.class).getAsset());
         root.getChildren().add(mur_sud.getComponent(Displayable.class).getAsset());
         root.getChildren().add(mur_nord.getComponent(Displayable.class).getAsset());
         root.getChildren().add(mur_est.getComponent(Displayable.class).getAsset());
         root.getChildren().add(mur_ouest.getComponent(Displayable.class).getAsset());
-
-
         root.getChildren().add(btn_up);
         root.getChildren().add(btn_down);
         root.getChildren().add(btn_droite);

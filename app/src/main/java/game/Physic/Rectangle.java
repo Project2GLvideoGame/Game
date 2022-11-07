@@ -46,9 +46,12 @@ public class Rectangle {
         this.height = height;
     }
 
-    public void setCooridnate(double x, double y ){
-        this.x = x;
-        this.y = y;
+    public Coordinate getCooridnate(){
+        return new Coordinate(this.x, this.y);
+    }
+    public void setCooridnate(Coordinate coord){
+        this.x = coord.getX();
+        this.y = coord.getY();
     }
 
 
@@ -61,7 +64,7 @@ public class Rectangle {
         double x3 = other.x;
         double y3 = other.y;
         double x4 = x3+other.width;
-        double y4 = y3+other.width;
+        double y4 = y3+other.height;
 
         double x5 = Math.max(x1, x3);
         double y5 = Math.max(y1, y3);
