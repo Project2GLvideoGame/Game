@@ -14,38 +14,80 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Kernel extends Application implements Runnable{
 
     List<GameObject> gameObjects = new ArrayList<>();
-    GameObject player = new GameObject(new Physical(0, 350-32, 64, 64), new Displayable(new ImageView("pacman_run.gif"), 350-32, 350-32, 64, 64));
+    GameObject player = new GameObject(new Physical(350-64, 350-32, 60, 64), new Displayable(new ImageView("pacman_run.gif"), 350-32, 350-32, 64, 64));
     GraphicEngine graphicEngine = new GraphicEngine();
     PhysicalEngine physicalEngine = new PhysicalEngine();
     Timeline timeline;
+
+    static ImageView i_mur_sud = new ImageView("wall.jpg");
+    static GameObject mur_sud = new GameObject(
+        new Physical(20, 650, 700, 50),
+        new Displayable(i_mur_sud, 20, 650, 700, 50)
+        );
+
+    static ImageView i_mur_nord = new ImageView("wall.jpg");
+    static GameObject mur_nord = new GameObject(
+        new Physical(20, 0, 700, 50),
+        new Displayable(i_mur_nord, 20, 0, 700, 50)
+        );
+
+    static ImageView i_mur_est = new ImageView("wall.jpg");
+    static GameObject mur_est = new GameObject(
+        new Physical(650, 20, 50, 700),
+        new Displayable(i_mur_est, 650, 20, 50, 700)
+        );
+
+    static ImageView i_mur_ouest = new ImageView("wall.jpg");
+    static GameObject mur_ouest = new GameObject(
+        new Physical(0, 20, 50, 700),
+        new Displayable(i_mur_ouest, 0, 20, 50, 700)
+        );
 
     @Override
     public void start(Stage stage) throws Exception {
         graphicEngine.init(stage);
 
-        InputEngine inputEngine = new InputEngine();
+        InputEngine inputEngine = new InputEngine(this);
         Scene scene = graphicEngine.getScene();
 
-        scene.setOnKeyPressed(inputEngine.eventHandlerPressed);
-        scene.setOnKeyReleased(inputEngine.eventHandlerReleased);
-        Thread thread = new Thread(this);
-
+        scene.addEventFilter(KeyEvent.KEY_PRESSED ,inputEngine.eventHandlerPressed);
+        scene.addEventFilter(KeyEvent.KEY_RELEASED ,inputEngine.eventHandlerReleased);
+        
+        
         physicalEngine.addPhysicalObject(player.getComponent(Physical.class));
         graphicEngine.addChildren(player.getComponent(Displayable.class));
-        player.getComponent(Physical.class).setSpeed(1);
-        player.getComponent(Physical.class).setDirection(270);
 
+        physicalEngine.addPhysicalObject(mur_est.getComponent(Physical.class));
+        graphicEngine.addChildren(mur_est.getComponent(Displayable.class));
+
+        physicalEngine.addPhysicalObject(mur_sud.getComponent(Physical.class));
+        graphicEngine.addChildren(mur_sud.getComponent(Displayable.class));
+
+        physicalEngine.addPhysicalObject(mur_nord.getComponent(Physical.class));
+        graphicEngine.addChildren(mur_nord.getComponent(Displayable.class));
+
+        physicalEngine.addPhysicalObject(mur_ouest.getComponent(Physical.class));
+        graphicEngine.addChildren(mur_ouest.getComponent(Displayable.class));
+
+        player.getComponent(Physical.class).setSpeed(2);
+        
         gameObjects.add(player);
-
+        gameObjects.add(mur_est);
+        gameObjects.add(mur_nord);
+        gameObjects.add(mur_ouest);
+        gameObjects.add(mur_sud);
+        
+        Thread thread = new Thread(this);
         thread.start();
     }
-
+    
     @Override
     public void run() {
         while(true){
@@ -54,14 +96,14 @@ public class Kernel extends Application implements Runnable{
                 physicalEngine.compute(go.getComponent(Physical.class));
                 if (timeline == null) {
                     // Timeline submits events to the JavaFX Thread currently running in the background
-                    timeline = new Timeline(new KeyFrame(Duration.millis(50), event -> graphicEngine.relocate(go.getComponent(Displayable.class), go.getComponent(Physical.class).getX(), go.getComponent(Physical.class).getY())));
+                    timeline = new Timeline(new KeyFrame(Duration.millis(1), event -> graphicEngine.relocate(go.getComponent(Displayable.class), go.getComponent(Physical.class).getX(), go.getComponent(Physical.class).getY())));
                     timeline.setCycleCount(Animation.INDEFINITE);
                 }
                 timeline.play();
                 System.out.println(go.getComponent(Physical.class).getX() + " " + go.getComponent(Physical.class).getY());
             }
             try {
-                Thread.sleep(500);
+                Thread.sleep(20);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -69,6 +111,10 @@ public class Kernel extends Application implements Runnable{
         }
 
 
+    }
+
+    public void movePlayer(int direction){
+        player.getComponent(Physical.class).setDirection(direction);
     }
 
 }

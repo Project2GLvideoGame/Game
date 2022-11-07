@@ -7,7 +7,7 @@ public class Displayable extends Component{
 
     private final ImageView asset;
 
-    public Displayable(ImageView asset, double x, double y, int height, int width) {
+    public Displayable(ImageView asset, double x, double y, int width, int height) {
         this.asset = asset;
         this.asset.setSmooth(false);
         this.asset.setX(x);

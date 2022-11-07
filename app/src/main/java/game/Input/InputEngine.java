@@ -1,4 +1,5 @@
 package game.Input;
+import game.Kernel;
 import game.Input.State.GameState;
 import game.Input.State.State;
 import javafx.event.EventHandler;
@@ -10,12 +11,17 @@ public class InputEngine {
     public EventHandler<? super KeyEvent> eventHandlerReleased;
 
     private State currentState = new GameState();
+    Kernel kernel;
 
     public void changeState(State state){
         this.currentState = state;
     }
+
+    public Kernel getKernel(){return kernel;}
     
-    public InputEngine(){
+    public InputEngine(Kernel kernel){
+
+        this.kernel = kernel;
 
         eventHandlerPressed = new EventHandler<KeyEvent>() {
             @Override

@@ -6,23 +6,22 @@ public class GameState implements State {
 
     @Override
     public void up(InputEngine input) {
-        
+        input.getKernel().movePlayer(0);
     }
 
     @Override
     public void right(InputEngine input) {
+        input.getKernel().movePlayer(270);
     }
 
     @Override
     public void down(InputEngine input) {
-        // TODO Auto-generated method stub
-        
+        input.getKernel().movePlayer(180);
     }
 
     @Override
     public void left(InputEngine input) {
-        // TODO Auto-generated method stub
-        
+        input.getKernel().movePlayer(90);
     }
 
     @Override

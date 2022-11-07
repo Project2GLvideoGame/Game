@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import game.GameObject;
+import game.Physic.Physical;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Group;
@@ -23,6 +24,8 @@ public class GraphicEngine {
     private List<Displayable> displayables = new ArrayList<>();
     private Scene scene;
 
+    
+
     //Initialise les gameObject Initialement présent dans la scène 
     private void createContent() {
         // GameObject g = new GameObject(new Displayable(new ImageView("pacman_run.gif"), width/2 - 32, height/2 - 32, 64, 64));
@@ -33,6 +36,7 @@ public class GraphicEngine {
         Button btn = new Button("TestButton");
         btn.setOnAction(this::actionEvent);
         mainGroup.getChildren().add(btn);
+
     }
 
     public void init(Stage stage) throws Exception {
