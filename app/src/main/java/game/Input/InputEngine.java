@@ -14,44 +14,17 @@ public class InputEngine {
     public void changeState(State state){
         this.currentState = state;
     }
-
-    //TODO: Change GraphiqueEngine start
-   /*
-   public void start(Stage stage) throws Exception {
-       InputEngine inputEngine = new InputEngine();
-       Scene scene = new Scene(createContent(), width, height);
-       scene.setOnKeyPressed(inputEngine.eventHandlerPressed);
-       scene.setOnKeyReleased(inputEngine.eventHandlerPressed);
-       stage.setScene(scene);
-       stage.show();
-   }
-    */ 
-
-    
-
     
     public InputEngine(){
 
         eventHandlerPressed = new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                eventSwitch(event);
-            }
-        };
-
-        eventHandlerReleased =  new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                eventSwitch(event);
-            } 
-        };
-    }
-
-    private void eventSwitch( KeyEvent event){
-            switch(event.getCode()){
+                switch(event.getCode()){
 
                     case UP:
-                    currentState.up(InputEngine.this);
+                        currentState.up(InputEngine.this);
+                        System.out.println("UP pressed");
                         break;
 
                     case RIGHT:
@@ -73,7 +46,74 @@ public class InputEngine {
                     default:
                         break;
 
-                }
+                }            
+            }
+        };
+
+        eventHandlerReleased =  new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                switch(event.getCode()){
+
+                    case UP:
+                    currentState.up(InputEngine.this);
+                    System.out.println("UP released");
+                        break;
+
+                    case RIGHT:
+                        currentState.right(InputEngine.this);
+                        break;
+
+                    case DOWN:
+                    currentState.down(InputEngine.this);
+                        break;
+
+                    case LEFT:
+                    currentState.left(InputEngine.this);
+                        break;
+
+                    case ESCAPE:
+                    currentState.pause(InputEngine.this);
+                    break;
+                    
+                    default:
+                        break;
+
+                }            } 
+        };
     }
+/*
+ * 
+ * 
+ private void eventSwitch( KeyEvent event){
+         switch(event.getCode()){
+
+                 case UP:
+                 currentState.up(InputEngine.this);
+                 System.out.println("pressed");
+                     break;
+
+                 case RIGHT:
+                     currentState.right(InputEngine.this);
+                     break;
+
+                 case DOWN:
+                 currentState.down(InputEngine.this);
+                     break;
+
+                 case LEFT:
+                 currentState.left(InputEngine.this);
+                     break;
+
+                 case ESCAPE:
+                 currentState.pause(InputEngine.this);
+                 break;
+                 
+                 default:
+                     break;
+
+             }
+ }
+ */
 
 }

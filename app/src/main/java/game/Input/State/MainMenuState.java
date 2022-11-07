@@ -30,7 +30,7 @@ public class MainMenuState implements State {
 
     @Override
     public void pause(InputEngine input) {
-        input.changeState(new MainMenuState());
+        input.changeState(new GameState());
         
     }
 

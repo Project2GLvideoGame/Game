@@ -114,6 +114,7 @@ public class PhysicalEngine {
             // System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX()+physical.getBoxCollider().getWidth(), physical.getY()+physical.getBoxCollider().getHeight());
 
         }
+        previousTime = System.nanoTime();
     }
 
 
