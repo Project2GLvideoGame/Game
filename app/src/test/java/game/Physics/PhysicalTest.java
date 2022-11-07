@@ -22,9 +22,6 @@ public class PhysicalTest {
         new Physical(1, 2, 3, 0);
     }
 
-    @Test
-    public void testsetBoxCollider() {
-        physicalToTest.setBoxCollider(null);
-    }
+
     
 }

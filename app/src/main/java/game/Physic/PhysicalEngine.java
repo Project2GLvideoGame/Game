@@ -49,7 +49,7 @@ public class PhysicalEngine {
 
 
     //TODO: regarde une seule colision
-    private void setPositionAfterCollision(Physical physical, Coordinate beforeCollsionCoord, Coordinate CollisonCoord, List<Collision> collisions){
+    public void setPositionAfterCollision(Physical physical, Coordinate beforeCollsionCoord, Coordinate CollisonCoord, List<Collision> collisions){
         if(collisions.isEmpty()) physical.setCoordinate(beforeCollsionCoord);
         
         Collision collision = collisions.get(0);
@@ -83,7 +83,7 @@ public class PhysicalEngine {
     }
 
 
-    private void compute(Physical physical) {
+    public void compute(Physical physical) {
         long currentTime = System.nanoTime();
         long elapsedTime = (currentTime-previousTime)/10_000_000;
         

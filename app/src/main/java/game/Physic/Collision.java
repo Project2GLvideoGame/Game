@@ -11,5 +11,13 @@ public class Collision {
         this.obstacle = obstacle;
     }
 
+
+    public Rectangle getOverlap(){
+        return overlap;
+    }
+
+    public void setOverlap(Rectangle overlap){
+        this.overlap = overlap;
+    }
 //TODO: mettre des get/set
 }
