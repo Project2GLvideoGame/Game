@@ -1,38 +1,56 @@
 package game.Graphic;
 
+import java.awt.image.BufferedImage;
+
 import game.Component;
-import javafx.scene.image.ImageView;
 
 public class Displayable extends Component{
 
-    private final ImageView asset;
+    private final BufferedImage asset;
+    private int x, y;
+    private int width, height;
 
-    public Displayable(ImageView asset, double x, double y, int width, int height) {
+    public Displayable(BufferedImage asset, int x, int y, int width, int height) {
         this.asset = asset;
-        this.asset.setSmooth(false);
-        this.asset.setX(x);
-        this.asset.setY(y);
-        this.asset.setFitHeight(height);
-        this.asset.setFitWidth(width);
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
     }
 
-    public double getX() {
-        return asset.getX();
+    public int getX() {
+        return x;
     }
 
-    public double getY() {
-        return asset.getY();
+    public int getY() {
+        return y;
     }
 
-    public void setX(double x) {
-        asset.setX(x);
+    public int getWidth() {
+        return width;
     }
 
-    public void setY(double y) {
-        asset.setY(y);
+    public int getHeight() {
+        return height;
     }
 
-    public ImageView getAsset() {
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public BufferedImage getAsset() {
         return asset;
     }
 }

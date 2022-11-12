@@ -1,33 +1,47 @@
 package game;
 
-import java.util.ArrayList;
-import java.util.List;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
-import javafx.stage.Stage;
-import javafx.util.Duration;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
-import game.Graphic.*;
-import game.Physic.*;
-import game.Input.*;
+import javax.imageio.ImageIO;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import java.io.IOException;
 
-public class Kernel extends Application {
+import game.Graphic.Displayable;
+import game.Input.KeyHandler;
+import game.Physic.Physical;
 
-    private static Timeline timeline;
-    private static List<GameObject> gameObjects = new ArrayList<>();
-    private static GraphicEngine graphicEngine = new GraphicEngine();
-    private static PhysicalEngine physicalEngine = new PhysicalEngine();
-    private InputEngine inputEngine = new InputEngine(this);
-    private GameObject player = new GameObject(new Physical(350-64, 350-32, 60, 64), new Displayable(new ImageView("pacman_run.gif"), 350-32, 350-32, 64, 64));
+public class Kernel extends JPanel implements Runnable{
 
-    static ImageView i_mur_sud = new ImageView("wall.jpg");
-    static GameObject mur_sud = new GameObject(
-        new Physical(20, 650, 700, 50),
+    final int originalTileSize = 16; //16x16 tiles
+    final int scale = 3;
+
+    final int tileSize = originalTileSize * scale;
+    final int maxScreenCol = 16;
+    final int maxScreenRow = 12;
+    
+    final int screenWidth = tileSize * maxScreenCol;
+    final int screenHeight = tileSize * maxScreenRow;
+
+    KeyHandler KeyH = new KeyHandler();
+    Thread gameThread;
+
+    int playerX = 100, playerY = 100, playerSpeed = 4;
+    int FPS = 30;
+
+    // private static List<GameObject> gameObjects = new ArrayList<>();
+    // private static GraphicEngine graphicEngine = new GraphicEngine();
+    // private static PhysicalEngine physicalEngine = new PhysicalEngine();
+    // private InputEngine inputEngine = new InputEngine(this);
+    private GameObject player;
+
+    /* 
+     static ImageView i_mur_sud = new ImageView("wall.jpg");
+     static GameObject mur_sud = new GameObject(
+         new Physical(20, 650, 700, 50),
         new Displayable(i_mur_sud, 20, 650, 700, 50)
         );
 
@@ -74,51 +88,104 @@ public class Kernel extends Application {
             }
         }
     }
+    */
 
-    public void update() {
-        Thread thread = new Thread(new Update());
-        thread.start();
+    public Kernel() throws IOException{
+        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+        this.setBackground(Color.black);
+        this.setDoubleBuffered(true);
+        this.addKeyListener(KeyH);
+        this.setFocusable(true);
+
+        player = new GameObject(new Physical(350-64, 350-32, 60, 64),
+                                new Displayable(ImageIO.read(getClass().getResource("/pacman_idle.png")),
+                                350-32, 350-32, 64, 64));
+    }
+
+    public void startGameThread(){
+        gameThread = new Thread(this);
+        gameThread.start();
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
-        graphicEngine.init(stage);
-
-        Scene scene = graphicEngine.getScene();
-
-        scene.addEventFilter(KeyEvent.KEY_PRESSED ,inputEngine.eventHandlerPressed);
-        scene.addEventFilter(KeyEvent.KEY_RELEASED ,inputEngine.eventHandlerReleased);
+    public void run(){
+        //graphicEngine.init(stage);
         
-        physicalEngine.addPhysicalObject(player.getComponent(Physical.class));
-        graphicEngine.addChildren(player.getComponent(Displayable.class));
+        // physicalEngine.addPhysicalObject(player.getComponent(Physical.class));
+        // graphicEngine.addChildren(player.getComponent(Displayable.class));
 
+        /* 
         physicalEngine.addPhysicalObject(mur_est.getComponent(Physical.class));
         graphicEngine.addChildren(mur_est.getComponent(Displayable.class));
-
+        
         physicalEngine.addPhysicalObject(mur_sud.getComponent(Physical.class));
         graphicEngine.addChildren(mur_sud.getComponent(Displayable.class));
-
+        
         physicalEngine.addPhysicalObject(mur_nord.getComponent(Physical.class));
         graphicEngine.addChildren(mur_nord.getComponent(Displayable.class));
 
         physicalEngine.addPhysicalObject(mur_ouest.getComponent(Physical.class));
         graphicEngine.addChildren(mur_ouest.getComponent(Displayable.class));
-
-        player.getComponent(Physical.class).setSpeed(2);
-        
-        gameObjects.add(player);
         gameObjects.add(mur_est);
         gameObjects.add(mur_nord);
         gameObjects.add(mur_ouest);
         gameObjects.add(mur_sud);
-        
-        update();
+        */
+
+        // player.getComponent(Physical.class).setSpeed(4);
+        // gameObjects.add(player);
+
+        double drawInternal = 1_000_000_000/FPS;
+        double delta = 0;
+        long lastTime = System.nanoTime();
+        long currentTime;
+
+        while(gameThread != null){
+            currentTime = System.nanoTime();
+
+            delta += (currentTime - lastTime) / drawInternal;
+
+            lastTime = currentTime;
+
+            if(delta >= 1){
+                update();
+                repaint();
+                delta--;
+            }
+        }
     }
 
-    public void movePlayer(int direction) {
-        player.getComponent(Physical.class).setDirection(direction);
+    public void update(){
+        if(KeyH.upPressed)
+            playerY -= playerSpeed;
+        if(KeyH.downPressed)
+            playerY += playerSpeed;
+        if(KeyH.leftPressed)
+            playerX -= playerSpeed;
+        if(KeyH.rightPressed)
+            playerX += playerSpeed;
+    }
+    
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+
+        Graphics2D g2 = (Graphics2D)g;
+
+        Displayable displayable = player.getComponent(Displayable.class);
+        displayable.setX(playerX);
+        displayable.setY(playerY);
+        g2.drawImage(displayable.getAsset(), displayable.getX(), displayable.getY(), null);
+
+        g2.dispose();
     }
 
-    public GameObject getPlayer(){return player;}
-    public GraphicEngine getGraphicEngine(){return graphicEngine;}
+
+
+
+    // public void movePlayer(int direction) {
+    //     player.getComponent(Physical.class).setDirection(direction);
+    // }
+
+    // public GameObject getPlayer(){return player;}
+    // public GraphicEngine getGraphicEngine(){return graphicEngine;}
 }
