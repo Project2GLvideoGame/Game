@@ -121,4 +121,8 @@ public class Kernel extends Application {
 
     public GameObject getPlayer(){return player;}
     public GraphicEngine getGraphicEngine(){return graphicEngine;}
+
+    public void changeState(State state) {
+        inputEngine.changeState(state);
+    }
 }
