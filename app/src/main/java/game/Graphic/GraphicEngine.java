@@ -1,9 +1,13 @@
 package game.Graphic;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class GraphicEngine extends JPanel{
@@ -24,11 +28,33 @@ public class GraphicEngine extends JPanel{
     
 
     public GraphicEngine() throws Exception {
-        
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
         this.setFocusable(true);
+
+        initWindow();
+        initInitialComponent();
+    }
+    
+    private void initWindow(){
+
+        JFrame window = new JFrame();
+        
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setResizable(true);
+        window.setTitle("Game");
+        
+        window.add(this);
+        
+        window.pack(); //window set to fit to prefered size
+        
+        window.setLocationRelativeTo(null); //init the window to center on the screen
+        window.setVisible(true);
+    }
+
+    private void initInitialComponent(){
+        
     }
 
     @Override
