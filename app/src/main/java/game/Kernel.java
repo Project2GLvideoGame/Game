@@ -9,33 +9,28 @@ import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import game.Graphic.Displayable;
+import game.Graphic.GraphicEngine;
 import game.Input.KeyHandler;
 import game.Physic.Physical;
+import game.Physic.PhysicalEngine;
 
-public class Kernel extends JPanel implements Runnable{
-
-    final int originalTileSize = 16; //16x16 tiles
-    final int scale = 3;
-
-    final int tileSize = originalTileSize * scale;
-    final int maxScreenCol = 16;
-    final int maxScreenRow = 12;
-    
-    final int screenWidth = tileSize * maxScreenCol;
-    final int screenHeight = tileSize * maxScreenRow;
+public class Kernel implements Runnable{
 
     KeyHandler KeyH = new KeyHandler();
     Thread gameThread;
-
-    int playerX = 100, playerY = 100, playerSpeed = 4;
     int FPS = 30;
 
-    // private static List<GameObject> gameObjects = new ArrayList<>();
-    // private static GraphicEngine graphicEngine = new GraphicEngine();
-    // private static PhysicalEngine physicalEngine = new PhysicalEngine();
-    // private InputEngine inputEngine = new InputEngine(this);
+    int playerX = 100, playerY = 100, playerSpeed = 4;
+
+    private static List<GameObject> gameObjects = new ArrayList<>();
+
+    private static GraphicEngine graphicEngine = new GraphicEngine();
+    private static PhysicalEngine physicalEngine = new PhysicalEngine();
+    
     private GameObject player;
 
     /* 
@@ -90,16 +85,18 @@ public class Kernel extends JPanel implements Runnable{
     }
     */
 
-    public Kernel() throws IOException{
-        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        this.setBackground(Color.black);
-        this.setDoubleBuffered(true);
-        this.addKeyListener(KeyH);
-        this.setFocusable(true);
+    public Kernel() throws Exception{
+
+        graphicEngine.init();
+        graphicEngine.addKeyListener(KeyH);
 
         player = new GameObject(new Physical(350-64, 350-32, 60, 64),
                                 new Displayable(ImageIO.read(getClass().getResource("/pacman_idle.png")),
                                 350-32, 350-32, 64, 64));
+
+        graphicEngine.addDisplayable(player.getComponent(Displayable.class));
+        physicalEngine.addPhysicalObject(player.getComponent(Physical.class));
+        gameObjects.add(player);
     }
 
     public void startGameThread(){
@@ -148,43 +145,16 @@ public class Kernel extends JPanel implements Runnable{
             lastTime = currentTime;
 
             if(delta >= 1){
-                update();
-                repaint();
+                graphicEngine.repaint();
                 delta--;
             }
         }
     }
 
-    public void update(){
-        if(KeyH.upPressed)
-            playerY -= playerSpeed;
-        if(KeyH.downPressed)
-            playerY += playerSpeed;
-        if(KeyH.leftPressed)
-            playerX -= playerSpeed;
-        if(KeyH.rightPressed)
-            playerX += playerSpeed;
+
+    public void movePlayer(int direction) {
+        player.getComponent(Physical.class).setDirection(direction);
     }
-    
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
-
-        Graphics2D g2 = (Graphics2D)g;
-
-        Displayable displayable = player.getComponent(Displayable.class);
-        displayable.setX(playerX);
-        displayable.setY(playerY);
-        g2.drawImage(displayable.getAsset(), displayable.getX(), displayable.getY(), null);
-
-        g2.dispose();
-    }
-
-
-
-
-    // public void movePlayer(int direction) {
-    //     player.getComponent(Physical.class).setDirection(direction);
-    // }
 
     // public GameObject getPlayer(){return player;}
     // public GraphicEngine getGraphicEngine(){return graphicEngine;}

@@ -1,29 +1,26 @@
 package game.Graphic;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JPanel;
+
 import game.GameObject;
-import game.Physic.Physical;
-import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
-public class GraphicEngine {
+public class GraphicEngine extends JPanel{
+
+    final int originalTileSize = 16; //16x16 tiles
+    final int scale = 3;
+
+    final int tileSize = originalTileSize * scale;
+    final int maxScreenCol = 16;
+    final int maxScreenRow = 12;
     
-    private Group mainGroup = new Group();
-
-    private final int width = 700;
-    private final int height = 700;
+    final int screenWidth = tileSize * maxScreenCol;
+    final int screenHeight = tileSize * maxScreenRow;
 
     private List<Displayable> displayables = new ArrayList<>();
-    private Scene scene;
-
     
 
     //Initialise les gameObject Initialement présent dans la scène 
@@ -32,30 +29,35 @@ public class GraphicEngine {
         
         // mainGroup.getChildren().add(g.getComponent(Displayable.class).getAsset());
         // displayables.add(g.getComponent(Displayable.class));
+    }
+
+    public void init() throws Exception {
         
-        Button btn = new Button("TestButton");
-        btn.setOnAction(this::actionEvent);
-        mainGroup.getChildren().add(btn);
+        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+        this.setBackground(Color.black);
+        this.setDoubleBuffered(true);
+        this.setFocusable(true);
 
-    }
-
-    public void init(Stage stage) throws Exception {
         createContent();
-
-        stage.setScene(new Scene(mainGroup, width, height));
-        stage.getScene().setFill(Color.web("#5b60e5"));
-
-        this.scene = stage.getScene();
-        stage.show();
     }
 
-    public Scene getScene(){return scene;}
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+
+        Graphics2D g2 = (Graphics2D)g;
+
+        Displayable displayable = player.getComponent(Displayable.class);
+
+        g2.drawImage(displayable.getAsset(), displayable.getX(), displayable.getY(), null);
+
+        g2.dispose();
+    }
 
     private void actionEvent(ActionEvent event){
         scale(displayables.get(0), displayables.get(0).getAsset().getScaleX() + 0.2d);
     }
 
-    public void setPosition(Displayable displayable, double x, double y) {
+    public void setPosition(Displayable displayable, int x, int y) {
         displayable.setX(x);
         displayable.setY(y);
     }
@@ -76,8 +78,7 @@ public class GraphicEngine {
         displayable.getAsset().setVisible(value);
     }
 
-    public void addChildren(Displayable displayable){
-        mainGroup.getChildren().add(displayable.getAsset());
+    public void addDisplayable(Displayable displayable){
         displayables.add(displayable);
     }
 
