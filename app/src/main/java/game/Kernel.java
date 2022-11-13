@@ -15,7 +15,6 @@ public class Kernel implements Runnable{
 
     private KeyHandler KeyH = new KeyHandler();
     private Thread gameThread;
-    private int FPS = 25;
 
     private static List<GameObject> gameObjects = new ArrayList<>();
 
@@ -44,7 +43,7 @@ public class Kernel implements Runnable{
         //Player
         graphicEngine.addDisplayable(player.getComponent(Displayable.class));
         physicalEngine.addPhysicalObject(player.getComponent(Physical.class));
-        player.getComponent(Physical.class).setSpeed(4);
+        player.getComponent(Physical.class).setSpeed(3);
 
         //Wall
         graphicEngine.addDisplayable(wall.getComponent(Displayable.class));
@@ -61,33 +60,20 @@ public class Kernel implements Runnable{
 
     @Override
     public void run(){
-
-        double drawInternal = 1_000_000_000/FPS;
-        double delta = 0;
-        long lastTime = System.nanoTime();
-        long currentTime;
-
         while(gameThread != null){
-            currentTime = System.nanoTime();
+            
+            if(!GraphicEngine.refreshFrequences()) continue;
 
-            delta += (currentTime - lastTime) / drawInternal;
-
-            lastTime = currentTime;
-
-            if(delta >= 1){
-                //Refresh 'FPS' times per seconds
-                
-                for(GameObject go : gameObjects){
-                    Physical physic = go.getComponent(Physical.class);
-                    Displayable disp = go.getComponent(Displayable.class);
-                    graphicEngine.setPosition(disp, (int)physic.getX(), (int)physic.getY());
-                    System.out.println(physic.getX() + " " + physic.getY());
-                }
-
-                physicalEngine.computeAll();
-                graphicEngine.repaint();
-                delta--;
+            for(GameObject go : gameObjects){
+                Physical physic = go.getComponent(Physical.class);
+                Displayable disp = go.getComponent(Displayable.class);
+                graphicEngine.setPosition(disp, (int)physic.getX(), (int)physic.getY());
+                System.out.println(physic.getX() + " " + physic.getY());
             }
+
+            physicalEngine.computeAll();
+            graphicEngine.repaint();
+                
         }
     }
 

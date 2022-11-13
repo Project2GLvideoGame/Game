@@ -22,7 +22,9 @@ public class GraphicEngine extends JPanel{
     
     final int screenWidth = tileSize * maxScreenCol;
     final int screenHeight = tileSize * maxScreenRow;
-
+    
+    private static int FPS = 25;
+    
 
     private List<Displayable> displayables = new ArrayList<>();
     
@@ -34,7 +36,6 @@ public class GraphicEngine extends JPanel{
         this.setFocusable(true);
 
         initWindow();
-        initInitialComponent();
     }
     
     private void initWindow(){
@@ -53,8 +54,22 @@ public class GraphicEngine extends JPanel{
         window.setVisible(true);
     }
 
-    private void initInitialComponent(){
-        
+    private static double drawInternal = 1_000_000_000/FPS;
+    private static double delta = 0;
+    private static long lastTime = System.nanoTime();
+    private static long currentTime;
+
+    public static boolean refreshFrequences(){
+
+        currentTime = System.nanoTime();
+        delta += (currentTime - lastTime) / drawInternal;
+        lastTime = currentTime;
+
+        if(delta >= 1){
+            delta--;
+            return true;
+        }
+        return false;
     }
 
     @Override
