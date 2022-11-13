@@ -1,14 +1,14 @@
 package game.Input.State;
 
-import game.Input.InputEngine;
+import game.Input.KeyHandler;
 
 public interface State {
 
-    void up(InputEngine input);
-    void right(InputEngine input);
-    void down(InputEngine input);
-    void left(InputEngine input);
-    void pause(InputEngine input);
+    void up(KeyHandler input);
+    void right(KeyHandler input);
+    void down(KeyHandler input);
+    void left(KeyHandler input);
+    void pause(KeyHandler input);
 
     
 }

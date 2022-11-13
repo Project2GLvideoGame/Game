@@ -8,13 +8,15 @@ import game.Input.State.State;
 
 public class KeyHandler implements KeyListener{
 
-    public boolean upPressed, downPressed, leftPressed, rightPressed;
-
     private State currentState = new GameState();
     private Kernel kernel;
 
     public void changeState(State state){
         this.currentState = state;
+    }
+
+    public void setKernel(Kernel kernel){
+        this.kernel = kernel;
     }
 
     public Kernel getKernel(){return kernel;}
@@ -24,17 +26,17 @@ public class KeyHandler implements KeyListener{
 
         switch(e.getKeyCode()){
             case KeyEvent.VK_Z:
-                upPressed = true;
-            break;
+                currentState.up(this);
+                break;
             case KeyEvent.VK_S:
-                downPressed = true;
-            break;
+                currentState.down(this);
+                break;
             case KeyEvent.VK_Q:
-                leftPressed = true;
-            break;
+                currentState.left(this);
+                break;
             case KeyEvent.VK_D:
-                rightPressed = true;
-            break;
+                currentState.right(this);
+                break;
         }
 
     }
@@ -44,16 +46,12 @@ public class KeyHandler implements KeyListener{
 
         switch(e.getKeyCode()){
             case KeyEvent.VK_Z:
-                upPressed = false;
             break;
             case KeyEvent.VK_S:
-                downPressed = false;
             break;
             case KeyEvent.VK_Q:
-                leftPressed = false;
             break;
             case KeyEvent.VK_D:
-                rightPressed = false;
             break;
         }
 

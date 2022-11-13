@@ -1,9 +1,5 @@
 package game.Physic;
 
-import java.math.*;
-
-import javafx.geometry.Rectangle2D;
-import javafx.scene.paint.Color;
 
 public class Rectangle {
 
