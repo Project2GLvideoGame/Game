@@ -24,15 +24,15 @@ public class PhysicalEngineTest {
     static PhysicalEngine engine;
 
     @BeforeClass
-    public static void testSetup() {
-        engine = new PhysicalEngine();
-        engine.addPhysicalObject(westWall);
-        engine.addPhysicalObject(eastWall);
-        engine.addPhysicalObject(southWall);
-        engine.addPhysicalObject(northWall);
-        engine.addPhysicalObject(movingShrek);
-        movingShrek.setSpeed( 0);
-    }
+    // public static void testSetup() {
+    //     engine = new PhysicalEngine();
+    //     engine.addPhysicalObject(westWall);
+    //     engine.addPhysicalObject(eastWall);
+    //     engine.addPhysicalObject(southWall);
+    //     engine.addPhysicalObject(northWall);
+    //     engine.addPhysicalObject(movingShrek);
+    //     movingShrek.setSpeed( 0);
+    // }
 
     @AfterClass
     public static void testCleanup() {
@@ -187,7 +187,7 @@ public class PhysicalEngineTest {
         movingShrek.setSpeed( 5);
         long start = System.nanoTime();
         while (movingShrek.getSpeed() != 0) {
-            engine.compute(movingShrek);
+            engine.update(movingShrek);
             System.out.println("Number collision " + engine.allCollision(movingShrek).size());
             System.out.println("Position : " + movingShrek.getX() + " " + movingShrek.getY());
             System.out.println("Speed : " + movingShrek.getSpeed());
@@ -199,7 +199,7 @@ public class PhysicalEngineTest {
         System.out.println("Number collision " + engine.allCollision(movingShrek).size());
         System.out.println("Position : " + movingShrek.getX() + " " + movingShrek.getY());
         System.out.println("Speed : " + movingShrek.getSpeed());
-        engine.compute(movingShrek);
+        engine.update(movingShrek);
         // assertTrue(engine.allCollision(movingShrek).size() == 0);
 
     }
@@ -210,7 +210,7 @@ public class PhysicalEngineTest {
     public void testSetDestination(){
         movingShrek.setCoordinate(new Coordinate(30, 30));
         movingShrek.setSpeed(5);
-        engine.compute(movingShrek);
+        engine.update(movingShrek);
         while(movingShrek.getX()!= 50){
             System.out.println(movingShrek.getX());
         }
