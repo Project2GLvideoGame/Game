@@ -7,7 +7,9 @@ import javax.imageio.ImageIO;
 
 import game.Graphic.Displayable;
 import game.Graphic.GraphicEngine;
+import game.Input.InputEngine;
 import game.Input.KeyHandler;
+import game.Input.State;
 import game.Physic.Physical;
 import game.Physic.PhysicalEngine;
 
@@ -20,6 +22,7 @@ public class Kernel implements Runnable{
 
     private static GraphicEngine graphicEngine;
     private static PhysicalEngine physicalEngine;
+    private static InputEngine inputEngine;
     
     private GameObject player;
 
@@ -71,7 +74,7 @@ public class Kernel implements Runnable{
                 System.out.println(physic.getX() + " " + physic.getY());
             }
 
-            physicalEngine.computeAll();
+            physicalEngine.update();
             graphicEngine.repaint();
                 
         }
@@ -82,6 +85,11 @@ public class Kernel implements Runnable{
         player.getComponent(Physical.class).setDirection(direction);
     }
 
-    // public GameObject getPlayer(){return player;}
-    // public GraphicEngine getGraphicEngine(){return graphicEngine;}
+    public GameObject getPlayer(){return player;}
+    public GraphicEngine getGraphicEngine(){return graphicEngine;}
+
+    public void changeState(State state) {
+        inputEngine.changeState(state);
+    }
+
 }
