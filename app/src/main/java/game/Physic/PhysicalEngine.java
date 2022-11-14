@@ -1,17 +1,21 @@
 package game.Physic;
 
-
 import java.util.ArrayList;
 import java.util.List;
-import java.math.*;
+import game.Engine;
+import game.Kernel;
+import game.Events.EventsManager;
+import game.Events.MoveEvent;
+
 import static game.Physic.Utils.*;
 
-public class PhysicalEngine {
+public class PhysicalEngine extends Engine{
 
     public List<Physical> physicalObjects = new ArrayList<>();
     long previousTime;
 
-    public PhysicalEngine() {
+    public PhysicalEngine(EventsManager eventsManager) {
+        super(eventsManager);
         previousTime = System.nanoTime(); //TODO pas exact
     }
 
@@ -81,7 +85,7 @@ public class PhysicalEngine {
     }
 
 
-    public void compute(Physical physical) {
+    public void update(Physical physical) {
         long currentTime = System.nanoTime();
         long elapsedTime = (currentTime-previousTime)/10_000_000;
         
@@ -112,13 +116,14 @@ public class PhysicalEngine {
             // System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX()+physical.getBoxCollider().getWidth(), physical.getY()+physical.getBoxCollider().getHeight());
 
         }
-        previousTime = System.nanoTime();
+        MoveEvent moveEvent = new MoveEvent(physical.getGameObject(), lastCoord, physical.getCoordinate());
+        submit(moveEvent);
     }
 
 
-    public void computeAll(){
+    public void update(){
         for (Physical physical : physicalObjects) {
-            compute(physical);
+            update(physical);
         }
         previousTime = System.nanoTime();
     }

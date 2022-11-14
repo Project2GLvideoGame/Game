@@ -13,6 +13,7 @@ public class GameObject{
     public GameObject(Component ...in_components){
         for (Component component : in_components) {
             components.add(component);
+            component.setGameObject(this);
         }
     }
     

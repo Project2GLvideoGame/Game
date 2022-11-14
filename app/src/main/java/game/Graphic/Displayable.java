@@ -1,38 +1,72 @@
 package game.Graphic;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+
 import game.Component;
-import javafx.scene.image.ImageView;
 
-public class Displayable extends Component{
+public class Displayable extends Component {
 
-    private final ImageView asset;
+    private Image asset;
+    private int x, y;
+    private int width, height;
+    private boolean visibility = true;
 
-    public Displayable(ImageView asset, double x, double y, int width, int height) {
-        this.asset = asset;
-        this.asset.setSmooth(false);
-        this.asset.setX(x);
-        this.asset.setY(y);
-        this.asset.setFitHeight(height);
-        this.asset.setFitWidth(width);
+    public Displayable(BufferedImage asset, int x, int y, int width, int height) {
+        this.asset = asset.getScaledInstance(width, height, Image.SCALE_DEFAULT);
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
     }
 
-    public double getX() {
-        return asset.getX();
+    public int getX() {
+        return x;
     }
 
-    public double getY() {
-        return asset.getY();
+    public int getY() {
+        return y;
     }
 
-    public void setX(double x) {
-        asset.setX(x);
+    public int getWidth() {
+        return width;
     }
 
-    public void setY(double y) {
-        asset.setY(y);
+    public int getHeight() {
+        return height;
     }
 
-    public ImageView getAsset() {
+    public Image getAsset() {
         return asset;
+    }
+
+    public boolean getVisibility(){
+        return this.visibility;
+    }
+    
+    public void setX(int x) {
+        this.x = x;
+    }
+    
+    public void setY(int y) {
+        this.y = y;
+    }
+    
+    public void setWidth(int width) {
+        this.asset = asset.getScaledInstance(width, this.height, Image.SCALE_DEFAULT);
+        this.width = width;
+    }
+    
+    public void setHeight(int height) {
+        this.asset = asset.getScaledInstance(this.width, height, Image.SCALE_DEFAULT);
+        this.height = height;
+    }
+    
+    public void setAsset(Image img) {
+        this.asset = img;
+    }
+
+    public void setVisibility(boolean visibility){
+        this.visibility = visibility;
     }
 }
