@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 public class GraphicEngine extends JPanel{
 
     //Screen settings
-    final int originalTileSize = 16; //16x16 tiles
+    final static int originalTileSize = 16; //16x16 tiles
     final int scale = 3;
 
     final int tileSize = originalTileSize * scale;
