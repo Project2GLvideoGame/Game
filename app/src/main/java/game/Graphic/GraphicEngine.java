@@ -1,83 +1,110 @@
 package game.Graphic;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import game.GameObject;
-import game.Physic.Physical;
-import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
-public class GraphicEngine {
+public class GraphicEngine extends JPanel{
+
+    //Screen settings
+    final static int originalTileSize = 16; //16x16 tiles
+    final int scale = 3;
+
+    final int tileSize = originalTileSize * scale;
+    final int maxScreenCol = 16;
+    final int maxScreenRow = 12;
     
-    private Group mainGroup = new Group();
-
-    private final int width = 700;
-    private final int height = 700;
+    final int screenWidth = tileSize * maxScreenCol;
+    final int screenHeight = tileSize * maxScreenRow;
+    
+    private static int FPS = 25;
+    
 
     private List<Displayable> displayables = new ArrayList<>();
-    private Scene scene;
-
     
 
-    //Initialise les gameObject Initialement présent dans la scène 
-    private void createContent() {
-        // GameObject g = new GameObject(new Displayable(new ImageView("pacman_run.gif"), width/2 - 32, height/2 - 32, 64, 64));
+    public GraphicEngine() throws Exception {
+        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+        this.setBackground(Color.black);
+        this.setDoubleBuffered(true);
+        this.setFocusable(true);
+
+        initWindow();
+    }
+    
+    private void initWindow(){
+
+        JFrame window = new JFrame();
         
-        // mainGroup.getChildren().add(g.getComponent(Displayable.class).getAsset());
-        // displayables.add(g.getComponent(Displayable.class));
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setResizable(true);
+        window.setTitle("Game");
         
-        Button btn = new Button("TestButton");
-        btn.setOnAction(this::actionEvent);
-        mainGroup.getChildren().add(btn);
-
+        window.add(this);
+        
+        window.pack(); //window set to fit to prefered size
+        
+        window.setLocationRelativeTo(null); //init the window to center on the screen
+        window.setVisible(true);
     }
 
-    public void init(Stage stage) throws Exception {
-        createContent();
+    private static double drawInternal = 1_000_000_000/FPS;
+    private static double delta = 0;
+    private static long lastTime = System.nanoTime();
+    private static long currentTime;
 
-        stage.setScene(new Scene(mainGroup, width, height));
-        stage.getScene().setFill(Color.web("#5b60e5"));
+    public static boolean refreshFrequences(){
 
-        this.scene = stage.getScene();
-        stage.show();
+        currentTime = System.nanoTime();
+        delta += (currentTime - lastTime) / drawInternal;
+        lastTime = currentTime;
+
+        if(delta >= 1){
+            delta--;
+            return true;
+        }
+        return false;
     }
 
-    public Scene getScene(){return scene;}
+    @Override
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
 
-    private void actionEvent(ActionEvent event){
-        scale(displayables.get(0), displayables.get(0).getAsset().getScaleX() + 0.2d);
+        Graphics2D g2 = (Graphics2D)g;
+
+        for(Displayable disp : displayables){
+            if(disp.getVisibility())
+                g2.drawImage(disp.getAsset(), disp.getX(), disp.getY(), null);
+        }
+        
+        g2.dispose();
     }
 
-    public void setPosition(Displayable displayable, double x, double y) {
+    public void setPosition(Displayable displayable, int x, int y) {
         displayable.setX(x);
         displayable.setY(y);
     }
-    public void relocate(Displayable displayable, double x, double y){
-        displayable.getAsset().relocate(x, y);
-    }
 
-    public void rotate(Displayable displayable, double angle) {
-        displayable.getAsset().setRotate(angle);
+    private void rotate(Displayable displayable, double angle) {
+        //displayable.getAsset().setRotate(angle);
     }
 
     public void scale(Displayable displayable, double percentage) {
-        displayable.getAsset().setScaleX(percentage);
-        displayable.getAsset().setScaleY(percentage);
+        displayable.setHeight((int)(displayable.getHeight()*percentage));
+        displayable.setWidth((int)(displayable.getWidth()*percentage));
     }
 
     public void setVisibility(Displayable displayable, boolean value) {
-        displayable.getAsset().setVisible(value);
+        displayable.setVisibility(value);
     }
 
-    public void addChildren(Displayable displayable){
-        mainGroup.getChildren().add(displayable.getAsset());
+    public void addDisplayable(Displayable displayable){
         displayables.add(displayable);
     }
 

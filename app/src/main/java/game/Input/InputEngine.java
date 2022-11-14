@@ -1,95 +1,95 @@
 package game.Input;
-import game.Kernel;
-import game.Input.State.GameState;
-import game.Input.State.State;
-import javafx.event.EventHandler;
-import javafx.scene.input.KeyEvent;
+// import game.Kernel;
+// import game.Input.State.GameState;
+// import game.Input.State.State;
+// import javafx.event.EventHandler;
+// import javafx.scene.input.KeyEvent;
 
 public class InputEngine {
     
-    public EventHandler<? super KeyEvent> eventHandlerPressed;
-    public EventHandler<? super KeyEvent> eventHandlerReleased;
+    // public EventHandler<? super KeyEvent> eventHandlerPressed;
+    // public EventHandler<? super KeyEvent> eventHandlerReleased;
 
-    private State currentState = new GameState();
-    Kernel kernel;
+    // private State currentState = new GameState();
+    // Kernel kernel;
 
-    public void changeState(State state){
-        this.currentState = state;
-    }
+    // public void changeState(State state){
+    //     this.currentState = state;
+    // }
 
-    public Kernel getKernel(){return kernel;}
+    // public Kernel getKernel(){return kernel;}
     
-    public InputEngine(Kernel kernel){
+    // public InputEngine(Kernel kernel){
 
-        this.kernel = kernel;
+    //     this.kernel = kernel;
 
-        eventHandlerPressed = new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                switch(event.getCode()){
+    //     eventHandlerPressed = new EventHandler<KeyEvent>() {
+    //         @Override
+    //         public void handle(KeyEvent event) {
+    //             switch(event.getCode()){
 
-                    case UP:
-                        currentState.up(InputEngine.this);
-                        System.out.println("UP pressed");
-                        break;
+    //                 case UP:
+    //                     currentState.up(InputEngine.this);
+    //                     System.out.println("UP pressed");
+    //                     break;
 
-                    case RIGHT:
-                        currentState.right(InputEngine.this);
-                        break;
+    //                 case RIGHT:
+    //                     currentState.right(InputEngine.this);
+    //                     break;
 
-                    case DOWN:
-                    currentState.down(InputEngine.this);
-                        break;
+    //                 case DOWN:
+    //                 currentState.down(InputEngine.this);
+    //                     break;
 
-                    case LEFT:
-                    currentState.left(InputEngine.this);
-                        break;
+    //                 case LEFT:
+    //                 currentState.left(InputEngine.this);
+    //                     break;
 
-                    case ESCAPE:
-                    currentState.pause(InputEngine.this);
-                    break;
+    //                 case ESCAPE:
+    //                 currentState.pause(InputEngine.this);
+    //                 break;
                     
-                    default:
-                    System.out.println(event.getCode());
-                        break;
+    //                 default:
+    //                 System.out.println(event.getCode());
+    //                     break;
 
-                }            
-            }
-        };
+    //             }            
+    //         }
+    //     };
 
-        eventHandlerReleased =  new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                switch(event.getCode()){
+    //     eventHandlerReleased =  new EventHandler<KeyEvent>() {
+    //         @Override
+    //         public void handle(KeyEvent event) {
+    //             switch(event.getCode()){
 
-                    case UP:
-                    currentState.up(InputEngine.this);
-                    System.out.println("UP released");
-                        break;
+    //                 case UP:
+    //                 currentState.up(InputEngine.this);
+    //                 System.out.println("UP released");
+    //                     break;
 
-                    case RIGHT:
-                        currentState.right(InputEngine.this);
-                        break;
+    //                 case RIGHT:
+    //                     currentState.right(InputEngine.this);
+    //                     break;
 
-                    case DOWN:
-                    currentState.down(InputEngine.this);
-                        break;
+    //                 case DOWN:
+    //                 currentState.down(InputEngine.this);
+    //                     break;
 
-                    case LEFT:
-                    currentState.left(InputEngine.this);
-                        break;
+    //                 case LEFT:
+    //                 currentState.left(InputEngine.this);
+    //                     break;
 
-                    case P:
-                    currentState.pause(InputEngine.this);
-                    System.out.println(event.getCode());
-                    break;
+    //                 case P:
+    //                 currentState.pause(InputEngine.this);
+    //                 System.out.println(event.getCode());
+    //                 break;
                     
-                    default:
-                        break;
+    //                 default:
+    //                     break;
 
-                }            } 
-        };
-    }
+    //             }            } 
+    //     };
+    // }
 /*
  * 
  * 
