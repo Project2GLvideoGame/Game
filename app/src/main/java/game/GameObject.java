@@ -3,8 +3,8 @@ package game;
 import java.util.ArrayList;
 import java.util.List;
 
-import game.Graphic.Displayable;
-import game.Physic.Physical;
+import game.graphic.Displayable;
+import game.physics.Physic;
 
 public class GameObject{
         

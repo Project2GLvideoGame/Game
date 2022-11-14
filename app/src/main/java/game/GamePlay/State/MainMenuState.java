@@ -1,6 +1,7 @@
-package game.Input;
+package game.gameplay.State;
 
 import game.Kernel;
+import game.input.State;
 
 /**
  * À créer par le concepteur du gameplay dans la partie gameplay pour autant d'états de jeu qu'il existe.
@@ -29,11 +30,12 @@ public class MainMenuState implements State {
 
     @Override
     public void escape(Kernel kernel) {
+
         kernel.changeState(new GameState());
     }
 
     @Override
-    public void p(Kernel kernel) {
+    public void pause(Kernel kernel) {
 
     }
 }

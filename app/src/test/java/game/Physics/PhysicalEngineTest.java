@@ -1,11 +1,5 @@
 package game.Physics;
 
-import game.Physic.Collision;
-import game.Physic.Coordinate;
-import game.Physic.Physical;
-import game.Physic.PhysicalEngine;
-import game.Physic.Rectangle;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -13,15 +7,21 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import game.physics.Collision;
+import game.physics.Coordinate;
+import game.physics.Physic;
+import game.physics.PhysicEngine;
+import game.physics.Rectangle;
+
 public class PhysicalEngineTest {
 
-    static Physical westWall = new Physical(0, 0, 20, 100);
-    static Physical eastWall = new Physical(80, 20, 20, 80);
-    static Physical northWall = new Physical(20, 0, 80, 20);
-    static Physical southWall = new Physical(20, 80, 60, 20);
-    static Physical movingShrek = new Physical(50, 50, 10, 10);
+    static Physic westWall = new Physic(0, 0, 20, 100);
+    static Physic eastWall = new Physic(80, 20, 20, 80);
+    static Physic northWall = new Physic(20, 0, 80, 20);
+    static Physic southWall = new Physic(20, 80, 60, 20);
+    static Physic movingShrek = new Physic(50, 50, 10, 10);
 
-    static PhysicalEngine engine;
+    static PhysicEngine engine;
 
     @BeforeClass
     // public static void testSetup() {
@@ -57,18 +57,18 @@ public class PhysicalEngineTest {
 
 @Test(expected = AssertionError.class)
     public void testNullHeight() {
-    engine.addPhysicalObject(new Physical(1, 2, 0, 4));
+    engine.addPhysicalObject(new Physic(1, 2, 0, 4));
     }
 
     @Test(expected = AssertionError.class)
     public void testNullWidth() {
-        engine.addPhysicalObject(new Physical(1, 2, 3, 0));
+        engine.addPhysicalObject(new Physic(1, 2, 3, 0));
     }
 
     @Test
     public void testAddPhysicalObject() {
         assertTrue(engine.physicalObjects.size() ==5 ); 
-        Physical testPhysical = new Physical(1, 2, 3, 1);
+        Physic testPhysical = new Physic(1, 2, 3, 1);
         engine.addPhysicalObject(testPhysical);
         assertTrue(engine.physicalObjects.size() == 6);
         assertTrue(engine.physicalObjects.get(5).equals(testPhysical));
@@ -76,7 +76,7 @@ public class PhysicalEngineTest {
 
     @Test
     public void testRemovePhysicalObject() {
-        Physical testPhysical = new Physical(1, 2, 3, 1);
+        Physic testPhysical = new Physic(1, 2, 3, 1);
 
         engine.addPhysicalObject(testPhysical);
         assertTrue(engine.physicalObjects.size() == 6);

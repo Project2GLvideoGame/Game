@@ -1,11 +1,11 @@
-package game.Physic;
+package game.physics;
 
 public class Collision {
 
     public Rectangle overlap;
-    public Physical obj, obstacle;
+    public Physic obj, obstacle;
 
-    public Collision(Rectangle overlap, Physical obj, Physical obstacle) {
+    public Collision(Rectangle overlap, Physic obj, Physic obstacle) {
         this.overlap = overlap;
         this.obj = obj;
         this.obstacle = obstacle;

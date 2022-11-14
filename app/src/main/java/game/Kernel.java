@@ -5,29 +5,28 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import game.Graphic.Displayable;
-import game.Graphic.GraphicEngine;
-import game.Input.InputEngine;
-import game.Input.KeyHandler;
-import game.Input.State;
-import game.Physic.Physical;
-import game.Physic.PhysicalEngine;
+import game.graphic.Displayable;
+import game.graphic.GraphicEngine;
+import game.input.InputEngine;
+import game.input.State;
+import game.physics.Physic;
+import game.physics.PhysicEngine;
 
 public class Kernel implements Runnable{
 
-    private KeyHandler KeyH = new KeyHandler();
+    private InputEngine KeyH = new InputEngine();
     private Thread gameThread;
 
     private static List<GameObject> gameObjects = new ArrayList<>();
 
     private static GraphicEngine graphicEngine;
-    private static PhysicalEngine physicalEngine;
+    private static PhysicEngine physicalEngine;
     private static InputEngine inputEngine;
     
     private GameObject player;
 
 
-    public Kernel(GraphicEngine graphicEngine, PhysicalEngine physicalEngine) throws Exception{
+    public Kernel(GraphicEngine graphicEngine, PhysicEngine physicalEngine) throws Exception{
 
         Kernel.graphicEngine = graphicEngine;
         Kernel.physicalEngine = physicalEngine;
@@ -36,21 +35,21 @@ public class Kernel implements Runnable{
         graphicEngine.addKeyListener(KeyH);
 
         //Gameplay work
-        player = new GameObject(new Physical(100, 100, 60, 64),
+        player = new GameObject(new Physic(100, 100, 60, 64),
                                 new Displayable(ImageIO.read(getClass().getResource("/pacman_idle.png")),
                                 100, 100, 64, 64));
-        GameObject wall = new GameObject(new Physical(350, 300, 50, 150),
+        GameObject wall = new GameObject(new Physic(350, 300, 50, 150),
                                 new Displayable(ImageIO.read(getClass().getResource("/wall.jpg")),
                                 350, 300, 50, 150));
 
         //Player
         graphicEngine.addDisplayable(player.getComponent(Displayable.class));
-        physicalEngine.addPhysicalObject(player.getComponent(Physical.class));
-        player.getComponent(Physical.class).setSpeed(3);
+        physicalEngine.addPhysicalObject(player.getComponent(Physic.class));
+        player.getComponent(Physic.class).setSpeed(3);
 
         //Wall
         graphicEngine.addDisplayable(wall.getComponent(Displayable.class));
-        physicalEngine.addPhysicalObject(wall.getComponent(Physical.class));
+        physicalEngine.addPhysicalObject(wall.getComponent(Physic.class));
 
         gameObjects.add(player);
         gameObjects.add(wall);
@@ -68,7 +67,7 @@ public class Kernel implements Runnable{
             if(!GraphicEngine.refreshFrequences()) continue;
 
             for(GameObject go : gameObjects){
-                Physical physic = go.getComponent(Physical.class);
+                Physic physic = go.getComponent(Physic.class);
                 Displayable disp = go.getComponent(Displayable.class);
                 graphicEngine.setPosition(disp, (int)physic.getX(), (int)physic.getY());
                 System.out.println(physic.getX() + " " + physic.getY());
@@ -82,7 +81,7 @@ public class Kernel implements Runnable{
 
 
     public void movePlayer(int direction) {
-        player.getComponent(Physical.class).setDirection(direction);
+        player.getComponent(Physic.class).setDirection(direction);
     }
 
     public GameObject getPlayer(){return player;}

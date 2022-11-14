@@ -1,4 +1,4 @@
-package game.Graphic;
+package game.graphic;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -23,7 +23,7 @@ public class GraphicEngine extends JPanel{
     final int screenWidth = tileSize * maxScreenCol;
     final int screenHeight = tileSize * maxScreenRow;
     
-    private static int FPS = 25;
+    private static int FPS = 60;
     
 
     private List<Displayable> displayables = new ArrayList<>();

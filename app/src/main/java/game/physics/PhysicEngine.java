@@ -1,39 +1,38 @@
-package game.Physic;
+package game.physics;
+
+import static game.physics.Utils.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import game.Engine;
-import game.Kernel;
-import game.Events.EventsManager;
-import game.Events.MoveEvent;
+import game.event.EventsManager;
+import game.event.MoveEvent;
 
-import static game.Physic.Utils.*;
+public class PhysicEngine extends Engine{
 
-public class PhysicalEngine extends Engine{
-
-    public List<Physical> physicalObjects = new ArrayList<>();
+    public List<Physic> physicalObjects = new ArrayList<>();
     long previousTime;
 
-    public PhysicalEngine(EventsManager eventsManager) {
+    public PhysicEngine(EventsManager eventsManager) {
         super(eventsManager);
         previousTime = System.nanoTime(); //TODO pas exact
     }
 
 
 
-    public void addPhysicalObject(Physical physical) {
+    public void addPhysicalObject(Physic physical) {
         physicalObjects.add(physical);
     }
 
 
-    public void removePhysicalObject(Physical physical) {
+    public void removePhysicalObject(Physic physical) {
         physicalObjects.remove(physical);
     }
 
 
-    public List<Collision> allCollision(Physical physical) {
+    public List<Collision> allCollision(Physic physical) {
         List<Collision> collidedObjects = new ArrayList<>();
-        for (Physical physicalObject : physicalObjects) {
+        for (Physic physicalObject : physicalObjects) {
             if (physicalObject!=physical && isCollided(physical, physicalObject)) {
                 collidedObjects.add(
                     new Collision(physical.getBoxCollider().intersection(physicalObject.getBoxCollider()),
@@ -47,13 +46,13 @@ public class PhysicalEngine extends Engine{
 
 
 
-    private boolean isCollided(Physical obj1, Physical obj2) {
+    private boolean isCollided(Physic obj1, Physic obj2) {
         return obj2.getBoxCollider().intersects(obj1.getBoxCollider());
     }
 
 
     //TODO: regarde une seule colision
-    public void setPositionAfterCollision(Physical physical, Coordinate beforeCollsionCoord, Coordinate CollisonCoord, List<Collision> collisions){
+    public void setPositionAfterCollision(Physic physical, Coordinate beforeCollsionCoord, Coordinate CollisonCoord, List<Collision> collisions){
         if(collisions.isEmpty()) physical.setCoordinate(beforeCollsionCoord);
         
         Collision collision = collisions.get(0);
@@ -85,7 +84,7 @@ public class PhysicalEngine extends Engine{
     }
 
 
-    public void update(Physical physical) {
+    public void update(Physic physical) {
         long currentTime = System.nanoTime();
         long elapsedTime = (currentTime-previousTime)/10_000_000;
         
@@ -122,7 +121,7 @@ public class PhysicalEngine extends Engine{
 
 
     public void update(){
-        for (Physical physical : physicalObjects) {
+        for (Physic physical : physicalObjects) {
             update(physical);
         }
         previousTime = System.nanoTime();

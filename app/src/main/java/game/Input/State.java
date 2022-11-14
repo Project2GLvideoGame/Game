@@ -1,4 +1,4 @@
-package game.Input;
+package game.input;
 
 import game.Kernel;
 
@@ -9,7 +9,8 @@ public interface State {
     void down(Kernel kernel);
     void left(Kernel kernel);
     void escape(Kernel kernel);
-    void p(Kernel kernel);
+    void pause(Kernel kernel);
 
-    // TODO: Discuter des touches qu'on propose au concepteur d'utiliser et les rajouter ici
+
+
 }

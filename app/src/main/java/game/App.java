@@ -1,13 +1,15 @@
 package game;
 
-import game.Graphic.GraphicEngine;
-import game.Physic.PhysicalEngine;
+import game.event.EventsManager;
+import game.graphic.GraphicEngine;
+import game.physics.PhysicEngine;
 
 public class App {
 
     public static void main(String[] args) throws Exception {
+        EventsManager eventManager = new EventsManager();
         GraphicEngine graphicE = new GraphicEngine();
-        PhysicalEngine physicalE = new PhysicalEngine();
+        PhysicEngine physicalE = new PhysicEngine(eventManager);
         
         Kernel kernel = new Kernel(graphicE, physicalE);
         kernel.startGameThread();

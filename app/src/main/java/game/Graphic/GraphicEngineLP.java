@@ -1,4 +1,4 @@
-package game.Graphic;
+package game.graphic;
 
 // import javafx.scene.Parent;
 // import java.util.ArrayList;

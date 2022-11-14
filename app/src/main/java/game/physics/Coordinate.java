@@ -1,4 +1,4 @@
-package game.Physic;
+package game.physics;
 
 public class Coordinate {
 
