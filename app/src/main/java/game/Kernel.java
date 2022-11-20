@@ -5,12 +5,12 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import game.graphic.Displayable;
-import game.graphic.GraphicEngine;
-import game.input.InputEngine;
-import game.input.State;
-import game.physics.Physic;
-import game.physics.PhysicEngine;
+import game.Physics.Physic;
+import game.Physics.PhysicEngine;
+import game.Graphic.Displayable;
+import game.Graphic.GraphicEngine;
+import game.Input.InputEngine;
+import game.Input.State;
 
 public class Kernel implements Runnable{
 

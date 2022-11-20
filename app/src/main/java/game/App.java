@@ -1,8 +1,8 @@
 package game;
 
-import game.event.EventsManager;
-import game.graphic.GraphicEngine;
-import game.physics.PhysicEngine;
+import game.Event.EventsManager;
+import game.Graphic.GraphicEngine;
+import game.Physics.PhysicEngine;
 
 public class App {
 

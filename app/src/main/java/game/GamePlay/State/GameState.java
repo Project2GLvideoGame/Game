@@ -1,7 +1,7 @@
-package game.gameplay.State;
+package game.Gameplay.State;
 
 import game.Kernel;
-import game.input.State;
+import game.Input.State;
 
 public class GameState implements State {
 

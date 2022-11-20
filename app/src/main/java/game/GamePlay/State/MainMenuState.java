@@ -1,7 +1,7 @@
-package game.gameplay.State;
+package game.Gameplay.State;
 
 import game.Kernel;
-import game.input.State;
+import game.Input.State;
 
 /**
  * À créer par le concepteur du gameplay dans la partie gameplay pour autant d'états de jeu qu'il existe.

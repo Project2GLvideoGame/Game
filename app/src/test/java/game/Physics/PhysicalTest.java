@@ -6,7 +6,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import game.physics.Physic;
+import game.Physics.Physic;
 
 public class PhysicalTest {
     Physic physicalToTest = new Physic(0, 0, 0, 0);

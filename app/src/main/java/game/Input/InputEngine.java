@@ -1,9 +1,9 @@
-package game.input;
+package game.Input;
 
 import java.awt.event.*;
 
 import game.Kernel;
-import game.gameplay.State.GameState;
+import game.Gameplay.State.GameState;
 
 public class InputEngine implements KeyListener{
 

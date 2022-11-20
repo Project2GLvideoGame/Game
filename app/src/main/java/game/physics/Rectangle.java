@@ -1,4 +1,4 @@
-package game.physics;
+package game.Physics;
 
 
 public class Rectangle {

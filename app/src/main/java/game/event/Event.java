@@ -1,4 +1,4 @@
-package game.event;
+package game.Event;
 
 public interface Event {
     

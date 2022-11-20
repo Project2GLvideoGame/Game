@@ -1,6 +1,6 @@
-package game.physics;
+package game.Physics;
 
-import static game.physics.Utils.*;
+import static game.Physics.Utils.*;
 
 import game.Component;
 

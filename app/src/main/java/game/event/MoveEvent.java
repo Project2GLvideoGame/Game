@@ -1,10 +1,10 @@
-package game.event;
+package game.Event;
 
 import game.GameObject;
-import game.physics.Coordinate;
+import game.Physics.Coordinate;
 
 
-public class MoveEvent implements game.event.Event{
+public class MoveEvent implements Event{
 
     final GameObject GameObject;
     final Coordinate origin, destination;

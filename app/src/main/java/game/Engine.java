@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import game.event.Event;
-import game.event.EventsManager;
+import game.Event.Event;
+import game.Event.EventsManager;
 
 public abstract class Engine {
 

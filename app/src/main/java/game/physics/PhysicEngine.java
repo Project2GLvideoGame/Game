@@ -1,12 +1,12 @@
-package game.physics;
+package game.Physics;
 
-import static game.physics.Utils.*;
+import static game.Physics.Utils.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import game.Engine;
-import game.event.EventsManager;
-import game.event.MoveEvent;
+import game.Event.EventsManager;
+import game.Event.MoveEvent;
 
 public class PhysicEngine extends Engine{
 

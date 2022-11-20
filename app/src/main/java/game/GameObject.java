@@ -3,9 +3,6 @@ package game;
 import java.util.ArrayList;
 import java.util.List;
 
-import game.graphic.Displayable;
-import game.physics.Physic;
-
 public class GameObject{
         
     private List<Component> components = new ArrayList<>();

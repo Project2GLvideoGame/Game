@@ -1,4 +1,4 @@
-package game.graphic;
+package game.Graphic;
 
 import java.awt.Color;
 import java.awt.Dimension;
