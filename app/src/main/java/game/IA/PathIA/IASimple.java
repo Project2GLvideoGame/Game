@@ -1,8 +1,8 @@
-package game.IA;
+package game.IA.PathIA;
 
 import game.GameObject;
-import game.Physic.Coordinate;
-import game.Physic.Physical;
+import game.Physics.Coordinate;
+import game.Physics.Physic;
 
 public class IASimple extends IA{
 
@@ -18,7 +18,7 @@ public class IASimple extends IA{
     @Override
     void executeOrders() {
         // TODO : set speed ?
-        go.getComponent(Physical.class).setDestinationCoord(coordinate);
+        go.getComponent(Physic.class).setDestinationCoord(coordinate);
     }
     
 }

@@ -1,9 +1,8 @@
-package game.IA;
+package game.IA.PathIA;
 
 import game.Component;
 import game.GameObject;
-import game.Physic.Coordinate;
-import game.Physic.Physical;
+import game.Physics.*;
 
 public abstract class IA extends Component{
     GameObject go;
@@ -15,7 +14,7 @@ public abstract class IA extends Component{
     }
 
     public IA(GameObject go,   GameObject goDestination) {
-        this.coordinate = go.getComponent(Physical.class).getCoordinate();
+        this.coordinate = go.getComponent(Physic.class).getCoordinate();
         this.go = go;
     }
     

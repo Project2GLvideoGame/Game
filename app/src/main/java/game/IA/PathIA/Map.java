@@ -1,4 +1,4 @@
-package game.IA;
+package game.IA.PathIA;
 
 public class Map {
     int[][] map;

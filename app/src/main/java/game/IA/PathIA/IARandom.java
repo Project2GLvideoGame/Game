@@ -1,10 +1,10 @@
-package game.IA;
+package game.IA.PathIA;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 import game.GameObject;
-import game.Physic.Coordinate;
-import game.Physic.Physical;
+import game.Physics.Coordinate;
+import game.Physics.Physic;
 
 public class IARandom extends IA {
 
@@ -16,7 +16,7 @@ public class IARandom extends IA {
     void executeOrders() {
         // TODO : set speed ?
         // TODO une boucle qui change la direction a chaque collision
-        go.getComponent(Physical.class).setDirection( ThreadLocalRandom.current().nextInt(0, 360));
+        go.getComponent(Physic.class).setDirection( ThreadLocalRandom.current().nextInt(0, 360));
     }
     
 }
