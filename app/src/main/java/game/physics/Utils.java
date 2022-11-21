@@ -1,4 +1,4 @@
-package game.Physic;
+package game.Physics;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

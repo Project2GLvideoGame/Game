@@ -1,9 +1,10 @@
-package game.Physic;
+package game.Physics;
+
+import static game.Physics.Utils.*;
 
 import game.Component;
-import static game.Physic.Utils.*;
 
-public class Physical extends Component {
+public class Physic extends Component {
 
     private Rectangle boxCollider;
     private double speed;
@@ -11,7 +12,7 @@ public class Physical extends Component {
     private Coordinate destination;
     private boolean useDestination;
 
-    public Physical(double x, double y, double width, double height) {
+    public Physic(double x, double y, double width, double height) {
         this.boxCollider = new Rectangle(x, y, width, height);
         this.speed=0;
         destination = new Coordinate(0,0);

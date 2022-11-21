@@ -3,62 +3,92 @@ package game;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
+import game.Physics.Physic;
+import game.Physics.PhysicEngine;
 import game.Graphic.Displayable;
 import game.Graphic.GraphicEngine;
 import game.Input.InputEngine;
-import game.Physic.Physical;
-import game.Physic.PhysicalEngine;
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
+import game.Input.State;
 
-public class Kernel extends Application implements Runnable{
+public class Kernel implements Runnable{
 
-    List<GameObject> gameObjects = new ArrayList<>();
-    GameObject player = new GameObject(new Physical(0, 350-32, 64, 64), new Displayable(new ImageView("pacman_run.gif"), 350-32, 350-32, 64, 64));
-    GraphicEngine graphicEngine = new GraphicEngine();
-    PhysicalEngine physicalEngine = new PhysicalEngine();
+    private InputEngine KeyH = new InputEngine();
+    private Thread gameThread;
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        graphicEngine.init(stage);
-        
-        InputEngine inputEngine = new InputEngine();
-        Scene scene = graphicEngine.getScene();
+    private static List<GameObject> gameObjects = new ArrayList<>();
 
-        scene.setOnKeyPressed(inputEngine.eventHandlerPressed);
-        scene.setOnKeyReleased(inputEngine.eventHandlerReleased);
-        Thread thread = new Thread(this);
+    private static GraphicEngine graphicEngine;
+    private static PhysicEngine physicalEngine;
+    private static InputEngine inputEngine;
+    
+    private GameObject player;
 
-        physicalEngine.addPhysicalObject(player.getComponent(Physical.class));
-        graphicEngine.addChildren(player.getComponent(Displayable.class));
-        player.getComponent(Physical.class).setSpeed(1);
-        player.getComponent(Physical.class).setDirection(270);
+
+    public Kernel(GraphicEngine graphicEngine, PhysicEngine physicalEngine) throws Exception{
+
+        Kernel.graphicEngine = graphicEngine;
+        Kernel.physicalEngine = physicalEngine;
+
+        KeyH.setKernel(this);
+        graphicEngine.addKeyListener(KeyH);
+
+        //Gameplay work
+        player = new GameObject(new Physic(100, 100, 60, 64),
+                                new Displayable(ImageIO.read(getClass().getResource("/pacman_idle.png")),
+                                100, 100, 64, 64));
+        GameObject wall = new GameObject(new Physic(350, 300, 50, 150),
+                                new Displayable(ImageIO.read(getClass().getResource("/wall.jpg")),
+                                350, 300, 50, 150));
+
+        //Player
+        graphicEngine.addDisplayable(player.getComponent(Displayable.class));
+        physicalEngine.addPhysicalObject(player.getComponent(Physic.class));
+        player.getComponent(Physic.class).setSpeed(3);
+
+        //Wall
+        graphicEngine.addDisplayable(wall.getComponent(Displayable.class));
+        physicalEngine.addPhysicalObject(wall.getComponent(Physic.class));
 
         gameObjects.add(player);
-
-        thread.start();
+        gameObjects.add(wall);
     }
-    
-    @Override
-    public void run() {
-        while(true){
-            
-            for(GameObject go : gameObjects){
-                physicalEngine.compute(go.getComponent(Physical.class));
-                graphicEngine.relocate(go.getComponent(Displayable.class), go.getComponent(Physical.class).getX(), go.getComponent(Physical.class).getY());
-                System.out.println(go.getComponent(Physical.class).getX() + " " + go.getComponent(Physical.class).getY());
-            }
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
 
-        
+    public void startGameThread(){
+        gameThread = new Thread(this);
+        gameThread.start();
+    }
+
+    @Override
+    public void run(){
+        while(gameThread != null){
+            
+            if(!GraphicEngine.refreshFrequences()) continue;
+
+            for(GameObject go : gameObjects){
+                Physic physic = go.getComponent(Physic.class);
+                Displayable disp = go.getComponent(Displayable.class);
+                graphicEngine.setPosition(disp, (int)physic.getX(), (int)physic.getY());
+                System.out.println(physic.getX() + " " + physic.getY());
+            }
+
+            physicalEngine.update();
+            graphicEngine.repaint();
+                
+        }
+    }
+
+
+    public void movePlayer(int direction) {
+        player.getComponent(Physic.class).setDirection(direction);
+    }
+
+    public GameObject getPlayer(){return player;}
+    public GraphicEngine getGraphicEngine(){return graphicEngine;}
+
+    public void changeState(State state) {
+        inputEngine.changeState(state);
     }
 
 }

@@ -3,17 +3,14 @@ package game;
 import java.util.ArrayList;
 import java.util.List;
 
-import game.Graphic.Displayable;
-import game.Physic.Physical;
-
 public class GameObject{
         
     private List<Component> components = new ArrayList<>();
-    public Class<Displayable> getComponent;
     
     public GameObject(Component ...in_components){
         for (Component component : in_components) {
             components.add(component);
+            component.setGameObject(this);
         }
     }
     

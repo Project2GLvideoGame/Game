@@ -6,20 +6,20 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import game.Physic.Physical;
+import game.Physics.Physic;
 
 public class PhysicalTest {
-    Physical physicalToTest = new Physical(0, 0, 0, 0);
+    Physic physicalToTest = new Physic(0, 0, 0, 0);
 
 
     @Test(expected = AssertionError.class)
     public void testNullHeight() {
-       new Physical(1, 2, 0, 4);
+       new Physic(1, 2, 0, 4);
     }
 
     @Test(expected = AssertionError.class)
     public void testNullWidth() {
-        new Physical(1, 2, 3, 0);
+        new Physic(1, 2, 3, 0);
     }
 
 
