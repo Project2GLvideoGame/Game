@@ -11,10 +11,7 @@ public class SoundEngine extends Engine {
     public List<Soundable> soundables = new ArrayList<>();
 
     public void play(){
-        for( Soundable soundables : soundables){
-            soundables.loop();
-            System.out.println(this.soundables.size());
-        }
+
     }
 
     public SoundEngine(EventsManager eventsManager) {
