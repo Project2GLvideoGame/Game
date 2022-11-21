@@ -7,11 +7,11 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import game.Physics.Collision;
-import game.Physics.Coordinate;
-import game.Physics.Physic;
-import game.Physics.PhysicEngine;
-import game.Physics.Rectangle;
+import engine.physics.Collision;
+import engine.physics.Coordinate;
+import engine.physics.Physic;
+import engine.physics.PhysicEngine;
+import engine.physics.Rectangle;
 
 public class PhysicalEngineTest {
 

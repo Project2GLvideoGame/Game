@@ -1,12 +1,8 @@
 package game.Physics;
 
-import static org.junit.Assert.assertTrue;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import game.Physics.Physic;
+import engine.physics.Physic;
 
 public class PhysicalTest {
     Physic physicalToTest = new Physic(0, 0, 0, 0);
