@@ -31,11 +31,13 @@ public class MainMenuState implements State {
     @Override
     public void escape(Kernel kernel) {
 
-        kernel.changeState(new GameState());
     }
 
     @Override
     public void pause(Kernel kernel) {
+        kernel.changeState(new GameState());
+        System.out.println("Main ");
+
 
     }
 }

@@ -7,7 +7,7 @@ import game.Gameplay.State.GameState;
 
 public class InputEngine implements KeyListener{
 
-    private State currentState = new GameState();
+    private static State currentState = new GameState();
     private Kernel kernel;
 
     public void changeState(State state){
@@ -22,6 +22,7 @@ public class InputEngine implements KeyListener{
 
     @Override
     public void keyPressed(KeyEvent e) {
+        System.out.println(getCurrentState());
 
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP -> currentState.up(kernel);
@@ -49,6 +50,10 @@ public class InputEngine implements KeyListener{
             break;
         }
 
+    }
+
+    public State getCurrentState() {
+        return currentState;
     }
 
     @Override
