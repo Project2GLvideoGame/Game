@@ -80,7 +80,7 @@ public class GraphicEngine extends JPanel{
 
         for(Displayable disp : displayables){
             if(disp.getVisibility())
-                g2.drawImage(disp.getAsset(), disp.getX(), disp.getY(), null);
+                disp.draw(g2);
         }
         
         g2.dispose();

@@ -36,11 +36,10 @@ public class Kernel implements Runnable{
 
         //Gameplay work
         player = new GameObject(new Physic(100, 100, 60, 64),
-                                new Displayable(ImageIO.read(getClass().getResource("/pacman_idle.png")),
-                                100, 100, 64, 64));
+                                new Displayable(100, 100, 64, 64, 6, "/player/pacman_run1.png", "/player/pacman_run2.png", "/player/pacman_run3.png", "/player/pacman_run4.png"));
+        
         GameObject wall = new GameObject(new Physic(350, 300, 50, 150),
-                                new Displayable(ImageIO.read(getClass().getResource("/wall.jpg")),
-                                350, 300, 50, 150));
+                                new Displayable(350, 300, 50, 150, "/wall.jpg"));
 
         //Player
         graphicEngine.addDisplayable(player.getComponent(Displayable.class));
