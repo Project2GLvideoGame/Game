@@ -17,6 +17,9 @@ import engine.input.InputEngine;
 import engine.input.State;
 import engine.physics.Physic;
 import engine.physics.PhysicEngine;
+import engine.sound.SoundEngine;
+import engine.sound.Soundable;
+import engine.sound.Track;
 
 public class Kernel implements Runnable{
 
@@ -28,6 +31,7 @@ public class Kernel implements Runnable{
     private GraphicEngine graphicEngine;
     private PhysicEngine physicalEngine;
     private InputEngine inputEngine;
+    private SoundEngine soundEngine;
 
     private EventsManager eventManager;
     
@@ -40,12 +44,14 @@ public class Kernel implements Runnable{
         aiEngine = new AIEngine(eventManager);
         physicalEngine = new PhysicEngine(eventManager);
         inputEngine = new InputEngine();
+        soundEngine = new SoundEngine(eventManager);
 
         inputEngine.setKernel(this);
         graphicEngine.addKeyListener(inputEngine);
         eventManager.subscribe(aiEngine, CollisionEvent.class);
 
         //Gameplay work
+
 
         // GameObject wall = new GameObject(new Physic(350, 300, 50, 150),
         // new Displayable(350, 300, 50, 150, "/wall.jpg"));
@@ -76,6 +82,8 @@ public class Kernel implements Runnable{
         graphicEngine.addDisplayable(player.getComponent(Displayable.class));
         physicalEngine.addPhysicalObject(player.getComponent(Physic.class));
         player.getComponent(Physic.class).setSpeed(3);
+        soundEngine.addSoundableObject(player.getComponent(Soundable.class));
+        soundEngine.play();
 
         gameObjects.add(player);
 
@@ -137,6 +145,7 @@ public class Kernel implements Runnable{
                 Physic physic = go.getComponent(Physic.class);
                 Displayable disp = go.getComponent(Displayable.class);
                 graphicEngine.setPosition(disp, (int)physic.getX(), (int)physic.getY());
+
             }
             physicalEngine.update();
             graphicEngine.repaint();
@@ -157,4 +166,7 @@ public class Kernel implements Runnable{
         inputEngine.changeState(state);
     }
 
+    public SoundEngine getSoundEngine() {
+        return soundEngine;
+    }
 }
