@@ -1,5 +1,6 @@
 package engine.sound;
 
+
 import javax.sound.sampled.*;
 
 import engine.Component;
@@ -7,40 +8,32 @@ import engine.Component;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Soundable extends Component  {
 
-    Clip clip;
-    //HashMap<String,URL> urls = new HashMap<>();
-    List<URL> urls = new ArrayList<>();
+    HashMap<String,Clip> clips = new HashMap<>();
 
-
-    public Soundable(String...paths) {
-        for(String path: paths)
-         addUrl(path);
+    public Soundable(Track...tracks) {
+        for(Track track: tracks){
+            addTrack(track);
+        }
     }
 
-    public void start(){
-        clip.start();
+    public void start(String name){
+        clips.get(name).start();
     }
 
-    public void setFile(URL url) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
-        clip = AudioSystem.getClip();
-        clip.open(audioInputStream);
-
-    }
-    public void stop(){
-        clip.stop();
+    public void stop(String name){
+        clips.get(name).stop();
     }
 
-    public void loop(){
-
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
+    public void loop(String name, int time){
+        clips.get(name).loop(time);
     }
-    private void addUrl(String path){
-        urls.add(getClass().getResource(path));
+    private void addTrack(Track track){
+        clips.put(track.getName(), track.getClip());
     }
     
     

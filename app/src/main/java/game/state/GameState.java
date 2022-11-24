@@ -28,6 +28,7 @@ public class GameState implements State {
     @Override
     public void pause(Kernel kernel) {
         System.out.println("game");
+        kernel.getSoundEngine().play();
         kernel.changeState(new MainMenuState());
 
     }
