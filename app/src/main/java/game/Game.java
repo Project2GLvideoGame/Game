@@ -11,6 +11,7 @@ public class Game {
 
     public Game() throws Exception {
         kernel = new Kernel();
+        kernel.startGameThread();
     }
 
     public void launch() {

@@ -74,8 +74,15 @@ public class Kernel implements Runnable{
 
     public void addGameObject(GameObject gameObject) {
         gameObjects.add(gameObject);
-        for (Component component : gameObject.getComponent()) {
-
+        for (Component component : gameObject.getComponents()) {
+            
         }
+    }
+
+    private void addDisplayable(Displayable displayable){
+        graphicEngine.addDisplayable(displayable);
+    }
+    private void addPhysic(Physic physic){
+        physicalEngine.addComponent(physic);
     }
 }
