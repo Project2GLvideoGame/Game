@@ -10,6 +10,9 @@ import engine.input.InputEngine;
 import engine.input.State;
 import engine.physics.Physic;
 import engine.physics.PhysicEngine;
+import engine.sound.SoundEngine;
+import engine.sound.Soundable;
+import engine.sound.Track;
 
 public class Kernel implements Runnable{
 
@@ -20,6 +23,7 @@ public class Kernel implements Runnable{
     private GraphicEngine graphicEngine;
     private PhysicEngine physicalEngine;
     private InputEngine inputEngine;
+    private SoundEngine soundEngine;
 
     private EventsManager eventManager;
     
@@ -31,6 +35,7 @@ public class Kernel implements Runnable{
         graphicEngine = new GraphicEngine();
         physicalEngine = new PhysicEngine(eventManager);
         inputEngine = new InputEngine();
+        soundEngine = new SoundEngine(eventManager);
 
         inputEngine.setKernel(this);
         graphicEngine.addKeyListener(inputEngine);
@@ -51,7 +56,7 @@ public class Kernel implements Runnable{
                 Physic physic = go.getComponent(Physic.class);
                 Displayable disp = go.getComponent(Displayable.class);
                 graphicEngine.setPosition(disp, (int)physic.getX(), (int)physic.getY());
-                System.out.println(physic.getX() + " " + physic.getY());
+                //System.out.println(physic.getX() + " " + physic.getY());
             }
 
             physicalEngine.update();
@@ -71,18 +76,28 @@ public class Kernel implements Runnable{
     public void changeState(State state) {
         inputEngine.changeState(state);
     }
-
+    
+    public SoundEngine getSoundEngine() {
+        return soundEngine;
+    }
+    
     public void addGameObject(GameObject gameObject) {
         gameObjects.add(gameObject);
         for (Component component : gameObject.getComponents()) {
             
         }
     }
-
+    
     private void addDisplayable(Displayable displayable){
         graphicEngine.addDisplayable(displayable);
     }
+
     private void addPhysic(Physic physic){
         physicalEngine.addComponent(physic);
     }
+
+    private void addSoundable(Soundable soundable){
+        soundEngine.addComponent(soundable);
+    }
+
 }
