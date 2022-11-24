@@ -7,12 +7,10 @@ import engine.event.EventsManager;
 import engine.graphic.Displayable;
 import engine.graphic.GraphicEngine;
 import engine.input.InputEngine;
-import engine.input.State;
 import engine.physics.Physic;
 import engine.physics.PhysicEngine;
 import engine.sound.SoundEngine;
 import engine.sound.Soundable;
-import engine.sound.Track;
 
 public class Kernel implements Runnable{
 
@@ -22,23 +20,16 @@ public class Kernel implements Runnable{
 
     private GraphicEngine graphicEngine;
     private PhysicEngine physicalEngine;
-    private InputEngine inputEngine;
     private SoundEngine soundEngine;
-
+    
     private EventsManager eventManager;
     
-    private GameObject player;
 
-
-    public Kernel() throws Exception{
+    public Kernel(){
         eventManager = new EventsManager();
         graphicEngine = new GraphicEngine();
         physicalEngine = new PhysicEngine(eventManager);
-        inputEngine = new InputEngine();
         soundEngine = new SoundEngine(eventManager);
-
-        inputEngine.setKernel(this);
-        graphicEngine.addKeyListener(inputEngine);
     }
 
     public void startGameThread(){
@@ -65,17 +56,9 @@ public class Kernel implements Runnable{
         }
     }
 
-
-    public void movePlayer(int direction) {
-        player.getComponent(Physic.class).setDirection(direction);
-    }
-
-    public GameObject getPlayer(){return player;}
     public GraphicEngine getGraphicEngine(){return graphicEngine;}
 
-    public void changeState(State state) {
-        inputEngine.changeState(state);
-    }
+    public void addKeyListener(InputEngine keyL){graphicEngine.addKeyListener(keyL);}
     
     public SoundEngine getSoundEngine() {
         return soundEngine;
@@ -84,20 +67,10 @@ public class Kernel implements Runnable{
     public void addGameObject(GameObject gameObject) {
         gameObjects.add(gameObject);
         for (Component component : gameObject.getComponents()) {
-            
+            if(component instanceof Displayable) graphicEngine.addDisplayable((Displayable)component);
+            if(component instanceof Physic) physicalEngine.addComponent((Physic)component);
+            if(component instanceof Soundable) soundEngine.addSoundableObject((Soundable)component);
         }
-    }
-    
-    private void addDisplayable(Displayable displayable){
-        graphicEngine.addDisplayable(displayable);
-    }
-
-    private void addPhysic(Physic physic){
-        physicalEngine.addComponent(physic);
-    }
-
-    private void addSoundable(Soundable soundable){
-        soundEngine.addComponent(soundable);
     }
 
 }

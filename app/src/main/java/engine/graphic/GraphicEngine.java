@@ -29,7 +29,7 @@ public class GraphicEngine extends JPanel{
     private List<Displayable> displayables = new ArrayList<>();
     
 
-    public GraphicEngine() throws Exception {
+    public GraphicEngine(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
@@ -106,6 +106,14 @@ public class GraphicEngine extends JPanel{
 
     public void addDisplayable(Displayable displayable){
         displayables.add(displayable);
+    }
+
+    public int getScreenWidth(){
+        return screenWidth;
+    }
+
+    public int getScreenHeight(){
+        return screenHeight;
     }
 
 }

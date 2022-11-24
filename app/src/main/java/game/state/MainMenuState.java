@@ -1,6 +1,6 @@
 package game.state;
 
-import engine.Kernel;
+import game.Game;
 import engine.input.State;
 
 /**
@@ -9,33 +9,33 @@ import engine.input.State;
 public class MainMenuState implements State {
 
     @Override
-    public void up(Kernel kernel) {
+    public void up(Game game) {
 
     }
 
     @Override
-    public void right(Kernel kernel) {
+    public void right(Game game) {
 
     }
 
     @Override
-    public void down(Kernel kernel) {
+    public void down(Game game) {
 
     }
 
     @Override
-    public void left(Kernel kernel) {
+    public void left(Game game) {
 
     }
 
     @Override
-    public void escape(Kernel kernel) {
+    public void escape(Game game) {
 
     }
 
     @Override
-    public void pause(Kernel kernel) {
-        kernel.changeState(new GameState());
+    public void pause(Game game) {
+        game.changeState(new GameState());
         System.out.println("Main ");
 
 

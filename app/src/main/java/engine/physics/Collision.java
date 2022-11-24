@@ -1,5 +1,7 @@
 package engine.physics;
 
+import engine.event.CollisionEvent;
+
 public class Collision {
 
     public Rectangle overlap;
@@ -19,5 +21,13 @@ public class Collision {
     public void setOverlap(Rectangle overlap){
         this.overlap = overlap;
     }
-//TODO: mettre des get/set
+
+    public Physic getObstacle() {
+        return obstacle;
+    }
+
+
+    public Physic getobj() {
+        return obj;
+    }
 }

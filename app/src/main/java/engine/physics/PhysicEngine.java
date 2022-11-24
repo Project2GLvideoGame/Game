@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import engine.Engine;
+import engine.event.CollisionEvent;
 import engine.event.EventsManager;
 import engine.event.MoveEvent;
 
@@ -98,6 +99,7 @@ public class PhysicEngine extends Engine<Physic> {
             //System.out.println("overlapW: "+collisions.get(0).overlap.getWidth()+"  overlapH: "+collisions.get(0).overlap.getHeight());
             physical.setCoordinate(naiveCoord);
             setPositionAfterCollision(physical, lastCoord, naiveCoord, collisions);
+            submit(new CollisionEvent(physical.getGameObject(),collisions,lastCoord));
             //physical.setSpeed(0);
             // System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX(), physical.getY());
             // System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX()+physical.getBoxCollider().getWidth(), physical.getY()+physical.getBoxCollider().getHeight());

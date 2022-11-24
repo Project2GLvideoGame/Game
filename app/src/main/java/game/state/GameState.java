@@ -1,39 +1,42 @@
 package game.state;
 
-import engine.Kernel;
 import engine.input.State;
+import game.Game;
 
 public class GameState implements State {
 
     @Override
-    public void up(Kernel kernel) {
-        kernel.movePlayer(0);
+    public void up(Game game) {
+        game.player.setPlayerSpeed(game.player.getSpeed());
+        game.player.setPlayerDirection(0);
     }
 
     @Override
-    public void right(Kernel kernel) {
-        kernel.movePlayer(270);
+    public void right(Game game) {
+        game.player.setPlayerSpeed(game.player.getSpeed());
+        game.player.setPlayerDirection(270);
     }
 
     @Override
-    public void down(Kernel kernel) {
-        kernel.movePlayer(180);
+    public void down(Game game) {
+        game.player.setPlayerSpeed(game.player.getSpeed());
+        game.player.setPlayerDirection(180);
     }
 
     @Override
-    public void left(Kernel kernel) {
-        kernel.movePlayer(90);
+    public void left(Game game) {
+        game.player.setPlayerSpeed(game.player.getSpeed());
+        game.player.setPlayerDirection(90);
     }
 
     @Override
-    public void pause(Kernel kernel) {
+    public void pause(Game game) {
         System.out.println("game");
-        kernel.getSoundEngine().play();
-        kernel.changeState(new MainMenuState());
-
+        game.changeState(new MainMenuState());
     }
+
     @Override
-    public void escape(Kernel kernel) {
+    public void escape(Game game) {
 
     }
 

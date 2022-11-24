@@ -1,15 +1,15 @@
 package engine.input;
 
-import engine.Kernel;
+import game.Game;
 
 public interface State {
 
-    void up(Kernel kernel);
-    void right(Kernel kernel);
-    void down(Kernel kernel);
-    void left(Kernel kernel);
-    void escape(Kernel kernel);
-    void pause(Kernel kernel);
+    void up(Game game);
+    void right(Game game);
+    void down(Game game);
+    void left(Game game);
+    void escape(Game game);
+    void pause(Game game);
 
 
 

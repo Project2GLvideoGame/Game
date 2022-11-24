@@ -2,49 +2,47 @@ package engine.input;
 
 import java.awt.event.*;
 
-import engine.Kernel;
+import game.Game;
 import game.state.GameState;
 
 public class InputEngine implements KeyListener{
 
-    private static State currentState = new GameState();
-    private Kernel kernel;
+    private State currentState = new GameState();
+    private Game game;
 
     public void changeState(State state){
         this.currentState = state;
     }
 
-    public void setKernel(Kernel kernel){
-        this.kernel = kernel;
+    public void setGame(Game game){
+        this.game = game;
     }
 
-    public Kernel getKernel(){return kernel;}
+    public Game getGame(){return game;}
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println(getCurrentState());
 
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
-                currentState.up(kernel);
+                currentState.up(game);
                 break;
             case KeyEvent.VK_RIGHT:
-                currentState.right(kernel);
+                currentState.right(game);
                 break;
             case KeyEvent.VK_DOWN:
-                currentState.down(kernel);
+                currentState.down(game);
                 break;
             case KeyEvent.VK_LEFT:
-                currentState.left(kernel);
+                currentState.left(game);
                 break;
             case KeyEvent.VK_P:
-                currentState.pause(kernel);
+                currentState.pause(game);
                 break;
             case KeyEvent.VK_ESCAPE:
-                currentState.escape(kernel);
+                currentState.escape(game);
                 break;
             default:
-                System.out.println(e.getKeyCode());
                 break;
         }
 
@@ -54,14 +52,26 @@ public class InputEngine implements KeyListener{
     public void keyReleased(KeyEvent e) {
 
         switch(e.getKeyCode()){
-            case KeyEvent.VK_Z:
-            break;
-            case KeyEvent.VK_S:
-            break;
-            case KeyEvent.VK_Q:
-            break;
-            case KeyEvent.VK_D:
-            break;
+            case KeyEvent.VK_UP:
+                game.player.setPlayerSpeed(0);
+                break;
+            case KeyEvent.VK_RIGHT:
+                game.player.setPlayerSpeed(0);
+                break;
+            case KeyEvent.VK_DOWN:
+                game.player.setPlayerSpeed(0);
+                break;
+            case KeyEvent.VK_LEFT:
+                game.player.setPlayerSpeed(0);
+                break;
+            case KeyEvent.VK_P:
+                currentState.pause(game);
+                break;
+            case KeyEvent.VK_ESCAPE:
+                currentState.escape(game);
+                break;
+            default:
+                break;
         }
 
     }
