@@ -9,9 +9,8 @@ import engine.Engine;
 import engine.event.EventsManager;
 import engine.event.MoveEvent;
 
-public class PhysicEngine extends Engine{
+public class PhysicEngine extends Engine<Physic> {
 
-    public List<Physic> physicalObjects = new ArrayList<>();
     long previousTime;
 
     public PhysicEngine(EventsManager eventsManager) {
@@ -19,21 +18,9 @@ public class PhysicEngine extends Engine{
         previousTime = System.nanoTime(); //TODO pas exact
     }
 
-
-
-    public void addPhysicalObject(Physic physical) {
-        physicalObjects.add(physical);
-    }
-
-
-    public void removePhysicalObject(Physic physical) {
-        physicalObjects.remove(physical);
-    }
-
-
     public List<Collision> allCollision(Physic physical) {
         List<Collision> collidedObjects = new ArrayList<>();
-        for (Physic physicalObject : physicalObjects) {
+        for (Physic physicalObject : gameObjects) {
             if (physicalObject!=physical && isCollided(physical, physicalObject)) {
                 collidedObjects.add(
                     new Collision(physical.getBoxCollider().intersection(physicalObject.getBoxCollider()),
@@ -122,7 +109,7 @@ public class PhysicEngine extends Engine{
 
 
     public void update(){
-        for (Physic physical : physicalObjects) {
+        for (Physic physical : gameObjects) {
             update(physical);
         }
         previousTime = System.nanoTime();

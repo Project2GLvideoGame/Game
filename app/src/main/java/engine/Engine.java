@@ -8,13 +8,15 @@ import java.util.Map;
 import engine.event.Event;
 import engine.event.EventsManager;
 
-public abstract class Engine {
+public abstract class Engine<Type> {
 
     EventsManager eventsManager;
+    public List<Type> gameObjects;
     Map<Class<? extends Event>,List<? extends Event>> events = new HashMap<>();
     
     public Engine(EventsManager eventsManager) {
         this.eventsManager = eventsManager;
+        this.gameObjects = new ArrayList<>();
     }
 
     protected <T extends Event> void submit(T event){
@@ -36,5 +38,8 @@ public abstract class Engine {
     protected <T extends Event> List<T> getEvents(Class<T> class1){
         return (List<T>)events.get(class1);
     }
-    
+
+    public void addComponent(Type component) {
+        gameObjects.add(component);
+    }
 }

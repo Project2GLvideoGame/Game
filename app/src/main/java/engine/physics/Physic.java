@@ -3,6 +3,7 @@ package engine.physics;
 import static engine.physics.Utils.*;
 
 import engine.Component;
+import engine.Engine;
 
 public class Physic extends Component {
 
@@ -89,11 +90,6 @@ public class Physic extends Component {
     public void setUseDestination(boolean value){
         this.useDestination = value;
     }
-
-
-
-
-
 
 }
 
