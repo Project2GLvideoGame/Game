@@ -108,4 +108,12 @@ public class GraphicEngine extends JPanel{
         displayables.add(displayable);
     }
 
+    public int getScreenWidth(){
+        return screenWidth;
+    }
+
+    public int getScreenHeight(){
+        return screenHeight;
+    }
+
 }

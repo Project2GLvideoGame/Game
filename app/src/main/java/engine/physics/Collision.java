@@ -19,5 +19,10 @@ public class Collision {
     public void setOverlap(Rectangle overlap){
         this.overlap = overlap;
     }
-//TODO: mettre des get/set
+    public Physic getobj(){
+        return obj;
+    }
+    public Physic getObstacle(){
+        return obstacle;
+    }
 }

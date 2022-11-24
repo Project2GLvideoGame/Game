@@ -22,6 +22,10 @@ public class GameObject{
         return null;
     }   
 
+    public void addcomponent(Component component){
+        components.add(component);
+    }
+
 
 
 

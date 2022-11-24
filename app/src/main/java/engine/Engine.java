@@ -10,7 +10,7 @@ import engine.event.EventsManager;
 
 public abstract class Engine {
 
-    EventsManager eventsManager;
+    protected EventsManager eventsManager;
     Map<Class<? extends Event>,List<? extends Event>> events = new HashMap<>();
     
     public Engine(EventsManager eventsManager) {
