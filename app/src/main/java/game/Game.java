@@ -28,20 +28,18 @@ public class Game {
         inputEngine.setGame(this);
         kernel.addKeyListener(inputEngine);
 
+        initEntities();
+
         kernel.startGameThread();
 
-        launch();
     }
 
-    public void launch() {
-        // player = new Player(3, new Physic(100, 100, 60, 64),
-        //         new Displayable(100, 100, 64, 64, 6, "/player/pacman_run1.png", "/player/pacman_run2.png", "/player/pacman_run3.png", "/player/pacman_run4.png"));
+    public void initEntities() {
+        int playerSize = 64;
+        player = new Player(3, new Physic(kernel.getScreenWidth()/2+playerSize, kernel.getScreenHeight()-playerSize, playerSize, playerSize),
+                new Displayable(kernel.getScreenWidth()/2+playerSize, kernel.getScreenHeight()-playerSize, playerSize, playerSize, 6, "/player/pacman_run1.png", "/player/pacman_run2.png", "/player/pacman_run3.png", "/player/pacman_run4.png"));
 
-        // GameObject wall = new GameObject(new Physic(350, 300, 50, 150),
-        //         new Displayable(350, 300, 50, 150, "/wall.jpg"));
-
-        // kernel.addGameObject(player);
-        // kernel.addGameObject(wall);
+        kernel.addGameObject(player);
 
         initializeEnemis();
         initializeInvisibleWall();
@@ -57,13 +55,16 @@ public class Game {
 
 
     private void initializeEnemis(){
+        int enemiesSize = 55;
+        int offset = 0;
+        offset += enemiesSize;
         List<String> pngs = new ArrayList<>(List.of("3","2","2","1","1"));
         for (int i = 0; i < 50; i++) {
-            int nb = ((i/10)%5) ;
+            int nb = ((i/10)%5);
             String path = "/enemies/alien_"+pngs.get(nb)+".png";
             Crab crab = new Crab(
-                new Physic(100 +50* ((i % 10)) ,50 +50 *((i/10)), 45, 45),
-                new Displayable(100 +50* ((i % 10)) ,50 +50 *( (i/10)), 45, 45, path),
+                new Physic(10 + offset * ((i % 10)) ,10 + offset *((i/10)), enemiesSize, enemiesSize),
+                new Displayable(10 + offset * ((i % 10)) ,10 + offset *( (i/10)), enemiesSize, enemiesSize, path),
                 new Intelligent(new AIAlgoEnnemis())
                 );
 
@@ -81,7 +82,7 @@ public class Game {
         InvisibleWall wallRight = new InvisibleWall(
             new Physic(screenWidth, 0, 50, screenHeight));
 
-        InvisibleWall wallTop = new InvisibleWall(new Physic(0, -50, screenWidth, 50));
+        InvisibleWall wallTop = new InvisibleWall(new Physic(0, -100, screenWidth, 50));
 
         InvisibleWall wallBottom = new InvisibleWall(new Physic(0,  screenHeight, screenWidth, 50));
         

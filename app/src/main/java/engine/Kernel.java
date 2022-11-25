@@ -54,7 +54,8 @@ public class Kernel implements Runnable{
             for(GameObject go : gameObjects){
                 Physic physic = go.getComponent(Physic.class);
                 Displayable disp = go.getComponent(Displayable.class);
-                graphicEngine.setPosition(disp, (int)physic.getX(), (int)physic.getY());
+                if(disp != null)
+                    graphicEngine.setPosition(disp, (int)physic.getX(), (int)physic.getY());
                 //System.out.println(physic.getX() + " " + physic.getY());
             }
 
@@ -77,13 +78,14 @@ public class Kernel implements Runnable{
     public int getScreenWidth(){return graphicEngine.getScreenWidth();}
     
     public void addGameObject(GameObject gameObject) {
-        gameObjects.add(gameObject);
-        for (Component component : gameObject.getComponents()) {
+        for (int i = 0; i < gameObject.getComponents().size(); i++) {
+            Component component = gameObject.getComponents().get(i);
             if(component instanceof Displayable) graphicEngine.addDisplayable((Displayable)component);
             if(component instanceof Physic) physicalEngine.addComponent((Physic)component);
             if(component instanceof Soundable) soundEngine.addSoundableObject((Soundable)component);
             if(component instanceof Intelligent) aiEngine.addIAObjectIntelligent((Intelligent)component);
         }
+        gameObjects.add(gameObject);
     }
 
 }
