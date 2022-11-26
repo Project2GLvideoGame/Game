@@ -3,12 +3,11 @@ package game;
 import java.util.ArrayList;
 import java.util.List;
 
-import engine.GameObject;
 import engine.Kernel;
 import engine.graphic.Displayable;
 import engine.input.InputEngine;
 import engine.input.State;
-import engine.physics.Physic;
+import engine.physicsAAA.Physic;
 import game.ai.AIAlgoEnnemis;
 import game.ai.Intelligent;
 import game.ai.InvisibleWall;
@@ -31,6 +30,7 @@ public class Game {
 
         initEntities();
         kernel.addGameObject(new PlayerShoot(400, 600));
+
         kernel.startGameThread();
 
     }
@@ -61,32 +61,32 @@ public class Game {
                 new Intelligent(new AIAlgoEnnemis())
                 );
                 
-                kernel.addGameObject(crab);
-            }
-        }
-        
-        private void initializeInvisibleWall(){
-            int screenWidth = kernel.getScreenWidth();
-            int screenHeight = kernel.getScreenHeight();
-            
-        InvisibleWall wallLeft = new InvisibleWall(
-            new Physic(-50, 0, 50, screenHeight));
-
-        InvisibleWall wallRight = new InvisibleWall(
-            new Physic(screenWidth, 0, 50, screenHeight));
-            
-            InvisibleWall wallTop = new InvisibleWall(new Physic(0, -100, screenWidth, 50));
-            
-            InvisibleWall wallBottom = new InvisibleWall(new Physic(0,  screenHeight, screenWidth, 50));
-            
-            kernel.addGameObject(wallLeft);
-            kernel.addGameObject(wallRight);
-            kernel.addGameObject(wallTop);
-            kernel.addGameObject(wallBottom);
-        }
-        
-        public void changeState(State state) {
-            inputEngine.changeState(state);
+            kernel.addGameObject(crab);
         }
     }
+        
+    private void initializeInvisibleWall(){
+        int screenWidth = kernel.getScreenWidth();
+        int screenHeight = kernel.getScreenHeight();
+        
+        InvisibleWall wallLeft = new InvisibleWall(
+        new Physic(-50, 0, 50, screenHeight));
+
+        InvisibleWall wallRight = new InvisibleWall(
+        new Physic(screenWidth, 0, 50, screenHeight));
+        
+        InvisibleWall wallTop = new InvisibleWall(new Physic(0, -100, screenWidth, 50));
+        
+        InvisibleWall wallBottom = new InvisibleWall(new Physic(0,  screenHeight, screenWidth, 50));
+        
+        kernel.addGameObject(wallLeft);
+        kernel.addGameObject(wallRight);
+        kernel.addGameObject(wallTop);
+        kernel.addGameObject(wallBottom);
+    }
+    
+    public void changeState(State state) {
+        inputEngine.changeState(state);
+    }
+}
     

@@ -2,7 +2,7 @@ package game.Physics;
 
 import org.junit.Test;
 
-import engine.physics.Physic;
+import engine.physicsAAA.Physic;
 
 public class PhysicalTest {
     Physic physicalToTest = new Physic(0, 0, 0, 0);

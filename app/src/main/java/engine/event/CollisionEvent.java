@@ -3,8 +3,8 @@ package engine.event;
 import java.util.List;
 
 import engine.GameObject;
-import engine.physics.Collision;
-import engine.physics.Coordinate;
+import engine.physicsAAA.Collision;
+import engine.physicsAAA.Coordinate;
 
 public class CollisionEvent  implements Event{
 

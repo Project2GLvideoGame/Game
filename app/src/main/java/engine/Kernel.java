@@ -8,8 +8,8 @@ import engine.event.EventsManager;
 import engine.graphic.Displayable;
 import engine.graphic.GraphicEngine;
 import engine.input.InputEngine;
-import engine.physics.Physic;
-import engine.physics.PhysicEngine;
+import engine.physicsAAA.Physic;
+import engine.physicsAAA.PhysicEngine;
 import engine.sound.SoundEngine;
 import engine.sound.Soundable;
 import game.ai.AIEngine;
@@ -54,15 +54,14 @@ public class Kernel implements Runnable{
             for(GameObject go : gameObjects){
                 Physic physic = go.getComponent(Physic.class);
                 Displayable disp = go.getComponent(Displayable.class);
-                if(disp != null)
+                if(disp != null && physic != null)
                     graphicEngine.setPosition(disp, (int)physic.getX(), (int)physic.getY());
-                //System.out.println(physic.getX() + " " + physic.getY());
+                //System.out.println(go.getClass() + " " + physic.getX() + " " + physic.getY());
             }
 
             physicalEngine.update();
             graphicEngine.repaint();
-            aiEngine.update();
-                
+            //aiEngine.update();
         }
     }
 

@@ -6,8 +6,8 @@ import engine.event.CollisionEvent;
 import engine.event.EnnemisCollisionEvent;
 import engine.event.Event;
 import engine.event.EventsManager;
-import engine.physics.Collision;
-import engine.physics.Physic;
+import engine.physicsAAA.Collision;
+import engine.physicsAAA.Physic;
 import game.entity.enemies.Enemies;
 
 public class AIAlgoEnnemis extends AI {
@@ -22,7 +22,7 @@ public class AIAlgoEnnemis extends AI {
                     for(Collision coll : ((CollisionEvent)event).getCollision()) {
                     
                         if( coll.getObstacle().getGameObject() instanceof InvisibleWall){
-                            eventsManager.submit(new EnnemisCollisionEvent( coll.getobj().getGameObject(),(((180 + coll.getobj().getGameObject().getComponent(Physic.class).getDirection()) % 360))));
+                            eventsManager.submit(new EnnemisCollisionEvent( coll.getObj().getGameObject(),(((180 + coll.getObj().getGameObject().getComponent(Physic.class).getDirection()) % 360))));
                             // coll.getobj().getGameObject().getComponent(Physic.class).setDirection((180 + coll.getobj().getGameObject().getComponent(Physic.class).getDirection()) % 360);
                             // coll.getobj().getGameObject().getComponent(Physic.class).setY((coll.getobj().getGameObject().getComponent(Physic.class).getY() + 50 ));
 
