@@ -7,8 +7,7 @@ public class GameState implements State {
 
     @Override
     public void up(Game game) {
-        game.player.setSpeed(game.player.getSpeed());
-        game.player.setDirection(0);
+        game.player.shoot();
     }
 
     @Override
@@ -19,8 +18,7 @@ public class GameState implements State {
 
     @Override
     public void down(Game game) {
-        game.player.setSpeed(game.player.getSpeed());
-        game.player.setDirection(180);
+        
     }
 
     @Override
@@ -31,7 +29,6 @@ public class GameState implements State {
 
     @Override
     public void pause(Game game) {
-        System.out.println("game");
         game.changeState(new MainMenuState());
     }
 

@@ -12,6 +12,7 @@ import engine.physics.Physic;
 import engine.physics.PhysicEngine;
 import engine.sound.SoundEngine;
 import engine.sound.Soundable;
+import game.Game;
 import game.ai.AIEngine;
 import game.ai.Intelligent;
 
@@ -28,6 +29,8 @@ public class Kernel implements Runnable{
     private AIEngine aiEngine;
     
     private EventsManager eventManager;
+
+    private Game game;
     
 
     public Kernel(){
@@ -36,8 +39,10 @@ public class Kernel implements Runnable{
         physicalEngine = new PhysicEngine(eventManager);
         soundEngine = new SoundEngine(eventManager);
         aiEngine = new AIEngine(eventManager);
-
+        
         eventManager.subscribe(aiEngine, CollisionEvent.class);
+        
+        game = new Game(this);
     }
 
     public void startGameThread(){
@@ -59,9 +64,13 @@ public class Kernel implements Runnable{
                 //System.out.println(go.getClass() + " " + physic.getX() + " " + physic.getY());
             }
 
+            //Engine Update
             physicalEngine.update();
             graphicEngine.repaint();
-            //aiEngine.update();
+            aiEngine.update();
+
+            game.update();
+
         }
     }
 
@@ -80,7 +89,7 @@ public class Kernel implements Runnable{
         for (int i = 0; i < gameObject.getComponents().size(); i++) {
             Component component = gameObject.getComponents().get(i);
             if(component instanceof Displayable) graphicEngine.addDisplayable((Displayable)component);
-            if(component instanceof Physic) physicalEngine.addComponent((Physic)component);
+            if(component instanceof Physic) physicalEngine.addPhysicalObject((Physic)component);
             if(component instanceof Soundable) soundEngine.addSoundableObject((Soundable)component);
             if(component instanceof Intelligent) aiEngine.addIAObjectIntelligent((Intelligent)component);
         }

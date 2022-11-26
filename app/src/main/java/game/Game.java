@@ -10,7 +10,7 @@ import engine.input.State;
 import engine.physics.Physic;
 import game.ai.AIAlgoEnnemis;
 import game.ai.Intelligent;
-import game.ai.InvisibleWall;
+import game.entity.InvisibleWall;
 import game.entity.Player;
 import game.entity.PlayerShoot;
 import game.entity.enemies.Crab;
@@ -21,19 +21,30 @@ public class Game {
     private final InputEngine inputEngine;
     public Player player;
 
-    public Game(){
-        kernel = new Kernel();
+    public Game(Kernel kernel){
+        this.kernel = kernel;
         inputEngine = new InputEngine();
 
         inputEngine.setGame(this);
         kernel.addKeyListener(inputEngine);
 
         initEntities();
-        kernel.addGameObject(new PlayerShoot(400, 600));
 
         kernel.startGameThread();
-
     }
+
+    public void update(){
+        playerRules();
+    }
+
+    public void playerRules(){
+        Displayable playerGraphic = player.getComponent(Displayable.class);
+        if(player.isShooting()){
+            kernel.addGameObject(new PlayerShoot(playerGraphic.getX()+playerGraphic.getWidth()/2, playerGraphic.getY()));
+            player.disableShoot();
+        }
+    }
+
 
     public void initEntities() {
         int playerSize = 55;

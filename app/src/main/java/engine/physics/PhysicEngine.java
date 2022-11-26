@@ -9,7 +9,7 @@ import engine.event.CollisionEvent;
 import engine.event.EventsManager;
 import engine.event.MoveEvent;
 
-public class PhysicEngine extends Engine{
+public class PhysicEngine extends Engine<Physic>{
 
     public List<Physic> physicalObjects = new ArrayList<>();
     long previousTime;
