@@ -1,9 +1,9 @@
-package engine.physicsAAA;
+package engine.physics;
 
-import static engine.physicsAAA.Utils.*;
+import static engine.physics.Utils.*;
 
 import engine.Component;
-import engine.physicsAAA.collisionReaction.*;
+import engine.physics.collisionReaction.*;
 
 public class Physic extends Component {
 

@@ -1,7 +1,7 @@
 package engine.event;
 
 import engine.GameObject;
-import engine.physicsAAA.Coordinate;
+import engine.physics.Coordinate;
 
 
 public class MoveEvent implements Event{

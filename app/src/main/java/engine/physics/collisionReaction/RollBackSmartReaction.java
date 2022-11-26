@@ -1,13 +1,13 @@
-package engine.physicsAAA.collisionReaction;
+package engine.physics.collisionReaction;
 
-import static engine.physicsAAA.Utils.*;
+import static engine.physics.Utils.*;
 
 import java.util.List;
 
-import engine.physicsAAA.Collision;
-import engine.physicsAAA.Coordinate;
-import engine.physicsAAA.Physic;
-import engine.physicsAAA.Rectangle;
+import engine.physics.Collision;
+import engine.physics.Coordinate;
+import engine.physics.Physic;
+import engine.physics.Rectangle;
 
 //TODO Bug pour les petits obstacles
 public class RollBackSmartReaction implements CollisionReaction {

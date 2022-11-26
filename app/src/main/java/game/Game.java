@@ -7,7 +7,7 @@ import engine.Kernel;
 import engine.graphic.Displayable;
 import engine.input.InputEngine;
 import engine.input.State;
-import engine.physicsAAA.Physic;
+import engine.physics.Physic;
 import game.ai.AIAlgoEnnemis;
 import game.ai.Intelligent;
 import game.ai.InvisibleWall;

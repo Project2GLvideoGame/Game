@@ -1,4 +1,4 @@
-package engine.physicsAAA;
+package engine.physics;
 
 public class Collision {
 

@@ -2,7 +2,7 @@ package game.entity;
 
 import engine.Component;
 import engine.GameObject;
-import engine.physicsAAA.Physic;
+import engine.physics.Physic;
 
 public class Player extends GameObject{
 

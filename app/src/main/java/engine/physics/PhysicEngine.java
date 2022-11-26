@@ -1,6 +1,6 @@
-package engine.physicsAAA;
+package engine.physics;
 
-import static engine.physicsAAA.Utils.*;
+import static engine.physics.Utils.*;
 
 import java.util.ArrayList;
 import java.util.List;

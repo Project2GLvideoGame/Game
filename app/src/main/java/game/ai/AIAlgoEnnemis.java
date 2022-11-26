@@ -6,8 +6,8 @@ import engine.event.CollisionEvent;
 import engine.event.EnnemisCollisionEvent;
 import engine.event.Event;
 import engine.event.EventsManager;
-import engine.physicsAAA.Collision;
-import engine.physicsAAA.Physic;
+import engine.physics.Collision;
+import engine.physics.Physic;
 import game.entity.enemies.Enemies;
 
 public class AIAlgoEnnemis extends AI {

@@ -3,15 +3,15 @@ package engine.event;
 import java.util.List;
 
 import engine.GameObject;
-import engine.physicsAAA.Collision;
-import engine.physicsAAA.Coordinate;
+import engine.physics.Collision;
+import engine.physics.Coordinate;
 
 public class CollisionEvent  implements Event{
 
     final GameObject gameObject;
     final  List<Collision> collisions;
     Coordinate lastCoordinate;
-
+    // CollisionEvent(GameObject, List<Collision>, Coordinate)
     public CollisionEvent(GameObject gameObject, List<Collision> collisions, Coordinate lastCoordinate) {
         this.gameObject = gameObject;
         this.collisions = collisions;

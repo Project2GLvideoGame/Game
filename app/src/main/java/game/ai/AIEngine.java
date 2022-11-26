@@ -6,7 +6,7 @@ import java.util.List;
 import engine.Engine;
 import engine.GameObject;
 import engine.event.EventsManager;
-import engine.physicsAAA.Physic;
+import engine.physics.Physic;
 import game.entity.enemies.Enemies;
 import engine.event.CollisionEvent;
 import engine.event.EnnemisCollisionEvent;

@@ -1,7 +1,7 @@
 package game.entity.enemies;
 
 import engine.Component;
-import engine.physicsAAA.Physic;
+import engine.physics.Physic;
 
 public class Crab extends Enemies{
     

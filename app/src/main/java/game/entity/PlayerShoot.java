@@ -2,7 +2,7 @@ package game.entity;
 
 import engine.GameObject;
 import engine.graphic.Displayable;
-import engine.physicsAAA.Physic;
+import engine.physics.Physic;
 
 public class PlayerShoot extends GameObject{
     private static int shootSize = 20;

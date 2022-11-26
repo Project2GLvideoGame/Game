@@ -1,10 +1,10 @@
-package engine.physicsAAA.collisionReaction;
+package engine.physics.collisionReaction;
 
 import java.util.List;
 
-import engine.physicsAAA.Collision;
-import engine.physicsAAA.Coordinate;
-import engine.physicsAAA.Physic;
+import engine.physics.Collision;
+import engine.physics.Coordinate;
+import engine.physics.Physic;
 
 
 public interface CollisionReaction {

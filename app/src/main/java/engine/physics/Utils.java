@@ -1,4 +1,4 @@
-package engine.physicsAAA;
+package engine.physics;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
