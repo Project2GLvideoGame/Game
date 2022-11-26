@@ -53,16 +53,16 @@ public class InputEngine implements KeyListener{
 
         switch(e.getKeyCode()){
             case KeyEvent.VK_UP:
-                game.player.setPlayerSpeed(0);
+                game.player.setSpeed(0);
                 break;
             case KeyEvent.VK_RIGHT:
-                game.player.setPlayerSpeed(0);
+                game.player.setSpeed(0);
                 break;
             case KeyEvent.VK_DOWN:
-                game.player.setPlayerSpeed(0);
+                game.player.setSpeed(0);
                 break;
             case KeyEvent.VK_LEFT:
-                game.player.setPlayerSpeed(0);
+                game.player.setSpeed(0);
                 break;
             case KeyEvent.VK_P:
                 currentState.pause(game);

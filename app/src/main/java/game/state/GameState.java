@@ -7,26 +7,26 @@ public class GameState implements State {
 
     @Override
     public void up(Game game) {
-        game.player.setPlayerSpeed(game.player.getSpeed());
-        game.player.setPlayerDirection(0);
+        game.player.setSpeed(game.player.getSpeed());
+        game.player.setDirection(0);
     }
 
     @Override
     public void right(Game game) {
-        game.player.setPlayerSpeed(game.player.getSpeed());
-        game.player.setPlayerDirection(270);
+        game.player.setSpeed(game.player.getSpeed());
+        game.player.setDirection(270);
     }
 
     @Override
     public void down(Game game) {
-        game.player.setPlayerSpeed(game.player.getSpeed());
-        game.player.setPlayerDirection(180);
+        game.player.setSpeed(game.player.getSpeed());
+        game.player.setDirection(180);
     }
 
     @Override
     public void left(Game game) {
-        game.player.setPlayerSpeed(game.player.getSpeed());
-        game.player.setPlayerDirection(90);
+        game.player.setSpeed(game.player.getSpeed());
+        game.player.setDirection(90);
     }
 
     @Override
