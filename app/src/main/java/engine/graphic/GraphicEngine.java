@@ -18,7 +18,7 @@ public class GraphicEngine extends JPanel{
 
     final int tileSize = originalTileSize * scale;
     final int maxScreenCol = 22;
-    final int maxScreenRow = 12;
+    final int maxScreenRow = 13;
     
     final int screenWidth = tileSize * maxScreenCol;
     final int screenHeight = tileSize * maxScreenRow;
