@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import engine.Kernel;
+import engine.event.StateEvent;
 import engine.graphic.Displayable;
 import engine.input.State;
 import engine.physics.Physic;
@@ -45,12 +46,12 @@ public class Game {
 
         Kernel.getInstance().addGameObject(player);
 
-        initializeEnemis();
+        initializeEnemies();
         initializeInvisibleWall();
     }
 
     
-    private void initializeEnemis(){
+    private void initializeEnemies(){
         int enemiesSize = 55;
         int offset = 0;
         offset += enemiesSize;
@@ -89,7 +90,8 @@ public class Game {
     }
     
     public void changeState(State state) {
-        Kernel.getInstance().changeState(state);
+        System.out.println("changestate");
+        Kernel.getInstance().submit(new StateEvent(state));
     }
 }
     

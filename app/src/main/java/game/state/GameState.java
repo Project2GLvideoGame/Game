@@ -29,6 +29,7 @@ public class GameState implements State {
 
     @Override
     public void pause(Game game) {
+        System.out.println("pause");
         game.changeState(new MainMenuState());
     }
 
