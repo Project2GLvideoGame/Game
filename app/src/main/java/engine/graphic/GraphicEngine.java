@@ -39,7 +39,7 @@ public class GraphicEngine extends JPanel{
     }
     
     private void initWindow(){
-
+        System.out.println("unefois");
         JFrame window = new JFrame();
         
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -8,6 +8,7 @@ import engine.event.EventsManager;
 import engine.graphic.Displayable;
 import engine.graphic.GraphicEngine;
 import engine.input.InputEngine;
+import engine.input.State;
 import engine.physics.Physic;
 import engine.physics.PhysicEngine;
 import engine.sound.SoundEngine;
@@ -16,75 +17,90 @@ import game.Game;
 import game.ai.AIEngine;
 import game.ai.Intelligent;
 
-public class Kernel implements Runnable{
+public class Kernel implements Runnable {
+
+    private static Kernel instance = null;
+    public static synchronized void start(Game game) {
+        if (instance == null) instance = new Kernel(game);
+    }
+    public static Kernel getInstance() {
+        return instance;
+    }
 
     private Thread gameThread;
-
     private static List<GameObject> gameObjects = new ArrayList<>();
 
-    //Engines
+    // Engines
     private GraphicEngine graphicEngine;
     private PhysicEngine physicalEngine;
     private SoundEngine soundEngine;
     private AIEngine aiEngine;
-    
+    private InputEngine inputEngine;
     private EventsManager eventManager;
 
     private Game game;
-    
 
-    public Kernel(){
-        eventManager = new EventsManager();
-        graphicEngine = new GraphicEngine();
-        physicalEngine = new PhysicEngine(eventManager);
-        soundEngine = new SoundEngine(eventManager);
-        aiEngine = new AIEngine(eventManager);
-        
-        eventManager.subscribe(aiEngine, CollisionEvent.class);
-        
-        game = new Game(this);
+    public Kernel(Game game) {
+        this.game = game;
+        this.eventManager = new EventsManager();
+        this.graphicEngine = new GraphicEngine();
+        this.physicalEngine = new PhysicEngine(eventManager);
+        this.soundEngine = new SoundEngine(eventManager);
+        this.aiEngine = new AIEngine(eventManager);
+        this.inputEngine = new InputEngine(game);
+
+        this.eventManager.subscribe(aiEngine, CollisionEvent.class);
+        this.graphicEngine.addKeyListener(inputEngine);
     }
 
-    public void startGameThread(){
+    public void changeState(State state) {
+        inputEngine.changeState(state);
+    }
+
+    public void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
     }
 
     @Override
-    public void run(){
-        while(gameThread != null){
-            
+    public void run() {
+        while(gameThread != null) {
+
             if(!GraphicEngine.refreshFrequences()) continue;
 
-            for(GameObject go : gameObjects){
+            for(GameObject go : gameObjects) {
                 Physic physic = go.getComponent(Physic.class);
-                Displayable disp = go.getComponent(Displayable.class);
-                if(disp != null && physic != null)
-                    graphicEngine.setPosition(disp, (int)physic.getX(), (int)physic.getY());
+                Displayable displayable = go.getComponent(Displayable.class);
+                if(displayable != null && physic != null)
+                    graphicEngine.setPosition(displayable, (int)physic.getX(), (int)physic.getY());
                 //System.out.println(go.getClass() + " " + physic.getX() + " " + physic.getY());
             }
 
-            //Engine Update
+            // Engine Update
             physicalEngine.update();
             graphicEngine.repaint();
             aiEngine.update();
-
             game.update();
-
         }
     }
 
-    public GraphicEngine getGraphicEngine(){return graphicEngine;}
+    public GraphicEngine getGraphicEngine() {
+        return graphicEngine;
+    }
 
-    public void addKeyListener(InputEngine keyL){graphicEngine.addKeyListener(keyL);}
-    
     public SoundEngine getSoundEngine() {
         return soundEngine;
     }
 
-    public int getScreenHeight(){return graphicEngine.getScreenHeight();}
-    public int getScreenWidth(){return graphicEngine.getScreenWidth();}
-    
+    public int getScreenHeight() {
+        return graphicEngine.getScreenHeight();
+
+    }
+
+    public int getScreenWidth() {
+        return graphicEngine.getScreenWidth();
+    }
+
     public void addGameObject(GameObject gameObject) {
         for (int i = 0; i < gameObject.getComponents().size(); i++) {
             Component component = gameObject.getComponents().get(i);
@@ -95,5 +111,4 @@ public class Kernel implements Runnable{
         }
         gameObjects.add(gameObject);
     }
-
 }

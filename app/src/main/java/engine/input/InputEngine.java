@@ -10,6 +10,10 @@ public class InputEngine implements KeyListener{
     private State currentState = new GameState();
     private Game game;
 
+    public InputEngine(Game game) {
+        this.game = game;
+    }
+
     public void changeState(State state){
         this.currentState = state;
     }

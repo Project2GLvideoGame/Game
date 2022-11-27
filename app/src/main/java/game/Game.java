@@ -5,7 +5,6 @@ import java.util.List;
 
 import engine.Kernel;
 import engine.graphic.Displayable;
-import engine.input.InputEngine;
 import engine.input.State;
 import engine.physics.Physic;
 import game.ai.AIAlgoEnnemis;
@@ -17,20 +16,13 @@ import game.entity.enemies.Crab;
 
 public class Game {
 
-    private final Kernel kernel;
-    private final InputEngine inputEngine;
     public Player player;
 
-    public Game(Kernel kernel){
-        this.kernel = kernel;
-        inputEngine = new InputEngine();
-
-        inputEngine.setGame(this);
-        kernel.addKeyListener(inputEngine);
-
+    public Game(){
+        Kernel.start(this);
         initEntities();
 
-        kernel.startGameThread();
+        Kernel.getInstance().startGameThread();
     }
 
     public void update(){
@@ -40,7 +32,7 @@ public class Game {
     public void playerRules(){
         Displayable playerGraphic = player.getComponent(Displayable.class);
         if(player.isShooting()){
-            kernel.addGameObject(new PlayerShoot(playerGraphic.getX()+playerGraphic.getWidth()/2, playerGraphic.getY()));
+            Kernel.getInstance().addGameObject(new PlayerShoot(playerGraphic.getX()+playerGraphic.getWidth()/2, playerGraphic.getY()));
             player.disableShoot();
         }
     }
@@ -48,10 +40,10 @@ public class Game {
 
     public void initEntities() {
         int playerSize = 55;
-        player = new Player(3, new Physic(kernel.getScreenWidth()/2+playerSize, kernel.getScreenHeight()-playerSize, playerSize, playerSize),
-                new Displayable(kernel.getScreenWidth()/2+playerSize, kernel.getScreenHeight()-playerSize, playerSize, playerSize, 6, "/player/pacman_run1.png", "/player/pacman_run2.png", "/player/pacman_run3.png", "/player/pacman_run4.png"));
+        player = new Player(3, new Physic(Kernel.getInstance().getScreenWidth()/2+playerSize, Kernel.getInstance().getScreenHeight()-playerSize, playerSize, playerSize),
+                new Displayable(Kernel.getInstance().getScreenWidth()/2+playerSize, Kernel.getInstance().getScreenHeight()-playerSize, playerSize, playerSize, 6, "/player/pacman_run1.png", "/player/pacman_run2.png", "/player/pacman_run3.png", "/player/pacman_run4.png"));
 
-        kernel.addGameObject(player);
+        Kernel.getInstance().addGameObject(player);
 
         initializeEnemis();
         initializeInvisibleWall();
@@ -72,13 +64,13 @@ public class Game {
                 new Intelligent(new AIAlgoEnnemis())
                 );
                 
-            kernel.addGameObject(crab);
+            Kernel.getInstance().addGameObject(crab);
         }
     }
         
     private void initializeInvisibleWall(){
-        int screenWidth = kernel.getScreenWidth();
-        int screenHeight = kernel.getScreenHeight();
+        int screenWidth = Kernel.getInstance().getScreenWidth();
+        int screenHeight = Kernel.getInstance().getScreenHeight();
         
         InvisibleWall wallLeft = new InvisibleWall(
         new Physic(-50, 0, 50, screenHeight));
@@ -89,15 +81,15 @@ public class Game {
         InvisibleWall wallTop = new InvisibleWall(new Physic(0, -100, screenWidth, 50));
         
         InvisibleWall wallBottom = new InvisibleWall(new Physic(0,  screenHeight, screenWidth, 50));
-        
-        kernel.addGameObject(wallLeft);
-        kernel.addGameObject(wallRight);
-        kernel.addGameObject(wallTop);
-        kernel.addGameObject(wallBottom);
+
+        Kernel.getInstance().addGameObject(wallLeft);
+        Kernel.getInstance().addGameObject(wallRight);
+        Kernel.getInstance().addGameObject(wallTop);
+        Kernel.getInstance().addGameObject(wallBottom);
     }
     
     public void changeState(State state) {
-        inputEngine.changeState(state);
+        Kernel.getInstance().changeState(state);
     }
 }
     
