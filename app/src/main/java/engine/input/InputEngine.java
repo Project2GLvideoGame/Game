@@ -41,7 +41,7 @@ public class InputEngine implements KeyListener{
                 currentState.left(game);
                 break;
             case KeyEvent.VK_P:
-                currentState.pause(game);
+                currentState.p(game);
                 break;
             case KeyEvent.VK_ESCAPE:
                 currentState.escape(game);
@@ -69,7 +69,7 @@ public class InputEngine implements KeyListener{
                 game.player.setSpeed(0);
                 break;
             case KeyEvent.VK_P:
-                currentState.pause(game);
+                currentState.p(game);
                 break;
             case KeyEvent.VK_ESCAPE:
                 currentState.escape(game);

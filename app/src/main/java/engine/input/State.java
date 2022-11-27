@@ -9,8 +9,5 @@ public interface State {
     void down(Game game);
     void left(Game game);
     void escape(Game game);
-    void pause(Game game);
-
-
-
+    void p(Game game);
 }

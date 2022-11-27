@@ -34,7 +34,7 @@ public class MainMenuState implements State {
     }
 
     @Override
-    public void pause(Game game) {
+    public void p(Game game) {
         game.changeState(new GameState());
         System.out.println("Main ");
 

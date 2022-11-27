@@ -28,7 +28,7 @@ public class GameState implements State {
     }
 
     @Override
-    public void pause(Game game) {
+    public void p(Game game) {
         System.out.println("pause");
         game.changeState(new MainMenuState());
     }
@@ -37,6 +37,4 @@ public class GameState implements State {
     public void escape(Game game) {
 
     }
-
-    
 }
