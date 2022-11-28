@@ -55,10 +55,10 @@ public class Game {
         List<String> pngs = new ArrayList<>(List.of("3","2","2","1","1"));
         for (int i = 0; i < 50; i++) {
             int nb = ((i/10)%5);
-            String path = "/enemies/alien_"+pngs.get(nb)+".png";
+            String pathAlien = "/enemies/alien_"+pngs.get(nb);
             Crab crab = new Crab(
                 new Physic(10 + offset * ((i % 10)) ,10 + offset *((i/10)), enemiesSize, enemiesSize, new IgnoreReaction()),
-                new Displayable(10 + offset * ((i % 10)) ,10 + offset *( (i/10)), enemiesSize, enemiesSize, path),
+                new Displayable(10 + offset * ((i % 10)) ,10 + offset *( (i/10)), enemiesSize, enemiesSize, 10, pathAlien+"/alien_1.png", pathAlien+"/alien_2.png", pathAlien+"/alien_3.png", pathAlien+"/alien_4.png"),
                 new Intelligent(new AIAlgoEnnemis())
                 );
                 
