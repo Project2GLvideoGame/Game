@@ -4,10 +4,17 @@ import game.Game;
 
 public interface State {
 
-    void up(Game game);
-    void right(Game game);
-    void down(Game game);
-    void left(Game game);
-    void escape(Game game);
-    void p(Game game);
+    void upPressed(Game game);
+    void upReleased(Game game);
+    void downPressed(Game game);
+    void downReleased(Game game);
+    void rightPressed(Game game);
+    void rightReleased(Game game);
+    void leftPressed(Game game);
+    void leftReleased(Game game);
+    void escapePressed(Game game);
+    void escapeReleased(Game game);
+    void pPressed(Game game);
+    void pReleased(Game game);
+
 }

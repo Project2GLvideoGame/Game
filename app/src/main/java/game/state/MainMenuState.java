@@ -9,35 +9,62 @@ import engine.input.State;
 public class MainMenuState implements State {
 
     @Override
-    public void up(Game game) {
+    public void upPressed(Game game) {
 
     }
 
     @Override
-    public void right(Game game) {
+    public void upReleased(Game game) {
 
     }
 
     @Override
-    public void down(Game game) {
+    public void downPressed(Game game) {
 
     }
 
     @Override
-    public void left(Game game) {
+    public void downReleased(Game game) {
 
     }
 
     @Override
-    public void escape(Game game) {
+    public void rightPressed(Game game) {
 
     }
 
     @Override
-    public void p(Game game) {
-        game.changeState(new GameState());
-        System.out.println("Main ");
+    public void rightReleased(Game game) {
 
+    }
+
+    @Override
+    public void leftPressed(Game game) {
+
+    }
+
+    @Override
+    public void leftReleased(Game game) {
+
+    }
+
+    @Override
+    public void escapePressed(Game game) {
+
+    }
+
+    @Override
+    public void escapeReleased(Game game) {
+
+    }
+
+    @Override
+    public void pPressed(Game game) {
+
+    }
+
+    @Override
+    public void pReleased(Game game) {
 
     }
 }

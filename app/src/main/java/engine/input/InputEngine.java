@@ -1,20 +1,35 @@
 package engine.input;
 
 import java.awt.event.*;
+import java.util.List;
 
+import engine.Engine;
+import engine.event.Event;
+import engine.event.EventsManager;
+import engine.event.StateEvent;
 import game.Game;
 import game.state.GameState;
 
-public class InputEngine implements KeyListener{
+public class InputEngine extends Engine<State> implements KeyListener{
 
     private State currentState = new GameState();
     private Game game;
 
-    public InputEngine(Game game) {
+    public InputEngine(Game game, EventsManager eventsManager) {
+        super(eventsManager);
         this.game = game;
     }
 
-    public void changeState(State state){
+    public void update() {
+        List<StateEvent> stateEvents = getEvents(StateEvent.class);
+        if(stateEvents != null) {
+            for (StateEvent stateEvent : stateEvents) {
+                changeState(stateEvent.getNewState());
+            }
+        }
+    }
+
+    private void changeState(State state) {
         this.currentState = state;
     }
 
@@ -25,26 +40,31 @@ public class InputEngine implements KeyListener{
     public Game getGame(){return game;}
 
     @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
     public void keyPressed(KeyEvent e) {
 
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
-                currentState.up(game);
+                currentState.upPressed(game);
                 break;
             case KeyEvent.VK_RIGHT:
-                currentState.right(game);
+                currentState.rightPressed(game);
                 break;
             case KeyEvent.VK_DOWN:
-                currentState.down(game);
+                currentState.downPressed(game);
                 break;
             case KeyEvent.VK_LEFT:
-                currentState.left(game);
+                currentState.leftPressed(game);
                 break;
             case KeyEvent.VK_P:
-                currentState.p(game);
+                currentState.pPressed(game);
                 break;
             case KeyEvent.VK_ESCAPE:
-                currentState.escape(game);
+                currentState.escapePressed(game);
                 break;
             default:
                 break;
@@ -57,36 +77,51 @@ public class InputEngine implements KeyListener{
 
         switch(e.getKeyCode()){
             case KeyEvent.VK_UP:
-                game.player.setSpeed(0);
+                currentState.upReleased(game);
                 break;
             case KeyEvent.VK_RIGHT:
-                game.player.setSpeed(0);
+                currentState.rightReleased(game);
                 break;
             case KeyEvent.VK_DOWN:
-                game.player.setSpeed(0);
+                currentState.downReleased(game);
                 break;
             case KeyEvent.VK_LEFT:
-                game.player.setSpeed(0);
+                currentState.leftReleased(game);
                 break;
             case KeyEvent.VK_P:
-                currentState.p(game);
+                currentState.pReleased(game);
                 break;
             case KeyEvent.VK_ESCAPE:
-                currentState.escape(game);
+                currentState.escapeReleased(game);
                 break;
             default:
                 break;
         }
-
     }
 
-    public State getCurrentState() {
-        return currentState;
-    }
+/*    switch(e.getKeyCode()){
+        case KeyEvent.VK_UP:
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-        
-    }
-    
+            game.player.setSpeed(0);
+            break;
+        case KeyEvent.VK_RIGHT:
+            System.out.println("right");
+            game.player.setSpeed(0);
+
+            break;
+        case KeyEvent.VK_DOWN:
+            game.player.setSpeed(0);
+            break;
+        case KeyEvent.VK_LEFT:
+            System.out.println("left");
+            game.player.setSpeed(0);
+            break;
+        case KeyEvent.VK_P:
+            //currentState.p(game);
+            break;
+        case KeyEvent.VK_ESCAPE:
+            //currentState.escape(game);
+            break;
+        default:
+            break;*/
 }

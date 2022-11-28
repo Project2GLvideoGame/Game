@@ -18,7 +18,7 @@ import game.Game;
 import game.ai.AIEngine;
 import game.ai.Intelligent;
 
-public class Kernel implements Runnable {
+public class Kernel implements Runnable  {
 
     private static Kernel instance = null;
     public static synchronized void start(Game game) {
@@ -37,26 +37,22 @@ public class Kernel implements Runnable {
     private SoundEngine soundEngine;
     private AIEngine aiEngine;
     private InputEngine inputEngine;
-    private EventsManager eventsManager;
-    Map<Class<? extends Event>,List<? extends Event>> events = new HashMap<>();
+    public EventsManager eventsManager;
 
     private Game game;
 
     public Kernel(Game game) {
-        this.game = game;
         this.eventsManager = new EventsManager();
+        this.game = game;
         this.graphicEngine = new GraphicEngine();
         this.physicalEngine = new PhysicEngine(eventsManager);
         this.soundEngine = new SoundEngine(eventsManager);
         this.aiEngine = new AIEngine(eventsManager);
-        this.inputEngine = new InputEngine(game);
+        this.inputEngine = new InputEngine(game, eventsManager);
 
         this.eventsManager.subscribe(aiEngine, CollisionEvent.class);
+        this.eventsManager.subscribe(inputEngine, StateEvent.class);
         this.graphicEngine.addKeyListener(inputEngine);
-    }
-
-    public void changeState(State state) {
-        inputEngine.changeState(state);
     }
 
     public void startGameThread() {
@@ -78,27 +74,13 @@ public class Kernel implements Runnable {
                 //System.out.println(go.getClass() + " " + physic.getX() + " " + physic.getY());
             }
 
-            List<StateEvent> stateEvents = getEvents(StateEvent.class);
-            if(stateEvents != null) {
-                for (StateEvent stateEvent : stateEvents) {
-                    inputEngine.changeState(stateEvent.getNewState());
-                }
-            }
-
                 // Engine Update
             physicalEngine.update();
             graphicEngine.repaint();
             aiEngine.update();
             game.update();
+            inputEngine.update();
         }
-    }
-
-    public <T extends Event> void submit(T event){
-        System.out.println("submit");
-        eventsManager.submit(event);
-    }
-    protected <T extends Event> List<T> getEvents(Class<T> class1){
-        return (List<T>)events.get(class1);
     }
 
     public GraphicEngine getGraphicEngine() {

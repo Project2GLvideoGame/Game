@@ -90,8 +90,7 @@ public class Game {
     }
     
     public void changeState(State state) {
-        System.out.println("changestate");
-        Kernel.getInstance().submit(new StateEvent(state));
+        Kernel.getInstance().eventsManager.submit(new StateEvent(state));
     }
 }
     
