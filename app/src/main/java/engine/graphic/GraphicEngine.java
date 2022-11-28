@@ -1,5 +1,8 @@
 package engine.graphic;
 
+import engine.Engine;
+import engine.event.EventsManager;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -10,7 +13,7 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class GraphicEngine extends JPanel{
+public class GraphicEngine extends Engine<Displayable> {
 
     //Screen settings
     final static int originalTileSize = 16; //16x16 tiles
@@ -27,17 +30,19 @@ public class GraphicEngine extends JPanel{
     
 
     private List<Displayable> displayables = new ArrayList<>();
+    private Scene scene;
     
 
-    public GraphicEngine(){
-        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        this.setBackground(Color.black);
-        this.setDoubleBuffered(true);
-        this.setFocusable(true);
-
+    public GraphicEngine(EventsManager eventsManager){
+        super(eventsManager);
+        this.scene = new Scene();
         initWindow();
     }
-    
+
+    public Scene getScene() {
+        return scene;
+    }
+
     private void initWindow(){
         JFrame window = new JFrame();
         
@@ -45,7 +50,7 @@ public class GraphicEngine extends JPanel{
         window.setResizable(true);
         window.setTitle("Game");
         
-        window.add(this);
+        window.add(scene);
         
         window.pack(); //window set to fit to prefered size
         
@@ -69,20 +74,6 @@ public class GraphicEngine extends JPanel{
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
-
-        Graphics2D g2 = (Graphics2D)g;
-
-        for(Displayable disp : displayables){
-            if(disp.getVisibility())
-                disp.draw(g2);
-        }
-        
-        g2.dispose();
     }
 
     public void setPosition(Displayable displayable, int x, int y) {
@@ -115,4 +106,26 @@ public class GraphicEngine extends JPanel{
         return screenHeight;
     }
 
+    public class Scene extends JPanel {
+
+        public Scene() {
+            this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+            this.setBackground(Color.black);
+            this.setDoubleBuffered(true);
+            this.setFocusable(true);
+        }
+        @Override
+        public void paintComponent(Graphics g){
+            super.paintComponent(g);
+
+            Graphics2D g2 = (Graphics2D)g;
+
+            for(Displayable disp : displayables){
+                if(disp.getVisibility())
+                    disp.draw(g2);
+            }
+
+            g2.dispose();
+        }
+    }
 }

@@ -10,7 +10,7 @@ import engine.event.StateEvent;
 import game.Game;
 import game.state.GameState;
 
-public class InputEngine extends Engine<State> implements KeyListener{
+public class InputEngine extends Engine<State> implements KeyListener {
 
     private State currentState = new GameState();
     private Game game;
@@ -99,29 +99,4 @@ public class InputEngine extends Engine<State> implements KeyListener{
         }
     }
 
-/*    switch(e.getKeyCode()){
-        case KeyEvent.VK_UP:
-
-            game.player.setSpeed(0);
-            break;
-        case KeyEvent.VK_RIGHT:
-            System.out.println("right");
-            game.player.setSpeed(0);
-
-            break;
-        case KeyEvent.VK_DOWN:
-            game.player.setSpeed(0);
-            break;
-        case KeyEvent.VK_LEFT:
-            System.out.println("left");
-            game.player.setSpeed(0);
-            break;
-        case KeyEvent.VK_P:
-            //currentState.p(game);
-            break;
-        case KeyEvent.VK_ESCAPE:
-            //currentState.escape(game);
-            break;
-        default:
-            break;*/
 }

@@ -44,7 +44,7 @@ public class Kernel implements Runnable  {
     public Kernel(Game game) {
         this.eventsManager = new EventsManager();
         this.game = game;
-        this.graphicEngine = new GraphicEngine();
+        this.graphicEngine = new GraphicEngine(eventsManager);
         this.physicalEngine = new PhysicEngine(eventsManager);
         this.soundEngine = new SoundEngine(eventsManager);
         this.aiEngine = new AIEngine(eventsManager);
@@ -52,7 +52,7 @@ public class Kernel implements Runnable  {
 
         this.eventsManager.subscribe(aiEngine, CollisionEvent.class);
         this.eventsManager.subscribe(inputEngine, StateEvent.class);
-        this.graphicEngine.addKeyListener(inputEngine);
+        this.graphicEngine.getScene().addKeyListener(inputEngine);
     }
 
     public void startGameThread() {
@@ -64,8 +64,6 @@ public class Kernel implements Runnable  {
     public void run() {
         while(gameThread != null) {
 
-            if(!GraphicEngine.refreshFrequences()) continue;
-
             for(GameObject go : gameObjects) {
                 Physic physic = go.getComponent(Physic.class);
                 Displayable displayable = go.getComponent(Displayable.class);
@@ -73,13 +71,14 @@ public class Kernel implements Runnable  {
                     graphicEngine.setPosition(displayable, (int)physic.getX(), (int)physic.getY());
                 //System.out.println(go.getClass() + " " + physic.getX() + " " + physic.getY());
             }
-
-                // Engine Update
+            // Engine Update
             physicalEngine.update();
-            graphicEngine.repaint();
             aiEngine.update();
             game.update();
             inputEngine.update();
+            if(!graphicEngine.refreshFrequences()) continue;
+            graphicEngine.getScene().repaint();
+
         }
     }
 
