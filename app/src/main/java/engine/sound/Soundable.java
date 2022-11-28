@@ -5,11 +5,7 @@ import javax.sound.sampled.*;
 
 import engine.Component;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class Soundable extends Component  {
 

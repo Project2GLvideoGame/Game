@@ -1,5 +1,8 @@
 package engine.graphic;
 
+import engine.Engine;
+import engine.event.EventsManager;
+import engine.event.MoveEvent;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -10,15 +13,15 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class GraphicEngine extends JPanel{
+public class GraphicEngine extends Engine<Displayable> {
 
     //Screen settings
     final static int originalTileSize = 16; //16x16 tiles
     final int scale = 3;
 
     final int tileSize = originalTileSize * scale;
-    final int maxScreenCol = 16;
-    final int maxScreenRow = 12;
+    final int maxScreenCol = 22;
+    final int maxScreenRow = 13;
     
     final int screenWidth = tileSize * maxScreenCol;
     final int screenHeight = tileSize * maxScreenRow;
@@ -27,26 +30,27 @@ public class GraphicEngine extends JPanel{
     
 
     private List<Displayable> displayables = new ArrayList<>();
+    private Scene scene;
     
 
-    public GraphicEngine() throws Exception {
-        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        this.setBackground(Color.black);
-        this.setDoubleBuffered(true);
-        this.setFocusable(true);
-
+    public GraphicEngine(EventsManager eventsManager){
+        super(eventsManager);
+        this.scene = new Scene();
         initWindow();
     }
-    
-    private void initWindow(){
 
+    public Scene getScene() {
+        return scene;
+    }
+
+    private void initWindow(){
         JFrame window = new JFrame();
         
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(true);
         window.setTitle("Game");
         
-        window.add(this);
+        window.add(scene);
         
         window.pack(); //window set to fit to prefered size
         
@@ -72,20 +76,6 @@ public class GraphicEngine extends JPanel{
         return false;
     }
 
-    @Override
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
-
-        Graphics2D g2 = (Graphics2D)g;
-
-        for(Displayable disp : displayables){
-            if(disp.getVisibility())
-                disp.draw(g2);
-        }
-        
-        g2.dispose();
-    }
-
     public void setPosition(Displayable displayable, int x, int y) {
         displayable.setX(x);
         displayable.setY(y);
@@ -107,5 +97,62 @@ public class GraphicEngine extends JPanel{
     public void addDisplayable(Displayable displayable){
         displayables.add(displayable);
     }
+
+    public void removeDisplayable(Displayable displayable){
+        displayables.remove(displayable);
+    }
+
+
+    public int getScreenWidth(){
+        return screenWidth;
+    }
+
+    public int getScreenHeight(){
+        return screenHeight;
+    }
+
+
+    public void update(){
+        List<MoveEvent> moveEvents = getEvents(MoveEvent.class);
+        if(moveEvents != null){
+            for (int i = 0; i < moveEvents.size(); i++) {
+                if(moveEvents.get(i).getGameObject().getComponent(Displayable.class)==null) continue;
+                setPosition(moveEvents.get(i).getGameObject().getComponent(Displayable.class), (int)moveEvents.get(i).getDestination().getX(), (int)moveEvents.get(i).getDestination().getY());
+                moveEvents.remove(i);
+            }
+        }
+
+        this.scene.validate();
+        this.scene.repaint();
+    }
+
+
+
+    public class Scene extends JPanel {
+
+        public Scene() {
+            this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+            this.setBackground(Color.black);
+            this.setDoubleBuffered(true);
+            this.setFocusable(true);
+        }
+
+        @Override
+        public void paintComponent(Graphics g){
+            super.paintComponent(g);
+            Graphics2D g2 = (Graphics2D)g;
+            for (int i = 0; i < displayables.size(); i++) {
+                if(displayables.get(i).getVisibility())
+                    displayables.get(i).draw(g2);
+            }
+            g2.dispose();
+        }
+    }
+
+
+
+
+
+
 
 }

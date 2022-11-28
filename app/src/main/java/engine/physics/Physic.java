@@ -3,6 +3,7 @@ package engine.physics;
 import static engine.physics.Utils.*;
 
 import engine.Component;
+import engine.physics.collisionReaction.*;
 
 public class Physic extends Component {
 
@@ -11,6 +12,7 @@ public class Physic extends Component {
     private double direction; // 0=Nord, sens trigo <==> N=0, O=90, S=180, E=270
     private Coordinate destination;
     private boolean useDestination;
+    CollisionReaction reaction;
 
     public Physic(double x, double y, double width, double height) {
         this.boxCollider = new Rectangle(x, y, width, height);
@@ -18,6 +20,16 @@ public class Physic extends Component {
         destination = new Coordinate(0,0);
         useDestination = false;
         direction = 0;
+        reaction = new RollBackReaction();
+    }
+
+    public Physic(double x, double y, double width, double height, CollisionReaction reaction) {
+        this.boxCollider = new Rectangle(x, y, width, height);
+        this.speed=0;
+        destination = new Coordinate(0,0);
+        useDestination = false;
+        direction = 0;
+        this.reaction = reaction;
     }
 
     public double getX() {
@@ -90,11 +102,11 @@ public class Physic extends Component {
         this.useDestination = value;
     }
 
-
+    public CollisionReaction getReaction(){
+        return this.reaction;
+    }
 
 
 
 
 }
-
-//TODO: les params de Displayable et Physical sont pas dans le mem ordre

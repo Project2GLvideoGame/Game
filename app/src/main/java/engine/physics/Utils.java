@@ -5,25 +5,25 @@ import java.math.RoundingMode;
 
 public class Utils {
 
-    protected static double round(double value, int places) {
+    public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
         BigDecimal bd = new BigDecimal(Double.toString(value));
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
 
-    protected static int oppositeSign(double n){
+    public static int oppositeSign(double n){
         return (n>0)? -1:1;
     }
 
-    protected static double deltaYFromDeltaX(double deltaCorrectionX, double alpha){
+    public static double deltaYFromDeltaX(double deltaCorrectionX, double alpha){
         double alphaRad = Math.toRadians(alpha);
         double r = Math.abs(deltaCorrectionX/Math.cos(alphaRad));
         double delta_y = r*Math.sin(alphaRad);
         return delta_y;
     }
 
-    protected static double deltaXFromDeltaY(double deltaCorrectionY, double alpha){
+    public static double deltaXFromDeltaY(double deltaCorrectionY, double alpha){
         double alphaRad = Math.toRadians(alpha);
         double r = Math.abs(deltaCorrectionY/Math.sin(alphaRad));
         double delta_x = r*Math.cos(alphaRad);

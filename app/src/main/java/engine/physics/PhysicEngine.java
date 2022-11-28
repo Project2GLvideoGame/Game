@@ -4,12 +4,12 @@ import static engine.physics.Utils.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import engine.Engine;
+import engine.event.CollisionEvent;
 import engine.event.EventsManager;
 import engine.event.MoveEvent;
 
-public class PhysicEngine extends Engine{
+public class PhysicEngine extends Engine<Physic>{
 
     public List<Physic> physicalObjects = new ArrayList<>();
     long previousTime;
@@ -33,15 +33,18 @@ public class PhysicEngine extends Engine{
 
     public List<Collision> allCollision(Physic physical) {
         List<Collision> collidedObjects = new ArrayList<>();
-        for (Physic physicalObject : physicalObjects) {
-            if (physicalObject!=physical && isCollided(physical, physicalObject)) {
+        for (int i = 0; i < physicalObjects.size(); i++) {
+            Physic tempPhysical = physicalObjects.get(i);
+            
+            if (tempPhysical!=physical && isCollided(physical, tempPhysical)) {
                 collidedObjects.add(
-                    new Collision(physical.getBoxCollider().intersection(physicalObject.getBoxCollider()),
+                    new Collision(physical.getBoxCollider().intersection(tempPhysical.getBoxCollider()),
                     physical,
-                    physicalObject
+                    tempPhysical
                     ));
             }
-        }
+        } 
+        
         return collidedObjects;
     }
 
@@ -52,36 +55,8 @@ public class PhysicEngine extends Engine{
     }
 
 
-    //TODO: regarde une seule colision
     public void setPositionAfterCollision(Physic physical, Coordinate beforeCollsionCoord, Coordinate CollisonCoord, List<Collision> collisions){
-        if(collisions.isEmpty()) physical.setCoordinate(beforeCollsionCoord);
-        
-        Collision collision = collisions.get(0);
-        Rectangle overlapRect = collision.overlap;
-
-        double deltaX = CollisonCoord.getX()-beforeCollsionCoord.getX();
-        int opX = oppositeSign(deltaX);
-        double correctionOnX = opX*overlapRect.getWidth();
-        double correctionOnY = deltaYFromDeltaX(opX*overlapRect.getWidth(), physical.getDirection()+180+90); // 90:Nord décalé 180:demi tour
-        physical.setCoordinate(new Coordinate(round(CollisonCoord.getX()+correctionOnX,6), round(CollisonCoord.getY()+correctionOnY,6) ));
-        if(physical.getBoxCollider().isTouching(collision.obstacle.getBoxCollider())){
-            // System.out.println("coorX: "+correctionOnX+"  corrY: "+correctionOnY);
-            return;
-        }
-        
-        double deltaY = CollisonCoord.getY()-beforeCollsionCoord.getY();
-        int opY = oppositeSign(deltaY);
-        correctionOnY = opY*overlapRect.getHeight();
-        correctionOnX = deltaXFromDeltaY(-opY*overlapRect.getHeight(), physical.getDirection()+180+90);
-        physical.setCoordinate(new Coordinate( Math.round(CollisonCoord.getX()+correctionOnX), Math.round(CollisonCoord.getY()+correctionOnY)));
-        if( physical.getBoxCollider().isTouching(collision.obstacle.getBoxCollider()) ){
-            // System.out.println("coorX: "+correctionOnX+"  corrY: "+correctionOnY);
-            return;
-        }
-    
-        // System.out.println("33333");
-        physical.setCoordinate(beforeCollsionCoord);
-        return;
+        physical.getReaction().setPositionAfterCollision(physical, beforeCollsionCoord, CollisonCoord, collisions);
     }
 
 
@@ -109,8 +84,9 @@ public class PhysicEngine extends Engine{
             //System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX(), physical.getY());
             //System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX()+physical.getBoxCollider().getWidth(), physical.getY()+physical.getBoxCollider().getHeight());
             //System.out.println("overlapW: "+collisions.get(0).overlap.getWidth()+"  overlapH: "+collisions.get(0).overlap.getHeight());
-            physical.setCoordinate(naiveCoord);
+            //physical.setCoordinate(naiveCoord);
             setPositionAfterCollision(physical, lastCoord, naiveCoord, collisions);
+            submit(new CollisionEvent(physical.getGameObject(),collisions,lastCoord));
             //physical.setSpeed(0);
             // System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX(), physical.getY());
             // System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX()+physical.getBoxCollider().getWidth(), physical.getY()+physical.getBoxCollider().getHeight());
@@ -122,7 +98,9 @@ public class PhysicEngine extends Engine{
 
 
     public void update(){
-        for (Physic physical : physicalObjects) {
+        if (System.nanoTime()-previousTime<10_000_000) return;
+        for (int i = 0; i < physicalObjects.size(); i++) {
+            Physic physical = physicalObjects.get(i);
             update(physical);
         }
         previousTime = System.nanoTime();

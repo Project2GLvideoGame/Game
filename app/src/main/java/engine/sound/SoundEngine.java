@@ -6,7 +6,7 @@ import java.util.List;
 import engine.Engine;
 import engine.event.EventsManager;
 
-public class SoundEngine extends Engine {
+public class SoundEngine extends Engine<Soundable> {
     
     public List<Soundable> soundables = new ArrayList<>();
 
@@ -21,4 +21,9 @@ public class SoundEngine extends Engine {
     public void addSoundableObject(Soundable sound){
         soundables.add(sound);
     }
+
+    public void removeSoundableObject(Soundable sound){
+        soundables.remove(sound);
+    }
+
 }

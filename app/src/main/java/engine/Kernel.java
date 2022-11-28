@@ -2,104 +2,112 @@ package engine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import engine.event.EventsManager;
+import javax.swing.SwingUtilities;
+
+import engine.input.State;
+import engine.event.*;
 import engine.graphic.Displayable;
 import engine.graphic.GraphicEngine;
 import engine.input.InputEngine;
-import engine.input.State;
 import engine.physics.Physic;
 import engine.physics.PhysicEngine;
 import engine.sound.SoundEngine;
 import engine.sound.Soundable;
-import engine.sound.Track;
+import game.Game;
+import game.ai.AIEngine;
+import game.ai.Intelligent;
+import game.entity.Player;
 
-public class Kernel implements Runnable{
+public class Kernel implements Runnable  {
 
-    private Thread gameThread;
-
-    private static List<GameObject> gameObjects = new ArrayList<>();
-
-    private GraphicEngine graphicEngine;
-    private PhysicEngine physicalEngine;
-    private InputEngine inputEngine;
-    private SoundEngine soundEngine;
-
-    private EventsManager eventManager;
-    
-    private GameObject player;
-
-
-    public Kernel() throws Exception{
-        eventManager = new EventsManager();
-        graphicEngine = new GraphicEngine();
-        physicalEngine = new PhysicEngine(eventManager);
-        inputEngine = new InputEngine();
-        soundEngine = new SoundEngine(eventManager);
-
-        inputEngine.setKernel(this);
-        graphicEngine.addKeyListener(inputEngine);
-
-        //Gameplay work
-        player = new GameObject(new Physic(100, 100, 60, 64),
-                                new Displayable(100, 100, 64, 64, 6, "/player/pacman_run1.png", "/player/pacman_run2.png", "/player/pacman_run3.png", "/player/pacman_run4.png"),
-                                new Soundable(new Track("move", "/audio/pacman.wav")) );
-        
-        GameObject wall = new GameObject(new Physic(350, 300, 50, 150),
-                                new Displayable(350, 300, 50, 150, "/wall.jpg"));
-
-        //Player
-        graphicEngine.addDisplayable(player.getComponent(Displayable.class));
-        physicalEngine.addPhysicalObject(player.getComponent(Physic.class));
-        player.getComponent(Physic.class).setSpeed(3);
-        soundEngine.addSoundableObject(player.getComponent(Soundable.class));
-        soundEngine.play();
-
-        //Wall
-        graphicEngine.addDisplayable(wall.getComponent(Displayable.class));
-        physicalEngine.addPhysicalObject(wall.getComponent(Physic.class));
-
-        gameObjects.add(player);
-        gameObjects.add(wall);
+    private static Kernel instance = null;
+    public static synchronized void start(Game game) {
+        if (instance == null) instance = new Kernel(game);
+    }
+    public static Kernel getInstance() {
+        return instance;
     }
 
-    public void startGameThread(){
+    private Thread gameThread;
+    private static List<GameObject> gameObjects = new ArrayList<>();
+    // Engines
+    private GraphicEngine graphicEngine;
+    private PhysicEngine physicalEngine;
+    private SoundEngine soundEngine;
+    private AIEngine aiEngine;
+    private InputEngine inputEngine;
+    public EventsManager eventsManager;
+    private Game game;
+
+
+    public Kernel(Game game) {
+        this.eventsManager = new EventsManager();
+        this.game = game;
+        this.graphicEngine = new GraphicEngine(eventsManager);
+        this.physicalEngine = new PhysicEngine(eventsManager);
+        this.soundEngine = new SoundEngine(eventsManager);
+        this.aiEngine = new AIEngine(eventsManager);
+        this.inputEngine = new InputEngine(game, eventsManager);
+
+        this.eventsManager.subscribe(aiEngine, CollisionEvent.class);
+        this.eventsManager.subscribe(inputEngine, StateEvent.class);
+        this.eventsManager.subscribe(graphicEngine, MoveEvent.class);
+        this.graphicEngine.getScene().addKeyListener(inputEngine);
+    }
+
+    public void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
     }
 
     @Override
-    public void run(){
-        while(gameThread != null){
-            
+    public void run() {
+        while(gameThread != null) {
+
             if(!GraphicEngine.refreshFrequences()) continue;
-
-            for(GameObject go : gameObjects){
-                Physic physic = go.getComponent(Physic.class);
-                Displayable disp = go.getComponent(Displayable.class);
-                graphicEngine.setPosition(disp, (int)physic.getX(), (int)physic.getY());
-                //System.out.println(physic.getX() + " " + physic.getY());
-            }
-
+            
             physicalEngine.update();
-            graphicEngine.repaint();
-                
+            aiEngine.update();
+            //game.update();
+            inputEngine.update();
+            SwingUtilities.invokeLater(()->graphicEngine.update());
         }
     }
 
+    public int getScreenHeight() {
+        return graphicEngine.getScreenHeight();
 
-    public void movePlayer(int direction) {
-        player.getComponent(Physic.class).setDirection(direction);
     }
 
-    public GameObject getPlayer(){return player;}
-    public GraphicEngine getGraphicEngine(){return graphicEngine;}
-
-    public void changeState(State state) {
-        inputEngine.changeState(state);
+    public int getScreenWidth() {
+        return graphicEngine.getScreenWidth();
     }
 
-    public SoundEngine getSoundEngine() {
-        return soundEngine;
+    public void addGameObject(GameObject gameObject) {
+        for (int i = 0; i < gameObject.getComponents().size(); i++) {
+            Component component = gameObject.getComponents().get(i);
+            if(component instanceof Displayable) graphicEngine.addDisplayable((Displayable)component);
+            if(component instanceof Physic) physicalEngine.addPhysicalObject((Physic)component);
+            if(component instanceof Soundable) soundEngine.addSoundableObject((Soundable)component);
+            if(component instanceof Intelligent) aiEngine.addIAObjectIntelligent((Intelligent)component);
+        }
+        //gameObjects.add(gameObject);
     }
+
+    public void removeGameObject(GameObject gameObject) {
+        for (int i = 0; i < gameObject.getComponents().size(); i++) {
+            Component component = gameObject.getComponents().get(i);
+            if(component instanceof Displayable) graphicEngine.removeDisplayable((Displayable)component);
+            if(component instanceof Physic) physicalEngine.removePhysicalObject((Physic)component);
+            if(component instanceof Soundable) soundEngine.removeSoundableObject((Soundable)component);
+            if(component instanceof Intelligent) aiEngine.removeIAObjectIntelligent((Intelligent)component);
+        }
+        //gameObjects.add(gameObject);
+    }
+
+
+
 }

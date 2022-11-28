@@ -11,6 +11,13 @@ public class Collision {
         this.obstacle = obstacle;
     }
 
+    public Physic getObstacle(){
+        return this.obstacle;
+    }
+
+    public Physic getObj(){
+        return this.obj;
+    }
 
     public Rectangle getOverlap(){
         return overlap;
