@@ -1,15 +1,17 @@
 package engine;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.SwingUtilities;
+
+import engine.input.State;
 import engine.event.*;
 import engine.graphic.Displayable;
 import engine.graphic.GraphicEngine;
 import engine.input.InputEngine;
-import engine.input.State;
 import engine.physics.Physic;
 import engine.physics.PhysicEngine;
 import engine.sound.SoundEngine;
@@ -17,6 +19,7 @@ import engine.sound.Soundable;
 import game.Game;
 import game.ai.AIEngine;
 import game.ai.Intelligent;
+import game.entity.Player;
 
 public class Kernel implements Runnable  {
 
@@ -30,7 +33,6 @@ public class Kernel implements Runnable  {
 
     private Thread gameThread;
     private static List<GameObject> gameObjects = new ArrayList<>();
-
     // Engines
     private GraphicEngine graphicEngine;
     private PhysicEngine physicalEngine;
@@ -38,8 +40,8 @@ public class Kernel implements Runnable  {
     private AIEngine aiEngine;
     private InputEngine inputEngine;
     public EventsManager eventsManager;
-
     private Game game;
+
 
     public Kernel(Game game) {
         this.eventsManager = new EventsManager();
@@ -52,6 +54,7 @@ public class Kernel implements Runnable  {
 
         this.eventsManager.subscribe(aiEngine, CollisionEvent.class);
         this.eventsManager.subscribe(inputEngine, StateEvent.class);
+        this.eventsManager.subscribe(graphicEngine, MoveEvent.class);
         this.graphicEngine.getScene().addKeyListener(inputEngine);
     }
 
@@ -64,30 +67,14 @@ public class Kernel implements Runnable  {
     public void run() {
         while(gameThread != null) {
 
-            for(GameObject go : gameObjects) {
-                Physic physic = go.getComponent(Physic.class);
-                Displayable displayable = go.getComponent(Displayable.class);
-                if(displayable != null && physic != null)
-                    graphicEngine.setPosition(displayable, (int)physic.getX(), (int)physic.getY());
-                //System.out.println(go.getClass() + " " + physic.getX() + " " + physic.getY());
-            }
-            // Engine Update
+            if(!GraphicEngine.refreshFrequences()) continue;
+            
             physicalEngine.update();
             aiEngine.update();
-            game.update();
+            //game.update();
             inputEngine.update();
-            if(!graphicEngine.refreshFrequences()) continue;
-            graphicEngine.getScene().repaint();
-
+            SwingUtilities.invokeLater(()->graphicEngine.update());
         }
-    }
-
-    public GraphicEngine getGraphicEngine() {
-        return graphicEngine;
-    }
-
-    public SoundEngine getSoundEngine() {
-        return soundEngine;
     }
 
     public int getScreenHeight() {
@@ -107,6 +94,20 @@ public class Kernel implements Runnable  {
             if(component instanceof Soundable) soundEngine.addSoundableObject((Soundable)component);
             if(component instanceof Intelligent) aiEngine.addIAObjectIntelligent((Intelligent)component);
         }
-        gameObjects.add(gameObject);
+        //gameObjects.add(gameObject);
     }
+
+    public void removeGameObject(GameObject gameObject) {
+        for (int i = 0; i < gameObject.getComponents().size(); i++) {
+            Component component = gameObject.getComponents().get(i);
+            if(component instanceof Displayable) graphicEngine.removeDisplayable((Displayable)component);
+            if(component instanceof Physic) physicalEngine.removePhysicalObject((Physic)component);
+            if(component instanceof Soundable) soundEngine.removeSoundableObject((Soundable)component);
+            if(component instanceof Intelligent) aiEngine.removeIAObjectIntelligent((Intelligent)component);
+        }
+        //gameObjects.add(gameObject);
+    }
+
+
+
 }

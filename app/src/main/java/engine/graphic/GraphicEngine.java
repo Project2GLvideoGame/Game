@@ -2,7 +2,7 @@ package engine.graphic;
 
 import engine.Engine;
 import engine.event.EventsManager;
-
+import engine.event.MoveEvent;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -98,6 +98,11 @@ public class GraphicEngine extends Engine<Displayable> {
         displayables.add(displayable);
     }
 
+    public void removeDisplayable(Displayable displayable){
+        displayables.remove(displayable);
+    }
+
+
     public int getScreenWidth(){
         return screenWidth;
     }
@@ -105,6 +110,23 @@ public class GraphicEngine extends Engine<Displayable> {
     public int getScreenHeight(){
         return screenHeight;
     }
+
+
+    public void update(){
+        List<MoveEvent> moveEvents = getEvents(MoveEvent.class);
+        if(moveEvents != null){
+            for (int i = 0; i < moveEvents.size(); i++) {
+                if(moveEvents.get(i).getGameObject().getComponent(Displayable.class)==null) continue;
+                setPosition(moveEvents.get(i).getGameObject().getComponent(Displayable.class), (int)moveEvents.get(i).getDestination().getX(), (int)moveEvents.get(i).getDestination().getY());
+                moveEvents.remove(i);
+            }
+        }
+
+        this.scene.validate();
+        this.scene.repaint();
+    }
+
+
 
     public class Scene extends JPanel {
 
@@ -114,18 +136,23 @@ public class GraphicEngine extends Engine<Displayable> {
             this.setDoubleBuffered(true);
             this.setFocusable(true);
         }
+
         @Override
         public void paintComponent(Graphics g){
             super.paintComponent(g);
-
             Graphics2D g2 = (Graphics2D)g;
-
-            for(Displayable disp : displayables){
-                if(disp.getVisibility())
-                    disp.draw(g2);
+            for (int i = 0; i < displayables.size(); i++) {
+                if(displayables.get(i).getVisibility())
+                    displayables.get(i).draw(g2);
             }
-
             g2.dispose();
         }
     }
+
+
+
+
+
+
+
 }

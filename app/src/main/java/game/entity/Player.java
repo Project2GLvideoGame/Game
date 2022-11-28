@@ -6,7 +6,7 @@ import engine.physics.Physic;
 
 public class Player extends GameObject{
 
-    private int speed;
+    final private int speed;
     private boolean shoot = false;
     private int lifePoint = 3;
 

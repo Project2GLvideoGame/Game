@@ -21,4 +21,9 @@ public class SoundEngine extends Engine<Soundable> {
     public void addSoundableObject(Soundable sound){
         soundables.add(sound);
     }
+
+    public void removeSoundableObject(Soundable sound){
+        soundables.remove(sound);
+    }
+
 }

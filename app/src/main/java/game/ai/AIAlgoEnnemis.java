@@ -1,5 +1,6 @@
 package game.ai;
 
+import engine.Kernel;
 import engine.event.CollisionEvent;
 import engine.event.EnnemisCollisionEvent;
 import engine.event.Event;
@@ -28,8 +29,12 @@ public class AIAlgoEnnemis extends AI {
 
                         }
 
-                        if(coll.getObstacle().getGameObject() instanceof PlayerShoot && coll.getObj().getGameObject() instanceof Enemies){
+                        if(coll.getObstacle().getGameObject() instanceof PlayerShoot){
                             ((Enemies)coll.getObj().getGameObject()).died();
+                        }
+
+                        if(coll.getObstacle().getGameObject() instanceof PlayerShoot){
+                                Kernel.getInstance().removeGameObject(coll.getObstacle().getGameObject());
                         }
                     }
                     

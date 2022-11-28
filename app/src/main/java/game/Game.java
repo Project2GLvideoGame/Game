@@ -8,6 +8,7 @@ import engine.event.StateEvent;
 import engine.graphic.Displayable;
 import engine.input.State;
 import engine.physics.Physic;
+import engine.physics.collisionReaction.IgnoreReaction;
 import game.ai.AIAlgoEnnemis;
 import game.ai.Intelligent;
 import game.entity.InvisibleWall;
@@ -31,17 +32,13 @@ public class Game {
     }
 
     public void playerRules(){
-        Displayable playerGraphic = player.getComponent(Displayable.class);
-        if(player.isShooting()){
-            Kernel.getInstance().addGameObject(new PlayerShoot(playerGraphic.getX()+playerGraphic.getWidth()/2, playerGraphic.getY()));
-            player.disableShoot();
-        }
+
     }
 
 
     public void initEntities() {
         int playerSize = 55;
-        player = new Player(3, new Physic(Kernel.getInstance().getScreenWidth()/2+playerSize, Kernel.getInstance().getScreenHeight()-playerSize, playerSize, playerSize),
+        player = new Player(5, new Physic(Kernel.getInstance().getScreenWidth()/2+playerSize, Kernel.getInstance().getScreenHeight()-playerSize, playerSize, playerSize),
                 new Displayable(Kernel.getInstance().getScreenWidth()/2+playerSize, Kernel.getInstance().getScreenHeight()-playerSize, playerSize, playerSize, 6, "/player/pacman_run1.png", "/player/pacman_run2.png", "/player/pacman_run3.png", "/player/pacman_run4.png"));
 
         Kernel.getInstance().addGameObject(player);
@@ -60,7 +57,7 @@ public class Game {
             int nb = ((i/10)%5);
             String path = "/enemies/alien_"+pngs.get(nb)+".png";
             Crab crab = new Crab(
-                new Physic(10 + offset * ((i % 10)) ,10 + offset *((i/10)), enemiesSize, enemiesSize),
+                new Physic(10 + offset * ((i % 10)) ,10 + offset *((i/10)), enemiesSize, enemiesSize, new IgnoreReaction()),
                 new Displayable(10 + offset * ((i % 10)) ,10 + offset *( (i/10)), enemiesSize, enemiesSize, path),
                 new Intelligent(new AIAlgoEnnemis())
                 );

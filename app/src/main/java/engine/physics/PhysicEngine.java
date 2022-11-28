@@ -33,15 +33,18 @@ public class PhysicEngine extends Engine<Physic>{
 
     public List<Collision> allCollision(Physic physical) {
         List<Collision> collidedObjects = new ArrayList<>();
-        for (Physic physicalObject : physicalObjects) {
-            if (physicalObject!=physical && isCollided(physical, physicalObject)) {
+        for (int i = 0; i < physicalObjects.size(); i++) {
+            Physic tempPhysical = physicalObjects.get(i);
+            
+            if (tempPhysical!=physical && isCollided(physical, tempPhysical)) {
                 collidedObjects.add(
-                    new Collision(physical.getBoxCollider().intersection(physicalObject.getBoxCollider()),
+                    new Collision(physical.getBoxCollider().intersection(tempPhysical.getBoxCollider()),
                     physical,
-                    physicalObject
+                    tempPhysical
                     ));
             }
-        }
+        } 
+        
         return collidedObjects;
     }
 
@@ -81,7 +84,7 @@ public class PhysicEngine extends Engine<Physic>{
             //System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX(), physical.getY());
             //System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX()+physical.getBoxCollider().getWidth(), physical.getY()+physical.getBoxCollider().getHeight());
             //System.out.println("overlapW: "+collisions.get(0).overlap.getWidth()+"  overlapH: "+collisions.get(0).overlap.getHeight());
-            physical.setCoordinate(naiveCoord);
+            //physical.setCoordinate(naiveCoord);
             setPositionAfterCollision(physical, lastCoord, naiveCoord, collisions);
             submit(new CollisionEvent(physical.getGameObject(),collisions,lastCoord));
             //physical.setSpeed(0);
@@ -95,7 +98,9 @@ public class PhysicEngine extends Engine<Physic>{
 
 
     public void update(){
-        for (Physic physical : physicalObjects) {
+        if (System.nanoTime()-previousTime<10_000_000) return;
+        for (int i = 0; i < physicalObjects.size(); i++) {
+            Physic physical = physicalObjects.get(i);
             update(physical);
         }
         previousTime = System.nanoTime();

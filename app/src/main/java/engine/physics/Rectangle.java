@@ -3,7 +3,7 @@ package engine.physics;
 
 public class Rectangle {
 
-    double x, y, width, height;
+    volatile double x, y, width, height;
 
     public Rectangle(double x, double y, double width, double height) {
         assert height>0 : "!height>0";

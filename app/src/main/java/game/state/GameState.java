@@ -1,19 +1,24 @@
 package game.state;
 
 import engine.Kernel;
+import engine.graphic.Displayable;
 import engine.input.State;
 import game.Game;
+import game.entity.PlayerShoot;
 
 public class GameState implements State {
 
     @Override
     public void upPressed(Game game) {
-        game.player.shoot();
     }
-
+    
     @Override
     public void upReleased(Game game) {
-        game.player.setSpeed(0);
+        Displayable playerGraphic = game.player.getComponent(Displayable.class);
+        Kernel kernel = Kernel.getInstance();
+        PlayerShoot ps = new PlayerShoot(playerGraphic.getX()+playerGraphic.getWidth()/2, playerGraphic.getY()-100);
+        kernel.addGameObject(ps);
+        System.out.println("release");
     }
 
     @Override
@@ -22,12 +27,12 @@ public class GameState implements State {
     }
 
     public void downReleased(Game game) {
-        game.player.setSpeed(0);
     }
 
     @Override
     public void rightPressed(Game game) {
-        game.player.setSpeed(game.player.getSpeed());
+        System.out.println("right");
+        game.player.setSpeed(4);
         game.player.setDirection(270);
     }
 
@@ -38,7 +43,7 @@ public class GameState implements State {
 
     @Override
     public void leftPressed(Game game) {
-        game.player.setSpeed(game.player.getSpeed());
+        game.player.setSpeed(4);
         game.player.setDirection(90);
     }
 
