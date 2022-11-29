@@ -5,7 +5,7 @@ import engine.physics.Physic;
 
 public class Crab extends Enemies{
     
-    public Crab(Component ... components){
+    public Crab(Component... components){
         super(components);
         this.getComponent(Physic.class).setSpeed(1);
         this.getComponent(Physic.class).setDirection(270);
@@ -20,4 +20,5 @@ public class Crab extends Enemies{
     public void fire() {
         // TODO Auto-generated method stub
     }
+    
 }

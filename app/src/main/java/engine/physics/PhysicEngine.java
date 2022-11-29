@@ -8,8 +8,11 @@ import engine.Engine;
 import engine.event.CollisionEvent;
 import engine.event.EventsManager;
 import engine.event.MoveEvent;
+import game.ai.Intelligent;
+import game.entity.enemies.Crab;
+import game.entity.enemies.Enemies;
 
-public class PhysicEngine extends Engine<Physic>{
+public class PhysicEngine extends Engine{
 
     public List<Physic> physicalObjects = new ArrayList<>();
     long previousTime;
@@ -86,7 +89,12 @@ public class PhysicEngine extends Engine<Physic>{
             //System.out.println("overlapW: "+collisions.get(0).overlap.getWidth()+"  overlapH: "+collisions.get(0).overlap.getHeight());
             //physical.setCoordinate(naiveCoord);
             setPositionAfterCollision(physical, lastCoord, naiveCoord, collisions);
-            submit(new CollisionEvent(physical.getGameObject(),collisions,lastCoord));
+            CollisionEvent collisionEvent = new CollisionEvent(physical.getGameObject(),collisions,lastCoord);
+            if(collisionEvent.getGameObject() instanceof Enemies)
+                submit(collisionEvent);
+            else{
+                //submit(collisionEvent);
+            }
             //physical.setSpeed(0);
             // System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX(), physical.getY());
             // System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX()+physical.getBoxCollider().getWidth(), physical.getY()+physical.getBoxCollider().getHeight());
@@ -98,7 +106,8 @@ public class PhysicEngine extends Engine<Physic>{
 
 
     public void update(){
-        if (System.nanoTime()-previousTime<10_000_000) return;
+        //System.out.println("len="+physicalObjects.size());
+        //if (System.nanoTime()-previousTime<10_000_000) return;
         for (int i = 0; i < physicalObjects.size(); i++) {
             Physic physical = physicalObjects.get(i);
             update(physical);
@@ -107,9 +116,4 @@ public class PhysicEngine extends Engine<Physic>{
     }
 
 
-
-//TODO: update d'abord position ou acceleration ?
-//TODO: coder acceleration avec des forces
-//TODO:  entre 2 compute() on peu traverser un mur
-//#endregion
 }

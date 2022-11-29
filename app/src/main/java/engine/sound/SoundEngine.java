@@ -6,7 +6,7 @@ import java.util.List;
 import engine.Engine;
 import engine.event.EventsManager;
 
-public class SoundEngine extends Engine<Soundable> {
+public class SoundEngine extends Engine{
     
     public List<Soundable> soundables = new ArrayList<>();
 

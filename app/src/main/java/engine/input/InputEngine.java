@@ -7,10 +7,11 @@ import engine.Engine;
 import engine.event.Event;
 import engine.event.EventsManager;
 import engine.event.StateEvent;
+import engine.sound.Soundable;
 import game.Game;
 import game.state.GameState;
 
-public class InputEngine extends Engine<State> implements KeyListener {
+public class InputEngine extends Engine implements KeyListener {
 
     private State currentState = new GameState();
     private Game game;
@@ -26,6 +27,7 @@ public class InputEngine extends Engine<State> implements KeyListener {
             for (StateEvent stateEvent : stateEvents) {
                 changeState(stateEvent.getNewState());
             }
+            stateEvents.clear();
         }
     }
 

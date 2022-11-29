@@ -18,7 +18,7 @@ public class GameState implements State {
         Kernel kernel = Kernel.getInstance();
         PlayerShoot ps = new PlayerShoot(playerGraphic.getX()+playerGraphic.getWidth()/2, playerGraphic.getY()-100);
         kernel.addGameObject(ps);
-        System.out.println("release");
+        //System.out.println("release");
     }
 
     @Override
@@ -31,7 +31,7 @@ public class GameState implements State {
 
     @Override
     public void rightPressed(Game game) {
-        System.out.println("right");
+        //System.out.println("right");
         game.player.setSpeed(4);
         game.player.setDirection(270);
     }
@@ -54,7 +54,7 @@ public class GameState implements State {
 
     @Override
     public void pPressed(Game game) {
-        System.out.println("pause");
+        //System.out.println("pause");
         game.changeState(new MainMenuState());
     }
 

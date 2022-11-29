@@ -1,11 +1,10 @@
 package game.ai;
 
 import engine.event.Event;
-import engine.event.EventsManager;
 
 public abstract class AI {
 
+    abstract void apply(Event event);
 
-    public void apply(Event event, EventsManager eventsManager) {
-    }
+
 }

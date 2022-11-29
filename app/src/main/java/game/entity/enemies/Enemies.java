@@ -7,7 +7,7 @@ import engine.graphic.Displayable;
 
 public abstract class Enemies extends GameObject {
 
-    public Enemies(Component ... components){
+    public Enemies(Component... components){
         super(components);
     }
 
