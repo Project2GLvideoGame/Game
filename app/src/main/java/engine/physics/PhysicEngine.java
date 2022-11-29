@@ -92,9 +92,6 @@ public class PhysicEngine extends Engine{
             CollisionEvent collisionEvent = new CollisionEvent(physical.getGameObject(),collisions,lastCoord);
             if(collisionEvent.getGameObject() instanceof Enemies)
                 submit(collisionEvent);
-            else{
-                //submit(collisionEvent);
-            }
             //physical.setSpeed(0);
             // System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX(), physical.getY());
             // System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX()+physical.getBoxCollider().getWidth(), physical.getY()+physical.getBoxCollider().getHeight());
