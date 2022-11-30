@@ -4,6 +4,7 @@ import game.entity.PlayerShoot;
 import java.util.ArrayList;
 import java.util.List;
 import engine.Engine;
+import engine.GameObject;
 import engine.Kernel;
 import engine.event.CollisionEvent;
 import engine.event.DestroyEvent;
@@ -120,8 +121,9 @@ public class Game extends Engine{
 
                 if(player.isDead()){
                     Kernel.getInstance().removeGameObject(player);
-                    //TODO
-                    //TODOOOO
+                    Kernel.getInstance().addGameObject(new GameObject(new Displayable(0, 0, Kernel.getInstance().getScreenWidth(), Kernel.getInstance().getScreenHeight(), "/gameOver.png")));
+                    Kernel.getInstance().graphicEngine.update();
+                    Kernel.getInstance().gameOver = true;
                 }
             }
         }

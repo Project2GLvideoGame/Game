@@ -16,13 +16,14 @@ import game.ai.Intelligent;
 public class Kernel implements Runnable  {
 
     private static Kernel instance = null;
-    private static Game game;
-    private GraphicEngine graphicEngine;
+    private static Game   game;
+    public GraphicEngine graphicEngine;
     private PhysicEngine  physicalEngine;
     private SoundEngine   soundEngine;
     private AIEngine      aiEngine;
     private InputEngine   inputEngine;
     public  EventsManager eventsManager;
+    public boolean gameOver = false;
     
     
     public Kernel() {
@@ -56,7 +57,7 @@ public class Kernel implements Runnable  {
 
     @Override
     public void run() {
-        while(true) {
+        while(!gameOver) {
 
             if(!Frequences.shouldRefresh()) continue;
             
