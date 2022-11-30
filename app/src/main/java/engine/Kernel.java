@@ -16,7 +16,7 @@ import game.ai.Intelligent;
 public class Kernel implements Runnable  {
 
     private static Kernel instance = null;
-    private Game game;
+    private static Game game;
     private GraphicEngine graphicEngine;
     private PhysicEngine  physicalEngine;
     private SoundEngine   soundEngine;
@@ -25,20 +25,34 @@ public class Kernel implements Runnable  {
     public  EventsManager eventsManager;
     
     
-    public Kernel(Game game) {
-        this.game           = game;
+    public Kernel() {
+
         this.eventsManager  = new EventsManager();
+
+        game           = new Game(eventsManager);
+
         this.graphicEngine  = new GraphicEngine(eventsManager);
         this.physicalEngine = new PhysicEngine(eventsManager);
         this.soundEngine    = new SoundEngine(eventsManager);
         this.aiEngine       = new AIEngine(eventsManager);
         this.inputEngine    = new InputEngine(game, eventsManager);
+
         this.graphicEngine.getScene().addKeyListener(inputEngine);
+        
         this.eventsManager.subscribe(aiEngine, CollisionEvent.class);
         this.eventsManager.subscribe(inputEngine, StateEvent.class);
         this.eventsManager.subscribe(graphicEngine, MoveEvent.class);
+        this.eventsManager.subscribe(game, CollisionEvent.class);
+        this.eventsManager.subscribe(game, PlayerShootEvent.class);
     }
 
+    public static synchronized void start() {
+        if (instance == null){
+            instance = new Kernel();
+            game.init();
+            new Thread(instance).start();
+        }
+    }
 
     @Override
     public void run() {
@@ -47,20 +61,14 @@ public class Kernel implements Runnable  {
             if(!Frequences.shouldRefresh()) continue;
             
             physicalEngine.update();
-            game.update();
             inputEngine.update();
             aiEngine.update();
             SwingUtilities.invokeLater(()->graphicEngine.update());
+            game.update();
         }
     }
 
 
-    public static synchronized void start(Game game) {
-        if (instance == null){
-            instance = new Kernel(game);
-            new Thread(instance).start();
-        }
-    }
     
     public static Kernel getInstance() {
         return instance;

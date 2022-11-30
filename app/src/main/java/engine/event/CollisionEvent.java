@@ -29,5 +29,10 @@ public class CollisionEvent  implements Event{
     public Coordinate getLastCoordinate() {
         return this.lastCoordinate;
     }
+
+    @Override
+    public String toString() {
+        return ("GameObject "+ gameObject + "\n CollisionObject " + collisions.get(0).getObstacle().getGameObject());
+    }
 }
 

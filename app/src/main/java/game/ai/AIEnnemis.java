@@ -66,7 +66,7 @@ public class AIEnnemis extends AI {
             else if (collision.getObstacle().getGameObject() instanceof PlayerShoot) {
                 //System.out.println("remove");
                 Kernel.getInstance().removeGameObject(collision.getObj().getGameObject());
-                Kernel.getInstance().removeGameObject(collision.getObstacle().getGameObject());
+                //Kernel.getInstance().removeGameObject(collision.getObstacle().getGameObject());
             }
             else if (collision.getObstacle().getGameObject() instanceof Player) {
                 Player player = (Player)collision.getObstacle().getGameObject();
