@@ -71,6 +71,7 @@ public class AIEnnemis extends AI {
             // si ennemi touche un misible du player
             else if (collision.getObstacle().getGameObject() instanceof PlayerShoot) {
                 //System.out.println("remove");
+                this.crabs.remove(collision.getObj().getGameObject());
                 Kernel.getInstance().removeGameObject(collision.getObj().getGameObject());
             }
 

@@ -1,13 +1,17 @@
 package engine.graphic;
 
 import engine.Engine;
+import engine.Kernel;
 import engine.event.EventsManager;
 import engine.event.MoveEvent;
+import engine.event.StateEvent;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -27,9 +31,10 @@ public class GraphicEngine extends Engine {
     final int screenHeight = tileSize * maxScreenRow;
     
     private static int FPS = 60;
+    JFrame window = new JFrame();
     
 
-    private List<Displayable> displayables = new ArrayList<>();
+    
     private Scene scene;
     
 
@@ -44,8 +49,6 @@ public class GraphicEngine extends Engine {
     }
 
     private void initWindow(){
-        JFrame window = new JFrame();
-        
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(true);
         window.setTitle("Game");
@@ -79,11 +82,11 @@ public class GraphicEngine extends Engine {
     }
 
     public void addDisplayable(Displayable displayable){
-        displayables.add(displayable);
+        this.scene.displayables.add(displayable);
     }
 
     public void removeDisplayable(Displayable displayable){
-        displayables.remove(displayable);
+        this.scene.displayables.remove(displayable);
     }
 
 
@@ -95,8 +98,7 @@ public class GraphicEngine extends Engine {
         return screenHeight;
     }
 
-
-    public void update(){
+    private void handleMoveEvents(){
         List<MoveEvent> moveEvents = getEvents(MoveEvent.class);
         if(moveEvents != null){
             for (int i = 0; i < moveEvents.size(); i++) {
@@ -104,17 +106,44 @@ public class GraphicEngine extends Engine {
                 setPosition(moveEvents.get(i).getGameObject().getComponent(Displayable.class), (int)moveEvents.get(i).getDestination().getX(), (int)moveEvents.get(i).getDestination().getY());
             }
             moveEvents.clear();
-            //for (int i = 0; i < moveEvents.size(); i++) {
-                //moveEvents.remove(i);
-            //}
         }
+    }
+
+    private void handleStateEvents(){
+        List<StateEvent> stateEvents = getEvents(StateEvent.class);
+        if(stateEvents == null) return;
+        for (StateEvent stateEvent : stateEvents) {
+            System.out.println("recoir state event");
+            createScene(stateEvent.getDisplayables());
+        }
+        stateEvents.clear();
+    }
+
+    public void update(){
+        handleMoveEvents();
+        handleStateEvents();
         this.scene.validate();
         this.scene.repaint();
     }
 
 
+    private void createScene(Displayable... displayables){
+
+        scene.displayables.addAll(Arrays.asList(displayables));
+        Kernel.getInstance().gameOver = true;
+        //window.validate();
+        //window.repaint();
+        
+        // for (Displayable displayable : displayables) {
+        //     addDisplayable(displayable);
+        // }
+        //window.removeAll();
+        //window.add(this.scene);
+    }
+
 
     public class Scene extends JPanel {
+        private List<Displayable> displayables = new ArrayList<>();
 
         public Scene() {
             this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -133,6 +162,8 @@ public class GraphicEngine extends Engine {
             }
             g2.dispose();
         }
+
+
     }
 
 

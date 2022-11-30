@@ -21,6 +21,7 @@ import game.entity.EnemyShoot;
 import game.entity.InvisibleWall;
 import game.entity.Player;
 import game.entity.enemies.Crab;
+import game.state.GameOverState;
 
 public class Game extends Engine{
 
@@ -126,10 +127,12 @@ public class Game extends Engine{
                 player.takeDamage();
 
                 if(player.isDead()){
+                    StateEvent stateEvent = new StateEvent(new GameOverState(), new Displayable(0, 0, Kernel.getInstance().getScreenWidth(), Kernel.getInstance().getScreenHeight(), "/gameOver.png") );
+                    submit(stateEvent);
                     Kernel.getInstance().removeGameObject(player);
-                    Kernel.getInstance().addGameObject(new GameObject(new Displayable(0, 0, Kernel.getInstance().getScreenWidth(), Kernel.getInstance().getScreenHeight(), "/gameOver.png")));
                     Kernel.getInstance().graphicEngine.update();
-                    Kernel.getInstance().gameOver = true;
+                    //Kernel.getInstance().gameOver = true;
+                    //Kernel.getInstance().addGameObject(new GameObject());
                 }
             }
         }
