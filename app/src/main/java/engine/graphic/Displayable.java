@@ -87,8 +87,14 @@ public class Displayable extends Component {
         this.height = height;
     }
     
-    public void setAsset(Image img) {
-        this.asset = img;
+    public void setAsset(String imgPath) {
+        BufferedImage tempAsset;
+        try {
+            tempAsset = ImageIO.read(getClass().getResource(imgPath));
+            this.asset = tempAsset.getScaledInstance(width, height, Image.SCALE_DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setVisibility(boolean visibility){

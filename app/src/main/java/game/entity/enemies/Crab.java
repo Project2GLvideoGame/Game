@@ -4,9 +4,10 @@ import engine.Component;
 import engine.physics.Physic;
 
 public class Crab extends Enemies{
-    
-    public Crab(Component ... components){
+    private final int id;
+    public Crab(int id, Component... components){
         super(components);
+        this.id = id;
         this.getComponent(Physic.class).setSpeed(1);
         this.getComponent(Physic.class).setDirection(270);
     }
@@ -20,4 +21,14 @@ public class Crab extends Enemies{
     public void fire() {
         // TODO Auto-generated method stub
     }
+
+    public int getID(){
+        return this.id;
+    }
+
+    @Override
+    public String toString() {
+        return "Crab_ID " + id;
+    }
+    
 }
