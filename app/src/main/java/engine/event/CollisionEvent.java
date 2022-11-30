@@ -11,7 +11,7 @@ public class CollisionEvent  implements Event{
     final GameObject gameObject;
     final  List<Collision> collisions;
     Coordinate lastCoordinate;
-    // CollisionEvent(GameObject, List<Collision>, Coordinate)
+
     public CollisionEvent(GameObject gameObject, List<Collision> collisions, Coordinate lastCoordinate) {
         this.gameObject = gameObject;
         this.collisions = collisions;
@@ -22,12 +22,17 @@ public class CollisionEvent  implements Event{
         return this.gameObject;
     }
 
-    public List<Collision> getCollision() {
+    public List<Collision> getCollisions() {
         return this.collisions;
     }
 
     public Coordinate getLastCoordinate() {
         return this.lastCoordinate;
+    }
+
+    @Override
+    public String toString() {
+        return ("GameObject "+ gameObject + "\n CollisionObject " + collisions.get(0).getObstacle().getGameObject());
     }
 }
 

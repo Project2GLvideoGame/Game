@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import engine.Engine;
+import game.ai.AIEngine;
+import game.ai.Intelligent;
 
 public class EventsManager {
 

@@ -13,7 +13,7 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class GraphicEngine extends Engine<Displayable> {
+public class GraphicEngine extends Engine {
 
     //Screen settings
     final static int originalTileSize = 16; //16x16 tiles
@@ -58,23 +58,7 @@ public class GraphicEngine extends Engine<Displayable> {
         window.setVisible(true);
     }
 
-    private static double drawInternal = 1_000_000_000/FPS;
-    private static double delta = 0;
-    private static long lastTime = System.nanoTime();
-    private static long currentTime;
 
-    public static boolean refreshFrequences(){
-
-        currentTime = System.nanoTime();
-        delta += (currentTime - lastTime) / drawInternal;
-        lastTime = currentTime;
-
-        if(delta >= 1){
-            delta--;
-            return true;
-        }
-        return false;
-    }
 
     public void setPosition(Displayable displayable, int x, int y) {
         displayable.setX(x);
@@ -118,10 +102,12 @@ public class GraphicEngine extends Engine<Displayable> {
             for (int i = 0; i < moveEvents.size(); i++) {
                 if(moveEvents.get(i).getGameObject().getComponent(Displayable.class)==null) continue;
                 setPosition(moveEvents.get(i).getGameObject().getComponent(Displayable.class), (int)moveEvents.get(i).getDestination().getX(), (int)moveEvents.get(i).getDestination().getY());
-                moveEvents.remove(i);
             }
+            moveEvents.clear();
+            //for (int i = 0; i < moveEvents.size(); i++) {
+                //moveEvents.remove(i);
+            //}
         }
-
         this.scene.validate();
         this.scene.repaint();
     }
