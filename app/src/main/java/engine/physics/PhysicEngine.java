@@ -1,20 +1,17 @@
 package engine.physics;
 
 import static engine.physics.Utils.*;
-import game.ai.Intelligent;
-import game.entity.enemies.Crab;
 import java.util.ArrayList;
 import java.util.List;
 import engine.Engine;
 import engine.event.CollisionEvent;
 import engine.event.EventsManager;
 import engine.event.MoveEvent;
-import game.entity.PlayerShoot;
-import game.entity.enemies.Enemies;
+
 
 public class PhysicEngine extends Engine{
 
-    boolean t=false;
+    PreviousWorld previousWorld =null;
     public List<Physic> physicalObjects = new ArrayList<>();
     long previousTime;
 
@@ -36,14 +33,6 @@ public class PhysicEngine extends Engine{
 
 
     public List<Collision> allCollision(Physic physical, List<Physic> physicalObjectsCopy) {
-
-        if(physical.getGameObject() instanceof Enemies && t){
-            for (int i = 0; i < physicalObjectsCopy.size(); i++) {
-                Physic tempPhysical = physicalObjectsCopy.get(i);
-                // if(tempPhysical.getGameObject() instanceof PlayerShoot)
-                //     System.out.println("coll crab<->shoot");
-            }
-        }
 
         List<Collision> collidedObjects = new ArrayList<>();
         for (int i = 0; i < physicalObjectsCopy.size(); i++) {
@@ -73,60 +62,85 @@ public class PhysicEngine extends Engine{
     }
 
 
-    public void update(Physic physical, List<Physic> physicalObjectsCopy) {
-        long currentTime = System.nanoTime();
-        long elapsedTime = (currentTime-previousTime)/10_000_000;
-        
-        double speed = physical.getSpeed();
-        Coordinate lastCoord = new Coordinate(physical.getX(), physical.getY());
-        double distance  = speed*elapsedTime;
 
-        if(physical.getUseDestination()){
-            physical.setDirection(normalizeAngle(computeDirectionForJavaFx(lastCoord, physical.getDestination())));
-            distance = Math.min(distance, distance(lastCoord, physical.getDestination()));
+
+    public void placerCorrectementToutLeMonde(List<Physic> physicalObjectsCopy , long elapsedTime) {
+        List<PositionAfterCollisionData> doiventEtreReplaces = new ArrayList<>();
+        
+        for (int i = 0; i < physicalObjectsCopy.size(); i++) {
+            Physic physical = physicalObjectsCopy.get(i);
+            Coordinate naiveCoord = new Coordinate(physical.getX(), physical.getY());
+            Coordinate beforeCollCoord  = previousWorld.getPreviousPhysical(i).getPreviousCoordinate();
+
+
+            List<Collision> collisions = allCollision(physical, physicalObjectsCopy);
+            if (! collisions.isEmpty()){
+                doiventEtreReplaces.add(new PositionAfterCollisionData(physical, beforeCollCoord, naiveCoord, collisions));
+
+                CollisionEvent collisionEvent = new CollisionEvent(physical.getGameObject(), collisions, beforeCollCoord);
+                submit(collisionEvent);
+                
+                //if(collisionEvent.getGameObject() instanceof Enemies && collisionEvent.getCollisions().get(0).getObstacle().getGameObject() instanceof PlayerShoot) System.out.println("coll crab<->shoot");
+                //if(collisionEvent.getGameObject() instanceof PlayerShoot && collisionEvent.getCollisions().get(0).getObstacle().getGameObject() instanceof Enemies) t=true;
+            }
+
+            MoveEvent moveEvent = new MoveEvent(physical.getGameObject(), beforeCollCoord, physical.getCoordinate());
+            submit(moveEvent);
         }
 
-        Coordinate deltaCoord = polarToCartesian(physical.getDirection(), distance);
-
-        Coordinate naiveCoord = new Coordinate(round(lastCoord.x+deltaCoord.x,6), round(lastCoord.y-deltaCoord.y,6)); //y inversé dans le graphique(JavaFX)
-        physical.setCoordinate(naiveCoord);
-        
-        List<Collision> collisions = allCollision(physical, physicalObjectsCopy);
-        if (! collisions.isEmpty()){
-            //System.out.printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Collision!!\n");
-            //System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX(), physical.getY());
-            //System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX()+physical.getBoxCollider().getWidth(), physical.getY()+physical.getBoxCollider().getHeight());
-            //System.out.println("overlapW: "+collisions.get(0).overlap.getWidth()+"  overlapH: "+collisions.get(0).overlap.getHeight());
-            //physical.setCoordinate(naiveCoord);
-            CollisionEvent collisionEvent = new CollisionEvent(physical.getGameObject(),collisions,lastCoord);
-            submit(collisionEvent);
-            
-            setPositionAfterCollision(physical, lastCoord, naiveCoord, collisions);
-            
-            //if(collisionEvent.getGameObject() instanceof Enemies && collisionEvent.getCollisions().get(0).getObstacle().getGameObject() instanceof PlayerShoot) System.out.println("coll crab<->shoot");
-            //if(collisionEvent.getGameObject() instanceof PlayerShoot && collisionEvent.getCollisions().get(0).getObstacle().getGameObject() instanceof Enemies) t=true;
-
-            //physical.setSpeed(0);
-            // System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX(), physical.getY());
-            // System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX()+physical.getBoxCollider().getWidth(), physical.getY()+physical.getBoxCollider().getHeight());
-
+        for (PositionAfterCollisionData data : doiventEtreReplaces) {        
+            setPositionAfterCollision(data.getPhysic(), data.getBeforeCollCoord(), data.getNaiveCoord(), data.getCollisions());
         }
-        MoveEvent moveEvent = new MoveEvent(physical.getGameObject(), lastCoord, physical.getCoordinate());
-        submit(moveEvent);
+
     }
+
+
+
+    
+    private void placerNaivementToutLeMonde(List<Physic> physicalObjectsCopy , long elapsedTime){
+        
+        for (int i = 0; i < physicalObjectsCopy.size(); i++) {
+            Physic physical = physicalObjectsCopy.get(i);
+
+            
+            double speed = physical.getSpeed();
+            Coordinate beforeCollCoord = new Coordinate(physical.getX(), physical.getY());
+            double distance  = speed*elapsedTime;
+            
+            if(physical.getUseDestination()){
+                physical.setDirection(normalizeAngle(computeDirectionForJavaFx(beforeCollCoord, physical.getDestination())));
+                distance = Math.min(distance, distance(beforeCollCoord, physical.getDestination()));
+            }
+            
+            Coordinate deltaCoord = polarToCartesian(physical.getDirection(), distance);
+            
+            Coordinate naiveCoord = new Coordinate(round(beforeCollCoord.x+deltaCoord.x,6), round(beforeCollCoord.y-deltaCoord.y,6)); //y inversé dans le graphique(JavaFX)
+            physical.setCoordinate(naiveCoord);
+            
+            previousWorld.addpreviousPhysical( previousWorld.new PreviousPhysical(physical, beforeCollCoord));
+        }
+    }
+
+
 
 
     public void update(){
         //System.out.println("len="+physicalObjects.size());
         //if (System.nanoTime()-previousTime<10_000_000) return;
         
+        previousWorld = new PreviousWorld();
         List<Physic> physicalObjectsCopy = new ArrayList<>(physicalObjects);
-        for (int i = 0; i < physicalObjectsCopy.size(); i++) {
-            Physic physical = physicalObjectsCopy.get(i);
-            update(physical, physicalObjectsCopy);
-        }
+        
+        long currentTime = System.nanoTime();
+        long elapsedTime = (currentTime-previousTime)/10_000_000;
+
+        placerNaivementToutLeMonde(physicalObjectsCopy, elapsedTime);
+        placerCorrectementToutLeMonde(physicalObjectsCopy, elapsedTime);
+        
         previousTime = System.nanoTime();
     }
+
+
 
 
 }
