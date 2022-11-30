@@ -30,14 +30,13 @@ public class AIEnnemis extends AI {
 
     @Override
     public void apply(Event event) {
-        
-        if (!(event instanceof CollisionEvent)) return;
+        //if (!(event instanceof CollisionEvent)) return;
         CollisionEvent collisionEvent = (CollisionEvent) event;
         if (!(collisionEvent.getGameObject() instanceof Enemies)) return;
         
-        //System.out.println("coll");
-
         for (Collision collision : collisionEvent.getCollisions()) {
+            // System.out.println("Coll type, Obj = " + collision.getObj().getGameObject());
+            // System.out.println("Obstacle = " + collision.getObstacle().getGameObject());
             
             //si ennemi touche un bord de l'ecran
             if (collision.getObstacle().getGameObject() instanceof InvisibleWall) {
@@ -63,17 +62,15 @@ public class AIEnnemis extends AI {
                 }
                 break;
             }
-
-            //si ennemi touche un misible du player
+            //si ennemi touche un missile du player
             else if (collision.getObstacle().getGameObject() instanceof PlayerShoot) {
-                System.out.println("remove");
+                //System.out.println("remove");
                 Kernel.getInstance().removeGameObject(collision.getObj().getGameObject());
+                Kernel.getInstance().removeGameObject(collision.getObstacle().getGameObject());
             }
-            
             else if (collision.getObstacle().getGameObject() instanceof Player) {
-                //TODO
-            }else{
-                System.out.println("else ai crab");
+                Player player = (Player)collision.getObstacle().getGameObject();
+                player.takeDamage();
             }
 
 

@@ -40,8 +40,8 @@ public class PhysicEngine extends Engine{
         if(physical.getGameObject() instanceof Enemies && t){
             for (int i = 0; i < physicalObjectsCopy.size(); i++) {
                 Physic tempPhysical = physicalObjectsCopy.get(i);
-                if(tempPhysical.getGameObject() instanceof PlayerShoot)
-                    System.out.println("coll crab<->shoot");
+                // if(tempPhysical.getGameObject() instanceof PlayerShoot)
+                //     System.out.println("coll crab<->shoot");
             }
         }
 
@@ -98,12 +98,13 @@ public class PhysicEngine extends Engine{
             //System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX()+physical.getBoxCollider().getWidth(), physical.getY()+physical.getBoxCollider().getHeight());
             //System.out.println("overlapW: "+collisions.get(0).overlap.getWidth()+"  overlapH: "+collisions.get(0).overlap.getHeight());
             //physical.setCoordinate(naiveCoord);
-            setPositionAfterCollision(physical, lastCoord, naiveCoord, collisions);
-            
             CollisionEvent collisionEvent = new CollisionEvent(physical.getGameObject(),collisions,lastCoord);
             submit(collisionEvent);
+            
+            setPositionAfterCollision(physical, lastCoord, naiveCoord, collisions);
+            
             //if(collisionEvent.getGameObject() instanceof Enemies && collisionEvent.getCollisions().get(0).getObstacle().getGameObject() instanceof PlayerShoot) System.out.println("coll crab<->shoot");
-            if(collisionEvent.getGameObject() instanceof PlayerShoot && collisionEvent.getCollisions().get(0).getObstacle().getGameObject() instanceof Enemies) t=true;
+            //if(collisionEvent.getGameObject() instanceof PlayerShoot && collisionEvent.getCollisions().get(0).getObstacle().getGameObject() instanceof Enemies) t=true;
 
             //physical.setSpeed(0);
             // System.out.printf("[DEBUG] coordO %f  %f\n", physical.getX(), physical.getY());

@@ -2,6 +2,7 @@ package game.entity;
 
 import engine.Component;
 import engine.GameObject;
+import engine.Kernel;
 import engine.physics.Physic;
 
 public class Player extends GameObject{
@@ -41,6 +42,7 @@ public class Player extends GameObject{
     }
 
     public void takeDamage(){
-        System.out.println(--this.lifePoint);
+        System.out.println("Player LifePoint : " + --this.lifePoint);
+        if(lifePoint <= 0) Kernel.getInstance().removeGameObject(this);
     }
 }
