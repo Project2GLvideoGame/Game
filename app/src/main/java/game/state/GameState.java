@@ -16,7 +16,7 @@ public class GameState implements State {
     public void upReleased(Game game) {
         Displayable playerGraphic = game.player.getComponent(Displayable.class);
         Kernel kernel = Kernel.getInstance();
-        PlayerShoot ps = new PlayerShoot(playerGraphic.getX()+playerGraphic.getWidth()/2, playerGraphic.getY()-100);
+        PlayerShoot ps = new PlayerShoot(playerGraphic.getX()+13, playerGraphic.getY()-35);
         kernel.addGameObject(ps);
         System.out.println("release");
     }
