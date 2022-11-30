@@ -32,11 +32,17 @@ public class Game extends Engine{
         super(eventsManager);
     }
 
-    public void init() {
-        int playerSize = 55;
-        player = new Player(5, new Physic(Kernel.getInstance().getScreenWidth()/2+playerSize, Kernel.getInstance().getScreenHeight()-playerSize, playerSize, playerSize),
-                new Displayable(Kernel.getInstance().getScreenWidth()/2+playerSize, Kernel.getInstance().getScreenHeight()-playerSize, playerSize, playerSize, 6, "/player/pacman_run1.png", "/player/pacman_run2.png", "/player/pacman_run3.png", "/player/pacman_run4.png"));
 
+    public void initEntities() {
+        GameObject backGround = new GameObject(
+            new Displayable(0, 0, Kernel.getInstance().getScreenWidth(), Kernel.getInstance().getScreenHeight(), 20, "/Background/Background1.png", "/Background/Background2.png", "/Background/Background3.png", "/Background/Background4.png")
+            );
+
+        int playerSize = 75;
+        player = new Player(5, new Physic(Kernel.getInstance().getScreenWidth()/2+playerSize, Kernel.getInstance().getScreenHeight()-playerSize, playerSize, playerSize),
+                new Displayable(Kernel.getInstance().getScreenWidth()/2+playerSize, Kernel.getInstance().getScreenHeight()-playerSize, playerSize, playerSize, 6, "/player/PlayerSpaceShip1.png", "/player/PlayerSpaceShip2.png", "/player/PlayerSpaceShip3.png", "/player/PlayerSpaceShip4.png"));
+
+        Kernel.getInstance().addGameObject(backGround);
         Kernel.getInstance().addGameObject(player);
 
         initializeEnemies();
@@ -52,6 +58,14 @@ public class Game extends Engine{
         List<Crab> crabs = new ArrayList<>();
         AI aiEnnemis = new AIEnnemis(crabs);
         List<String> pngs = new ArrayList<>(List.of("3","2","2","1","1"));
+
+        for (int i = 0; i < 50; i++) {
+            int nb = ((i/10)%5);
+            String pathAlien = "/enemies/alien_"+pngs.get(nb);
+            Crab crab = new Crab(
+                new Physic(10 + offset * ((i % 10)) ,10 + offset *((i/10)), enemiesSize, enemiesSize, new IgnoreReaction()),
+                new Displayable(10 + offset * ((i % 10)) ,10 + offset *( (i/10)), enemiesSize, enemiesSize, 10, pathAlien+"/alien_1.png", pathAlien+"/alien_2.png", pathAlien+"/alien_3.png", pathAlien+"/alien_4.png"),
+                new Intelligent(new AIAlgoEnnemis())
 
         for (int rang = 0; rang < 50; rang++) {
             int nb = ((rang/maxParLigne)%5);

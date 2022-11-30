@@ -12,9 +12,9 @@ public class PlayerShoot extends GameObject{
     private static int physicShootSize = 1; //TODO mettre 1
     
     public PlayerShoot(int x, int y){
-        super(new Physic     (x+graphicShootSize/2, y+graphicShootSize/2, physicShootSize, physicShootSize, new DisappearReaction()),
-              new Displayable(x, y, graphicShootSize, graphicShootSize, 10, "/player/shoot/playerShoot1.png", "/player/shoot/playerShoot2.png", "/player/shoot/playerShoot3.png", "/player/shoot/playerShoot4.png")
-            );
+        super(new Physic(x+graphicShootSize/2, y+graphicShootSize/2, physicShootSize, physicShootSize, new IgnoreReaction()),
+            new Displayable(x+graphicShootSize/2, y+graphicShootSize/2, graphicShootSize, graphicShootSize, 10, "/player/shoot/playerShoot1.png", "/player/shoot/playerShoot2.png", "/player/shoot/playerShoot3.png", "/player/shoot/playerShoot4.png")
+        
         getComponent(Physic.class).setSpeed(4);
     }
 
