@@ -13,7 +13,6 @@ public class DisappearReaction implements CollisionReaction {
 
     @Override
     public void setPositionAfterCollision(Physic physical, Coordinate beforeCollsionCoord, Coordinate CollisonCoord, List<Collision> collisions) {
-        //Impossible car si il rentre en collision avec un missile ennemie il sera quand même détruit.
         Kernel.getInstance().removeGameObject(physical.getGameObject());
         return;
     }

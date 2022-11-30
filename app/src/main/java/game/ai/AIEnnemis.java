@@ -1,85 +1,113 @@
 package game.ai;
 
 import engine.physics.Physic;
-import engine.event.EnnemisCollisionEvent;
-import engine.event.EventsManager;
-
+import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Random;
 import engine.Kernel;
 import engine.event.CollisionEvent;
 import engine.event.Event;
 import engine.physics.Collision;
+import game.entity.EnemyShoot;
 import game.entity.InvisibleWall;
 import game.entity.Player;
 import game.entity.PlayerShoot;
 import game.entity.enemies.Crab;
 import game.entity.enemies.Enemies;
+import java.lang.Math;
+import java.util.Random.*;
 
 public class AIEnnemis extends AI {
-    
-    int c = 0;
-    final List<Crab> crabs ;
-    final double mid = Kernel.getInstance().getScreenWidth()/2;
-    boolean lastCollisonLeft = true;
 
-    public AIEnnemis(List<Crab> crabs ) {
+    final List<Crab> crabs;
+    final double mid = Kernel.getInstance().getScreenWidth() / 2;
+    final long DELAYBETWEENSHOOT = 2000000000; //ns
+    final int MAXSALVOSHOOT = 4;
+    boolean lastCollisonLeft = true;
+    long lastShootSalvoTime = System.nanoTime();
+
+
+
+    public AIEnnemis(List<Crab> crabs) {
         this.crabs = crabs;
-        //System.out.println(mid);
+        // System.out.println(mid);
     }
 
     @Override
     public void apply(Event event) {
-        
-        if (!(event instanceof CollisionEvent)) return;
+        if (event instanceof CollisionEvent)
+            GererDeplacement(event);
+    }
+
+    private void GererDeplacement(Event event) {
         CollisionEvent collisionEvent = (CollisionEvent) event;
-        if (!(collisionEvent.getGameObject() instanceof Enemies)) return;
-        
-        //System.out.println("coll");
+        if (!(collisionEvent.getGameObject() instanceof Enemies))
+            return;
 
         for (Collision collision : collisionEvent.getCollisions()) {
-            
-            //si ennemi touche un bord de l'ecran
-            if (collision.getObstacle().getGameObject() instanceof InvisibleWall) {
-                //System.out.println(collision.getObstacle().getGameObject().getClass());
-                //System.out.println(collision.getObj().getGameObject().getClass()+" "+c);
-                //System.out.println(collision.getObstacle().getGameObject().getClass()+" "+c);
-                //System.out.println(collision.getOverlap().getX()+" "+collision.getOverlap().getX()+" "+c);
-                //c++;
 
-                
-                if(collision.getObj().getX()>mid && lastCollisonLeft==false) return;
-                if(collision.getObj().getX()<mid && lastCollisonLeft==true) return;
-                
+            // si ennemi touche un bord de l'ecran
+            if (collision.getObstacle().getGameObject() instanceof InvisibleWall) {
+
+                if (collision.getObj().getX() > mid && lastCollisonLeft == false)
+                    return;
+                if (collision.getObj().getX() < mid && lastCollisonLeft == true)
+                    return;
+
                 lastCollisonLeft = !lastCollisonLeft;
-                //System.out.println(lastCollisonLeft);
-                
-                double currentDirection = collision.getObj().getGameObject().getComponent(Physic.class).getDirection();
-                //System.out.println(" "+currentDirection);
-                
+                // System.out.println(lastCollisonLeft);
+
+                double currentDirection = collision.getObj().getGameObject().getComponent(Physic.class)
+                        .getDirection();
+                // System.out.println(" "+currentDirection);
+
                 for (Crab crab : crabs) {
-                    crab.getComponent(Physic.class).setDirection((currentDirection+180)%360);
-                    crab.getComponent(Physic.class).setY(crab.getComponent(Physic.class).getY()+15);
+                    crab.getComponent(Physic.class).setDirection((currentDirection + 180) % 360);
+                    crab.getComponent(Physic.class).setY(crab.getComponent(Physic.class).getY() + 15);
                 }
                 break;
             }
 
-            //si ennemi touche un misible du player
+            // si ennemi touche un misible du player
             else if (collision.getObstacle().getGameObject() instanceof PlayerShoot) {
                 System.out.println("remove");
                 Kernel.getInstance().removeGameObject(collision.getObj().getGameObject());
             }
-            
+
             else if (collision.getObstacle().getGameObject() instanceof Player) {
-                //TODO
-            }else{
+                // TODO
+            } else {
                 System.out.println("else ai crab");
             }
-
 
         }
     }
 
+    @Override
+    void apply(Intelligent intelligent, long currentTime, long previousTime) {
+        GererMissiles(intelligent, currentTime, previousTime);
+    }
 
+    private void GererMissiles(Intelligent intelligent, long currentTime, long previousTime) {
+        if(currentTime-lastShootSalvoTime<DELAYBETWEENSHOOT) return;
+        lastShootSalvoTime = currentTime;
+
+        int nbShootPerSalvo = Math.min(crabs.size(), MAXSALVOSHOOT);
+
+        Random rd = new Random();
+        List<Integer> crabShooterIDs = new ArrayList<>(nbShootPerSalvo);
+        for (int i=0; i<nbShootPerSalvo; i++) {
+            crabShooterIDs.add(rd.nextInt(crabs.size()));
+        }
+        
+        for (Crab crab : crabs) {
+            if(!crabShooterIDs.contains(crab.getID())) return;
+            int y = (int)crab.getComponent(Physic.class).getY()-30;
+            int x = (int)crab.getComponent(Physic.class).getX();
+            EnemyShoot enemyShoot = new EnemyShoot(x, y);
+            Kernel.getInstance().addGameObject(enemyShoot);
+        }
+    
+    }
 
 }

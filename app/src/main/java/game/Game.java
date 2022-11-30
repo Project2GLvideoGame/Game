@@ -3,13 +3,10 @@ package game;
 import game.entity.PlayerShoot;
 import java.util.ArrayList;
 import java.util.List;
-
 import engine.Engine;
-import engine.GameObject;
 import engine.Kernel;
-import engine.event.CollisionEvent;
+import engine.event.DestroyEvent;
 import engine.event.EventsManager;
-import engine.event.PlayerShootEvent;
 import engine.event.StateEvent;
 import engine.graphic.Displayable;
 import engine.input.State;
@@ -25,46 +22,52 @@ import game.entity.enemies.Crab;
 public class Game extends Engine{
 
     public Player player;
+    public boolean PlayerShootAlive = false;
+
 
     public Game(EventsManager eventsManager){
         super(eventsManager);
     }
 
+
     public void update(){
-        //playerRules();
-        shootRules();
+        List<DestroyEvent> destroyEvents = getEvents(DestroyEvent.class);
+        if(destroyEvents==null || destroyEvents.size()==0) return;
+        for (DestroyEvent destroyEvent : destroyEvents)
+            if(destroyEvent.getGameObject() instanceof PlayerShoot);
+                PlayerShootAlive = false;
+        destroyEvents.clear();
     }
 
-    public void shootRules(){
-        destroyShoot();
-        
-        List<CollisionEvent> colls = getEvents(CollisionEvent.class);
-        if(colls == null || colls.size() == 0) return;
-        
-        System.out.println(colls.get(0));
-        
-        for(CollisionEvent col : colls){
-            if(col.getGameObject() instanceof PlayerShoot)//est que l'autre n'est pas un EnemieShoot
-            submit(new PlayerShootEvent(col.getGameObject()));
-        }
-        colls.clear();
-    }
 
-    private void destroyShoot(){
-        List<PlayerShootEvent> shootsE = getEvents(PlayerShootEvent.class);
-        if(shootsE == null || shootsE.size() == 0) return;
+    // public void shootRules(){
+    //     destroyShoot();
         
-        System.out.println(shootsE.get(0));
+    //     List<CollisionEvent> colls = getEvents(CollisionEvent.class);
+    //     if(colls == null || colls.size() == 0) return;
         
-        for(PlayerShootEvent shootE : shootsE){
-            Kernel.getInstance().removeGameObject(shootE.getGameObject());
-        }
-        shootsE.clear();
-    }
+    //     System.out.println(colls.get(0));
+        
+    //     for(CollisionEvent col : colls){
+    //         if(col.getGameObject() instanceof PlayerShoot)//est que l'autre n'est pas un EnemieShoot
+    //         submit(new PlayerShootEvent(col.getGameObject()));
+    //     }
+    //     colls.clear();
+    // }
+
+    // private void destroyShoot(){
+    //     List<PlayerShootEvent> shootsE = getEvents(PlayerShootEvent.class);
+    //     if(shootsE == null || shootsE.size() == 0) return;
+        
+    //     System.out.println(shootsE.get(0));
+        
+    //     for(PlayerShootEvent shootE : shootsE){
+    //         Kernel.getInstance().removeGameObject(shootE.getGameObject());
+    //     }
+    //     shootsE.clear();
+    // }
 
     
-    //private void PleyrShootRules(){}
-    //private void playerRules(){}
 
 
     public void init() {
@@ -128,5 +131,15 @@ public class Game extends Engine{
     public void changeState(State state) {
         Kernel.getInstance().eventsManager.submit(new StateEvent(state));
     }
+
+    public void PlayerShoot(){
+        if(PlayerShootAlive) return;
+        PlayerShootAlive = true;
+        Displayable playerGraphic = player.getComponent(Displayable.class);
+        PlayerShoot ps = new PlayerShoot(playerGraphic.getX(), playerGraphic.getY()-20);
+        Kernel.getInstance().addGameObject(ps);
+    }
+
+
 }
     

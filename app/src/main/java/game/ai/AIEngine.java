@@ -10,7 +10,6 @@ import game.entity.PlayerShoot;
 import game.entity.enemies.Crab;
 import game.entity.enemies.Enemies;
 import engine.event.CollisionEvent;
-import engine.event.EnnemisCollisionEvent;
 
 /**
  * IAEngine
@@ -18,10 +17,12 @@ import engine.event.EnnemisCollisionEvent;
 public class AIEngine extends Engine {
 
    List<Intelligent> intelligents = new ArrayList<Intelligent>();
-
+   long previousTime;
+   final long DeltaBetweenCall = 200_000_000; //in ns
 
    public AIEngine(EventsManager eventsManager) {
       super(eventsManager);
+      previousTime = System.nanoTime();
    }
 
    public void addIAObjectIntelligent(Intelligent intelligent) {
@@ -34,27 +35,35 @@ public class AIEngine extends Engine {
 
 
    public void update() {
+      ManageCollisionEvents();   
+      ManageTiming();
+   }
 
 
+   private void ManageCollisionEvents(){
       List<CollisionEvent> collisionEvents = getEvents(CollisionEvent.class);
       if (collisionEvents == null) return;
-
       for (CollisionEvent collisionEvent : collisionEvents) {
-
-         //System.out.println(collisionEvent.getGameObject()+" "+collisionEvent.getCollisions().get(0).getObstacle().getGameObject() );         
-         
          if(collisionEvent.getGameObject().getComponent(Intelligent.class)==null){
             collisionEvents.clear();
             return;
          }
-         
          collisionEvent.getGameObject().getComponent(Intelligent.class).getIA().apply(collisionEvent);
       }
       collisionEvents.clear();
    }
 
 
-
+   private void ManageTiming(){
+      long currentTime = System.nanoTime();
+      long elapsedTime = currentTime-previousTime;
+      previousTime = currentTime;
+      if( elapsedTime > DeltaBetweenCall){
+         for (Intelligent intelligent : intelligents) {
+            intelligent.getIA().apply(intelligent, currentTime, previousTime);
+         }
+      }
+   }
 
 
 

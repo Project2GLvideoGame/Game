@@ -40,10 +40,9 @@ public class Kernel implements Runnable  {
         this.graphicEngine.getScene().addKeyListener(inputEngine);
         
         this.eventsManager.subscribe(aiEngine, CollisionEvent.class);
+        this.eventsManager.subscribe(game, DestroyEvent.class);
         this.eventsManager.subscribe(inputEngine, StateEvent.class);
         this.eventsManager.subscribe(graphicEngine, MoveEvent.class);
-        this.eventsManager.subscribe(game, CollisionEvent.class);
-        this.eventsManager.subscribe(game, PlayerShootEvent.class);
     }
 
     public static synchronized void start() {
@@ -102,7 +101,10 @@ public class Kernel implements Runnable  {
             if(component instanceof Soundable)   soundEngine.removeSoundableObject((Soundable)component);
             if(component instanceof Intelligent) aiEngine.removeIAObjectIntelligent((Intelligent)component);
         }
+        eventsManager.submit(new DestroyEvent(gameObject) );
+        System.out.println("on destroy"+gameObject.getClass() );
     }
+
 
 
 }

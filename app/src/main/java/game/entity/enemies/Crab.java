@@ -22,6 +22,10 @@ public class Crab extends Enemies{
         // TODO Auto-generated method stub
     }
 
+    public int getID(){
+        return this.id;
+    }
+
     @Override
     public String toString() {
         return "Crab_ID " + id;
