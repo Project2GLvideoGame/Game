@@ -31,12 +31,12 @@ public class Game {
     }
 
     public void update(){
-        playerRules();
+        //playerRules();
     }
 
-    public void playerRules(){
-
-    }
+    
+    //private void PleyrShootRules(){}
+    //private void playerRules(){}
 
 
     public void initEntities() {

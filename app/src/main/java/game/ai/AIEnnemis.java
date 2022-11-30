@@ -11,6 +11,7 @@ import engine.event.CollisionEvent;
 import engine.event.Event;
 import engine.physics.Collision;
 import game.entity.InvisibleWall;
+import game.entity.Player;
 import game.entity.PlayerShoot;
 import game.entity.enemies.Crab;
 import game.entity.enemies.Enemies;
@@ -34,13 +35,13 @@ public class AIEnnemis extends AI {
         CollisionEvent collisionEvent = (CollisionEvent) event;
         if (!(collisionEvent.getGameObject() instanceof Enemies)) return;
         
-        System.out.println("coll");
+        //System.out.println("coll");
 
         for (Collision collision : collisionEvent.getCollisions()) {
             
             //si ennemi touche un bord de l'ecran
             if (collision.getObstacle().getGameObject() instanceof InvisibleWall) {
-                System.out.println(collision.getObstacle().getGameObject().getClass());
+                //System.out.println(collision.getObstacle().getGameObject().getClass());
                 //System.out.println(collision.getObj().getGameObject().getClass()+" "+c);
                 //System.out.println(collision.getObstacle().getGameObject().getClass()+" "+c);
                 //System.out.println(collision.getOverlap().getX()+" "+collision.getOverlap().getX()+" "+c);
@@ -51,10 +52,10 @@ public class AIEnnemis extends AI {
                 if(collision.getObj().getX()<mid && lastCollisonLeft==true) return;
                 
                 lastCollisonLeft = !lastCollisonLeft;
-                System.out.println(lastCollisonLeft);
+                //System.out.println(lastCollisonLeft);
                 
                 double currentDirection = collision.getObj().getGameObject().getComponent(Physic.class).getDirection();
-                System.out.println(" "+currentDirection);
+                //System.out.println(" "+currentDirection);
                 
                 for (Crab crab : crabs) {
                     crab.getComponent(Physic.class).setDirection((currentDirection+180)%360);
@@ -67,11 +68,14 @@ public class AIEnnemis extends AI {
             else if (collision.getObstacle().getGameObject() instanceof PlayerShoot) {
                 System.out.println("remove");
                 Kernel.getInstance().removeGameObject(collision.getObj().getGameObject());
-                Kernel.getInstance().removeGameObject(collision.getObstacle().getGameObject());
             }
-            else{
-                System.out.println(collision.getObstacle().getGameObject().getClass());
+            
+            else if (collision.getObstacle().getGameObject() instanceof Player) {
+                //TODO
+            }else{
+                System.out.println("else ai crab");
             }
+
 
         }
     }

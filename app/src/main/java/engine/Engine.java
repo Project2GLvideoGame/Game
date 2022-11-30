@@ -36,7 +36,7 @@ public abstract class Engine {
     }
 
     protected <T extends Event> List<T> getEvents(Class<T> class1){
-        //if(events.get(class1)!=null && events.get(class1).get(0).getClass()==CollisionEvent.class) System.out.println(events.get(class1).size()+"  "+events.get(class1).get(0).getClass());
+        //if(events.get(class1)!=null) System.out.println(events.get(class1).size());
         return (List<T>)events.get(class1);
     }
 

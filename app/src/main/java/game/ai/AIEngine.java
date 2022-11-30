@@ -40,12 +40,17 @@ public class AIEngine extends Engine {
       if (collisionEvents == null) return;
 
       for (CollisionEvent collisionEvent : collisionEvents) {
-         System.out.println(collisionEvent.getGameObject()+" "+collisionEvent.getCollisions().get(0).getObstacle().getGameObject() );         
-         if(collisionEvent.getGameObject().getComponent(Intelligent.class)==null) return;
+
+         //System.out.println(collisionEvent.getGameObject()+" "+collisionEvent.getCollisions().get(0).getObstacle().getGameObject() );         
+         
+         if(collisionEvent.getGameObject().getComponent(Intelligent.class)==null){
+            collisionEvents.clear();
+            return;
+         }
+         
          collisionEvent.getGameObject().getComponent(Intelligent.class).getIA().apply(collisionEvent);
       }
       collisionEvents.clear();
-      //System.out.println(collisionEvents.size());
    }
 
 
