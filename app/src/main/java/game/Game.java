@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import engine.Engine;
 import engine.Kernel;
+import engine.event.CollisionEvent;
 import engine.event.DestroyEvent;
 import engine.event.EventsManager;
 import engine.event.StateEvent;
@@ -15,6 +16,7 @@ import engine.physics.collisionReaction.IgnoreReaction;
 import game.ai.AI;
 import game.ai.AIEnnemis;
 import game.ai.Intelligent;
+import game.entity.EnemyShoot;
 import game.entity.InvisibleWall;
 import game.entity.Player;
 import game.entity.enemies.Crab;
@@ -29,8 +31,12 @@ public class Game extends Engine{
         super(eventsManager);
     }
 
-
     public void update(){
+        handleDestoyEvents();
+        handleCollisionEvents();
+    }
+
+    private void handleDestoyEvents(){
         List<DestroyEvent> destroyEvents = getEvents(DestroyEvent.class);
         if(destroyEvents==null || destroyEvents.size()==0) return;
         for (DestroyEvent destroyEvent : destroyEvents)
@@ -39,6 +45,22 @@ public class Game extends Engine{
         destroyEvents.clear();
     }
 
+    private void handleCollisionEvents(){
+        List<CollisionEvent> collisionEvents = getEvents(CollisionEvent.class);
+        if(collisionEvents==null || collisionEvents.size()==0) return;
+        for (CollisionEvent collisionEvent : collisionEvents) {
+            if(collisionEvent.getGameObject() instanceof Player && collisionEvent.getCollisions().get(0).getObstacle().getGameObject() instanceof EnemyShoot){
+                player.takeDamage();
+                if(player.isDead()){
+                    Kernel.getInstance().removeGameObject(player);
+                    //TODO
+                    //TODOOOO
+                }
+            }
+        }
+
+        collisionEvents.clear();
+    }
 
     // public void shootRules(){
     //     destroyShoot();

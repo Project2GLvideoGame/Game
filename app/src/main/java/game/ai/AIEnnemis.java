@@ -22,7 +22,7 @@ public class AIEnnemis extends AI {
     final List<Crab> crabs;
     final double mid = Kernel.getInstance().getScreenWidth() / 2;
     final long DELAYBETWEENSHOOT = 2000000000; //ns
-    final int MAXSALVOSHOOT = 4;
+    final int MAXSALVOSHOOT = 7;
     boolean lastCollisonLeft = true;
     long lastShootSalvoTime = System.nanoTime();
 
@@ -91,18 +91,22 @@ public class AIEnnemis extends AI {
     private void GererMissiles(Intelligent intelligent, long currentTime, long previousTime) {
         if(currentTime-lastShootSalvoTime<DELAYBETWEENSHOOT) return;
         lastShootSalvoTime = currentTime;
-
-        int nbShootPerSalvo = Math.min(crabs.size(), MAXSALVOSHOOT);
-
+        
+        int possibleNbShootPerSalvo = Math.min(crabs.size(), MAXSALVOSHOOT);
         Random rd = new Random();
+        int nbShootPerSalvo = rd.nextInt(possibleNbShootPerSalvo);
+        
         List<Integer> crabShooterIDs = new ArrayList<>(nbShootPerSalvo);
+        
         for (int i=0; i<nbShootPerSalvo; i++) {
-            crabShooterIDs.add(rd.nextInt(crabs.size()));
+            crabShooterIDs.add( crabs.get(rd.nextInt(crabs.size())).getID() );
         }
         
         for (Crab crab : crabs) {
-            if(!crabShooterIDs.contains(crab.getID())) return;
-            int y = (int)crab.getComponent(Physic.class).getY()-30;
+            //System.out.println(crabShooterIDs+" "+crab.getID());
+            if(!crabShooterIDs.contains(crab.getID())) continue;
+            //System.out.println("on va tirer");
+            int y = (int)crab.getComponent(Physic.class).getY()+25;
             int x = (int)crab.getComponent(Physic.class).getX();
             EnemyShoot enemyShoot = new EnemyShoot(x, y);
             Kernel.getInstance().addGameObject(enemyShoot);

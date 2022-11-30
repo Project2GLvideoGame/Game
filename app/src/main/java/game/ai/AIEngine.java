@@ -55,10 +55,12 @@ public class AIEngine extends Engine {
 
 
    private void ManageTiming(){
-      long currentTime = System.nanoTime();
+      final long currentTime = System.nanoTime();
       long elapsedTime = currentTime-previousTime;
-      previousTime = currentTime;
+      //System.out.println("elapsed moteur ia: "+elapsedTime);
       if( elapsedTime > DeltaBetweenCall){
+         previousTime = currentTime;
+         //System.out.println("DeltaBetweenCall ok ");
          for (Intelligent intelligent : intelligents) {
             intelligent.getIA().apply(intelligent, currentTime, previousTime);
          }

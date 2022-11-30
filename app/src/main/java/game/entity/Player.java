@@ -8,7 +8,6 @@ import engine.physics.Physic;
 public class Player extends GameObject{
 
     final private int speed;
-    private boolean shoot = false;
     private int lifePoint = 3;
 
     public Player(int speed, Component... components){
@@ -29,20 +28,15 @@ public class Player extends GameObject{
         return this.speed;
     }
 
-    public void shoot(){
-        this.shoot = true;
-    }
-
-    public boolean isShooting(){
-        return shoot;
-    }
-
-    public void disableShoot(){
-        this.shoot = false;
-    }
 
     public void takeDamage(){
-        System.out.println("Player LifePoint : " + --this.lifePoint);
-        if(lifePoint <= 0) Kernel.getInstance().removeGameObject(this);
+        this.lifePoint-=1;
     }
+
+    public boolean isDead(){
+        return this.lifePoint<=0;
+    }
+
+
+
 }
