@@ -103,7 +103,7 @@ public class Kernel implements Runnable  {
             if(component instanceof Intelligent) aiEngine.removeIAObjectIntelligent((Intelligent)component);
         }
         eventsManager.submit(new DestroyEvent(gameObject) );
-        System.out.println("on destroy"+gameObject.getClass() );
+        System.out.println("on destroy "+gameObject.getClass() );
     }
 
 

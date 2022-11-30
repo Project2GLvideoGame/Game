@@ -31,67 +31,6 @@ public class Game extends Engine{
         super(eventsManager);
     }
 
-    public void update(){
-        handleDestoyEvents();
-        handleCollisionEvents();
-    }
-
-    private void handleDestoyEvents(){
-        List<DestroyEvent> destroyEvents = getEvents(DestroyEvent.class);
-        if(destroyEvents==null || destroyEvents.size()==0) return;
-        for (DestroyEvent destroyEvent : destroyEvents)
-            if(destroyEvent.getGameObject() instanceof PlayerShoot);
-                PlayerShootAlive = false;
-        destroyEvents.clear();
-    }
-
-    private void handleCollisionEvents(){
-        List<CollisionEvent> collisionEvents = getEvents(CollisionEvent.class);
-        if(collisionEvents==null || collisionEvents.size()==0) return;
-        for (CollisionEvent collisionEvent : collisionEvents) {
-            if(collisionEvent.getGameObject() instanceof Player && collisionEvent.getCollisions().get(0).getObstacle().getGameObject() instanceof EnemyShoot){
-                player.takeDamage();
-                if(player.isDead()){
-                    Kernel.getInstance().removeGameObject(player);
-                    //TODO
-                    //TODOOOO
-                }
-            }
-        }
-
-        collisionEvents.clear();
-    }
-
-    // public void shootRules(){
-    //     destroyShoot();
-        
-    //     List<CollisionEvent> colls = getEvents(CollisionEvent.class);
-    //     if(colls == null || colls.size() == 0) return;
-        
-    //     System.out.println(colls.get(0));
-        
-    //     for(CollisionEvent col : colls){
-    //         if(col.getGameObject() instanceof PlayerShoot)//est que l'autre n'est pas un EnemieShoot
-    //         submit(new PlayerShootEvent(col.getGameObject()));
-    //     }
-    //     colls.clear();
-    // }
-
-    // private void destroyShoot(){
-    //     List<PlayerShootEvent> shootsE = getEvents(PlayerShootEvent.class);
-    //     if(shootsE == null || shootsE.size() == 0) return;
-        
-    //     System.out.println(shootsE.get(0));
-        
-    //     for(PlayerShootEvent shootE : shootsE){
-    //         Kernel.getInstance().removeGameObject(shootE.getGameObject());
-    //     }
-    //     shootsE.clear();
-    // }
-
-    
-
-
     public void init() {
         int playerSize = 55;
         player = new Player(5, new Physic(Kernel.getInstance().getScreenWidth()/2+playerSize, Kernel.getInstance().getScreenHeight()-playerSize, playerSize, playerSize),
@@ -101,8 +40,8 @@ public class Game extends Engine{
 
         initializeEnemies();
         initializeInvisibleWall();
+        initializeUI();
     }
-
     
     private void initializeEnemies(){
         int enemiesSize = 55;
@@ -149,11 +88,47 @@ public class Game extends Engine{
         Kernel.getInstance().addGameObject(wallTop);
         Kernel.getInstance().addGameObject(wallBottom);
     }
-    
-    public void changeState(State state) {
-        Kernel.getInstance().eventsManager.submit(new StateEvent(state));
+
+    public void initializeUI(){
+        Kernel.getInstance().addGameObject(player.getLifePointGameObject());
     }
 
+    public void update(){
+        handleDestoyEvents();
+        handleCollisionEvents();
+    }
+
+    private void handleDestoyEvents(){
+        List<DestroyEvent> destroyEvents = getEvents(DestroyEvent.class);
+        if(destroyEvents==null || destroyEvents.size()==0) return;
+        for (DestroyEvent destroyEvent : destroyEvents)
+            if(destroyEvent.getGameObject() instanceof PlayerShoot);
+                PlayerShootAlive = false;
+        destroyEvents.clear();
+    }
+
+    private void handleCollisionEvents(){
+        List<CollisionEvent> collisionEvents = getEvents(CollisionEvent.class);
+        if(collisionEvents==null || collisionEvents.size()==0) return;
+
+        for (CollisionEvent collisionEvent : collisionEvents) {
+            if(collisionEvent.getGameObject() instanceof Player &&
+            collisionEvent.getCollisions().get(0).getObstacle().getGameObject() instanceof EnemyShoot){
+
+                Kernel.getInstance().removeGameObject(collisionEvent.getCollisions().get(0).getObstacle().getGameObject());
+                player.takeDamage();
+
+                if(player.isDead()){
+                    Kernel.getInstance().removeGameObject(player);
+                    //TODO
+                    //TODOOOO
+                }
+            }
+        }
+
+        collisionEvents.clear();
+    }
+    
     public void PlayerShoot(){
         if(PlayerShootAlive) return;
         PlayerShootAlive = true;
@@ -161,6 +136,12 @@ public class Game extends Engine{
         PlayerShoot ps = new PlayerShoot(playerGraphic.getX(), playerGraphic.getY()-20);
         Kernel.getInstance().addGameObject(ps);
     }
+
+    
+    public void changeState(State state) {
+        Kernel.getInstance().eventsManager.submit(new StateEvent(state));
+    }
+
 
 
 }

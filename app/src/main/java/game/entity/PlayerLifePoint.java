@@ -5,7 +5,7 @@ import engine.graphic.Displayable;
 
 public class PlayerLifePoint extends GameObject{
     public PlayerLifePoint(){
-        super(new Displayable(0, 0, 100, 25, "/player/lifePoint/LifePoint3.png"));
+        super(new Displayable(10, 10, 100, 25, "/player/lifePoint/LifePoint3.png"));
     }
 
     public void graphicPlayerLife(int lifePoint){

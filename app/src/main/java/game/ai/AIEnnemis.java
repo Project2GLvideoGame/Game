@@ -70,14 +70,14 @@ public class AIEnnemis extends AI {
 
             // si ennemi touche un misible du player
             else if (collision.getObstacle().getGameObject() instanceof PlayerShoot) {
-                System.out.println("remove");
+                //System.out.println("remove");
                 Kernel.getInstance().removeGameObject(collision.getObj().getGameObject());
             }
 
             else if (collision.getObstacle().getGameObject() instanceof Player) {
                 // TODO
             } else {
-                System.out.println("else ai crab");
+                //System.out.println("else ai crab");
             }
 
         }
