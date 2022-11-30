@@ -33,7 +33,7 @@ public class Game extends Engine{
     }
 
 
-    public void initEntities() {
+    public void init() {
         GameObject backGround = new GameObject(
             new Displayable(0, 0, Kernel.getInstance().getScreenWidth(), Kernel.getInstance().getScreenHeight(), 20, "/Background/Background1.png", "/Background/Background2.png", "/Background/Background3.png", "/Background/Background4.png")
             );
@@ -59,23 +59,15 @@ public class Game extends Engine{
         AI aiEnnemis = new AIEnnemis(crabs);
         List<String> pngs = new ArrayList<>(List.of("3","2","2","1","1"));
 
-        for (int i = 0; i < 50; i++) {
-            int nb = ((i/10)%5);
-            String pathAlien = "/enemies/alien_"+pngs.get(nb);
-            Crab crab = new Crab(
-                new Physic(10 + offset * ((i % 10)) ,10 + offset *((i/10)), enemiesSize, enemiesSize, new IgnoreReaction()),
-                new Displayable(10 + offset * ((i % 10)) ,10 + offset *( (i/10)), enemiesSize, enemiesSize, 10, pathAlien+"/alien_1.png", pathAlien+"/alien_2.png", pathAlien+"/alien_3.png", pathAlien+"/alien_4.png"),
-                new Intelligent(new AIAlgoEnnemis())
-
         for (int rang = 0; rang < 50; rang++) {
             int nb = ((rang/maxParLigne)%5);
-            String path = "/enemies/alien_"+pngs.get(nb)+".png";
+            String path = "/enemies/Alien_"+pngs.get(nb);
             int rangEffectif = rang % maxParLigne;
             int column = rang/maxParLigne;
 
             Crab crab = new Crab(rang,
                 new Physic     (offsetInitial+ offset*rangEffectif, offsetInitial + offset*column, enemiesSize-10, enemiesSize-10, new IgnoreReaction()),
-                new Displayable(offsetInitial+ offset*rangEffectif, offsetInitial + offset*column, enemiesSize, enemiesSize, path),
+                new Displayable(offsetInitial+ offset*rangEffectif, offsetInitial + offset*column, enemiesSize, enemiesSize, 8, path+"/alien_1.png", path+"/alien_2.png", path+"/alien_3.png", path+"/alien_4.png"),
                 new Intelligent(aiEnnemis)
                 );
             crabs.add(crab);
