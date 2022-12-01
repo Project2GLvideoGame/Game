@@ -14,7 +14,7 @@ public class GameState implements State {
     
     @Override
     public void upReleased(Game game) {
-        game.PlayerShoot();
+        game.onlyOnePlayerShootAtTime();
     }
 
     @Override
