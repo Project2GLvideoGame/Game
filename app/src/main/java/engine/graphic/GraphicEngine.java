@@ -174,7 +174,7 @@ public class GraphicEngine extends Engine {
 
         public void seeScore(Graphics2D g2){
             g2.setColor(Color.BLACK);
-            g2.setFont(new Font("Verdana",1,80));
+            g2.setFont(new Font("Pill Gothic 600mg Light",1,80));
             g2.drawString(""+this.score, 565, 425);
         }
 
