@@ -14,7 +14,7 @@ public class Crab extends Enemies{
 
     @Override
     public int getPoint() {
-        return 5;
+        return 15;
     }
 
     @Override

@@ -131,8 +131,7 @@ public class Game extends Engine{
                     submit(stateEvent);
                     Kernel.getInstance().removeGameObject(player);
                     Kernel.getInstance().graphicEngine.update();
-                    //Kernel.getInstance().gameOver = true;
-                    //Kernel.getInstance().addGameObject(new GameObject());
+                    Kernel.getInstance().gameOver = true;
                 }
             }
         }
