@@ -1,19 +1,20 @@
 package game;
 
+import engine.event.*;
 import game.entity.PlayerShoot;
+
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import engine.Engine;
 import engine.GameObject;
 import engine.Kernel;
-import engine.event.CollisionEvent;
-import engine.event.DestroyEvent;
-import engine.event.EventsManager;
-import engine.event.StateEvent;
 import engine.graphic.Displayable;
 import engine.input.State;
 import engine.physics.Physic;
 import engine.physics.collisionReaction.IgnoreReaction;
+import engine.sound.Soundable;
+import engine.sound.Track;
 import game.ai.AI;
 import game.ai.AIEnnemis;
 import game.ai.Intelligent;
@@ -24,6 +25,7 @@ import game.entity.Player;
 import game.entity.enemies.Crab;
 import game.entity.enemies.Enemies;
 import game.state.GameOverState;
+import game.state.GameState;
 
 public class Game extends Engine{
 
@@ -43,7 +45,10 @@ public class Game extends Engine{
 
         int playerSize = 75;
         player = new Player(5, new Physic(Kernel.getInstance().getScreenWidth()/2+playerSize, Kernel.getInstance().getScreenHeight()-playerSize, playerSize, playerSize),
-                new Displayable(Kernel.getInstance().getScreenWidth()/2+playerSize, Kernel.getInstance().getScreenHeight()-playerSize, playerSize, playerSize, 6, "/player/PlayerSpaceShip1.png", "/player/PlayerSpaceShip2.png", "/player/PlayerSpaceShip3.png", "/player/PlayerSpaceShip4.png"));
+                new Displayable(Kernel.getInstance().getScreenWidth()/2+playerSize, Kernel.getInstance().getScreenHeight()-playerSize, playerSize, playerSize, 6, "/player/PlayerSpaceShip1.png", "/player/PlayerSpaceShip2.png", "/player/PlayerSpaceShip3.png", "/player/PlayerSpaceShip4.png")
+                ,new Soundable(new Track(StateEvent.class.getName(), "/audio/music.wav"),new Track(DestroyEvent.class.getName(), "/audio/gameOver.wav"))
+
+        );
 
         Kernel.getInstance().addGameObject(backGround);
         Kernel.getInstance().addGameObject(player);
@@ -51,6 +56,7 @@ public class Game extends Engine{
         initializeEnemies();
         initializeInvisibleWall();
         initializeUI();
+        initializeSound();
     }
     
     private void initializeEnemies(){
@@ -71,6 +77,7 @@ public class Game extends Engine{
             Crab crab = new Crab(rang,
                 new Physic     (offsetInitial+ offset*rangEffectif, offsetInitial + offset*column, enemiesSize-10, enemiesSize-10, new IgnoreReaction()),
                 new Displayable(offsetInitial+ offset*rangEffectif, offsetInitial + offset*column, enemiesSize, enemiesSize, 8, path+"/alien_1.png", path+"/alien_2.png", path+"/alien_3.png", path+"/alien_4.png"),
+                new Soundable(new Track(DeadEnemyEvent.class.getName(),"/audio/enemyDead.wav" )),
                 new Intelligent(aiEnnemis)
                 );
             crabs.add(crab);
@@ -103,6 +110,11 @@ public class Game extends Engine{
         Kernel.getInstance().addGameObject(player.getLifePointGameObject());
     }
 
+    public void initializeSound(){
+        player.getComponent(Soundable.class).playSoundtrack(StateEvent.class.getName());
+
+    }
+
     public void update(){
         handleDestoyEvents();
         handleCollisionEvents();
@@ -123,12 +135,19 @@ public class Game extends Engine{
         if(collisionEvents==null || collisionEvents.isEmpty()) return;
 
         for (CollisionEvent collisionEvent : collisionEvents) {
-            if(collisionEvent.getGameObject() instanceof Player && collisionEvent.getCollisions().get(0).getObstacle().getGameObject() instanceof EnemyShoot)
+            GameObject gameObject = collisionEvent.getCollisions().get(0).getObstacle().getGameObject();
+            if(collisionEvent.getGameObject() instanceof Player && gameObject instanceof EnemyShoot)
                 handlePlayerShootColl(collisionEvent);
-            else if(collisionEvent.getGameObject() instanceof Player && collisionEvent.getCollisions().get(0).getObstacle().getGameObject() instanceof Enemies)
+            else if(collisionEvent.getGameObject() instanceof Player && gameObject instanceof Enemies)
                 endGame();
-            else if(collisionEvent.getGameObject() instanceof Enemies && collisionEvent.getCollisions().get(0).getObstacle().getGameObject() instanceof BottomWall)
+            else if(collisionEvent.getGameObject() instanceof Enemies && gameObject instanceof BottomWall)
                 endGame();
+            else if (collisionEvent.getGameObject() instanceof PlayerShoot  && gameObject instanceof Enemies) {
+                submit(new DeadEnemyEvent(gameObject));
+            }
+            else if (collisionEvent.getGameObject() instanceof Player  && gameObject instanceof PlayerShoot) {
+                submit(new ShootEvent(gameObject));
+            }
         }
 
         collisionEvents.clear();
@@ -140,6 +159,7 @@ public class Game extends Engine{
         PlayerShootAlive = true;
         Displayable playerGraphic = player.getComponent(Displayable.class);
         PlayerShoot ps = new PlayerShoot(playerGraphic.getX(), playerGraphic.getY()-20);
+        submit(new ShootEvent(ps));
         Kernel.getInstance().addGameObject(ps);
     }
 
@@ -147,7 +167,7 @@ public class Game extends Engine{
     private void handlePlayerShootColl(CollisionEvent collisionEvent){
         Kernel.getInstance().removeGameObject(collisionEvent.getCollisions().get(0).getObstacle().getGameObject());
         player.takeDamage();
-        if(! player.isDead()) return;
+        if(! player.isDead()) return; 
         endGame();
     }
 
@@ -155,6 +175,7 @@ public class Game extends Engine{
 
     private void endGame(){
         //System.out.println("KILLLLLLLLLLL PLAYER");
+        player.getComponent(Soundable.class).stopAllMusic();
         Kernel.getInstance().removeGameObject(player);
         StateEvent stateEvent = new StateEvent(new GameOverState(), new Displayable(0, 0, Kernel.getInstance().getScreenWidth(), Kernel.getInstance().getScreenHeight(), "/gameOver.png") );
         submit(stateEvent);
