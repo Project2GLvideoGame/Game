@@ -7,6 +7,8 @@ import engine.Engine;
 import engine.event.CollisionEvent;
 import engine.event.EventsManager;
 import engine.event.MoveEvent;
+import game.entity.Player;
+import game.entity.enemies.Enemies;
 
 
 public class PhysicEngine extends Engine{
@@ -79,9 +81,6 @@ public class PhysicEngine extends Engine{
 
                 CollisionEvent collisionEvent = new CollisionEvent(physical.getGameObject(), collisions, beforeCollCoord);
                 submit(collisionEvent);
-                
-                //if(collisionEvent.getGameObject() instanceof Enemies && collisionEvent.getCollisions().get(0).getObstacle().getGameObject() instanceof PlayerShoot) System.out.println("coll crab<->shoot");
-                //if(collisionEvent.getGameObject() instanceof PlayerShoot && collisionEvent.getCollisions().get(0).getObstacle().getGameObject() instanceof Enemies) t=true;
             }
 
             MoveEvent moveEvent = new MoveEvent(physical.getGameObject(), beforeCollCoord, physical.getCoordinate());

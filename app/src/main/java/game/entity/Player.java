@@ -44,6 +44,10 @@ public class Player extends GameObject{
         return this.lifePoint<=0;
     }
 
+    public void kill(){
+        this.lifePoint=0;
+    }
+
 
 
 }
