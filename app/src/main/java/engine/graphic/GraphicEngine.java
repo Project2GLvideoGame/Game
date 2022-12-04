@@ -146,7 +146,7 @@ public class GraphicEngine extends Engine {
 
 
     public class Scene extends JPanel {
-        private List<Displayable> displayables = new ArrayList<>();
+        public List<Displayable> displayables = new ArrayList<>();
 
         public Scene() {
             this.setPreferredSize(new Dimension(screenWidth, screenHeight));

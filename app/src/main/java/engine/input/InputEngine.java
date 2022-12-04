@@ -44,11 +44,15 @@ public class InputEngine extends Engine implements KeyListener {
         }
     }
 
+    public State getCurrentState() {
+        return currentState;
+    }
+
     /**
      * Permet au moteur d'entrée de changer son état courant.
      * @param state Le prochain état souhaité
      */
-    private void changeState(State state) {
+    public void changeState(State state) {
         this.currentState = state;
     }
 

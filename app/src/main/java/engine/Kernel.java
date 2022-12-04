@@ -22,7 +22,7 @@ public class Kernel implements Runnable  {
     private static Kernel instance = null;
     private static Game   game;
     public GraphicEngine graphicEngine;
-    private PhysicEngine  physicalEngine;
+    public PhysicEngine physicEngine;
     private SoundEngine   soundEngine;
     private AIEngine      aiEngine;
     private InputEngine   inputEngine;
@@ -40,7 +40,7 @@ public class Kernel implements Runnable  {
         game           = new Game(eventsManager);
 
         this.graphicEngine  = new GraphicEngine(eventsManager);
-        this.physicalEngine = new PhysicEngine(eventsManager);
+        this.physicEngine = new PhysicEngine(eventsManager);
         this.soundEngine    = new SoundEngine(eventsManager);
         this.aiEngine       = new AIEngine(eventsManager);
         this.inputEngine    = new InputEngine(game, eventsManager);
@@ -84,7 +84,7 @@ public class Kernel implements Runnable  {
 
             if(!Frequences.shouldRefresh()) continue;
             
-            physicalEngine.update();
+            physicEngine.update();
             inputEngine.update();
             aiEngine.update();
             soundEngine.update();
@@ -131,7 +131,7 @@ public class Kernel implements Runnable  {
         for (int i = 0; i < gameObject.getComponents().size(); i++) {
             Component component = gameObject.getComponents().get(i);
             if(component instanceof Displayable) graphicEngine.addDisplayable((Displayable)component);
-            if(component instanceof Physic)      physicalEngine.addPhysicalObject((Physic)component);
+            if(component instanceof Physic)      physicEngine.addPhysicalObject((Physic)component);
             if(component instanceof Soundable){   soundEngine.addSoundableObject((Soundable)component);}
             if(component instanceof Intelligent) aiEngine.addIAObjectIntelligent((Intelligent)component);
         }
@@ -149,7 +149,7 @@ public class Kernel implements Runnable  {
         for (int i = 0; i < gameObject.getComponents().size(); i++) {
             Component component = gameObject.getComponents().get(i);
             if(component instanceof Displayable) graphicEngine.removeDisplayable((Displayable)component);
-            if(component instanceof Physic)      physicalEngine.removePhysicalObject((Physic)component);
+            if(component instanceof Physic)      physicEngine.removePhysicalObject((Physic)component);
             if(component instanceof Soundable)   soundEngine.removeSoundableObject((Soundable)component);
             if(component instanceof Intelligent) aiEngine.removeIAObjectIntelligent((Intelligent)component);
         }

@@ -7,14 +7,12 @@ import engine.Engine;
 import engine.event.CollisionEvent;
 import engine.event.EventsManager;
 import engine.event.MoveEvent;
-import game.entity.Player;
-import game.entity.enemies.Enemies;
 
 
 public class PhysicEngine extends Engine{
 
     PreviousWorld previousWorld =null;
-    public List<Physic> physicalObjects = new ArrayList<>();
+    public List<Physic> physicObjects = new ArrayList<>();
     long previousTime;
 
     public PhysicEngine(EventsManager eventsManager) {
@@ -25,12 +23,12 @@ public class PhysicEngine extends Engine{
 
 
     public void addPhysicalObject(Physic physical) {
-        physicalObjects.add(physical);
+        physicObjects.add(physical);
     }
 
 
     public void removePhysicalObject(Physic physical) {
-        physicalObjects.remove(physical);
+        physicObjects.remove(physical);
     }
 
 
@@ -128,7 +126,7 @@ public class PhysicEngine extends Engine{
         //if (System.nanoTime()-previousTime<10_000_000) return;
         
         previousWorld = new PreviousWorld();
-        List<Physic> physicalObjectsCopy = new ArrayList<>(physicalObjects);
+        List<Physic> physicalObjectsCopy = new ArrayList<>(physicObjects);
         
         long currentTime = System.nanoTime();
         long elapsedTime = (currentTime-previousTime)/10_000_000;
