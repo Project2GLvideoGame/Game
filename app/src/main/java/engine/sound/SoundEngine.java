@@ -35,7 +35,8 @@ public class SoundEngine extends Engine{
     public void handleSoundEvent(){
         List<SoundEvent> soundEvents = getEvents(SoundEvent.class);
         if (soundEvents == null) return;
-        for (SoundEvent event : soundEvents) {
+        for (int i = 0; i < soundEvents.size(); i++) {
+            SoundEvent event = soundEvents.get(i);
             if (event.getGameObject().getComponent(Soundable.class) == null )
                 continue;
             if (event.getGameObject().getComponent(Soundable.class).getClips().get(event.getTrackName()) == null)

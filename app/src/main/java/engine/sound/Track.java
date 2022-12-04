@@ -21,6 +21,7 @@ public class Track {
             audioInputStream = AudioSystem.getAudioInputStream(getClass().getResource(clipPath));
             this.clip = AudioSystem.getClip();
             this.clip.open(audioInputStream);
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
