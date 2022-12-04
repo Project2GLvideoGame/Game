@@ -159,8 +159,7 @@ public class Game extends Engine{
         PlayerShootAlive = true;
         Displayable playerGraphic = player.getComponent(Displayable.class);
         PlayerShoot ps = new PlayerShoot(playerGraphic.getX(), playerGraphic.getY()-20);
-        submit(new ShootEvent(ps));
-        //submit(new SoundEvent(ps,"shoot"));
+        submit(new SoundEvent(ps,"shoot"));
         Kernel.getInstance().addGameObject(ps);
     }
 
@@ -169,13 +168,13 @@ public class Game extends Engine{
         Kernel.getInstance().removeGameObject(collisionEvent.getCollisions().get(0).getObstacle().getGameObject());
         player.takeDamage();
         if(! player.isDead()) return;
-        submit(new SoundEvent(player,"gameOver"));
         endGame();
     }
 
 
 
     private void endGame(){
+        submit(new SoundEvent(player,"gameOver"));
         //System.out.println("KILLLLLLLLLLL PLAYER");
         player.getComponent(Soundable.class).stopAllMusic();
         Kernel.getInstance().removeGameObject(player);

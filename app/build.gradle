@@ -36,3 +36,10 @@ application {
     // Define the main class for the application.
     mainClass = 'engine.App'
 }
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'engine.App'
+    }
+}
+

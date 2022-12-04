@@ -1,4 +1,4 @@
-package game.Physics;
+package engine.physics;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import engine.physics.Collision;
 import engine.physics.Coordinate;
 import engine.physics.Physic;

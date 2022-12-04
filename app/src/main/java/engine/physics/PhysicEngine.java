@@ -21,18 +21,24 @@ public class PhysicEngine extends Engine{
     }
 
 
-
+    /**
+     * Ajouter un objet à mettre à jour lors de l'appel à update()
+     * @param physical
+     */
     public void addPhysicalObject(Physic physical) {
         physicObjects.add(physical);
     }
 
-
+    /**
+     * Retirer un objet à mettre à jour lors de l'appel à update()
+     * @param physical
+     */
     public void removePhysicalObject(Physic physical) {
         physicObjects.remove(physical);
     }
 
 
-    public List<Collision> allCollision(Physic physical, List<Physic> physicalObjectsCopy) {
+    private List<Collision> allCollision(Physic physical, List<Physic> physicalObjectsCopy) {
 
         List<Collision> collidedObjects = new ArrayList<>();
         for (int i = 0; i < physicalObjectsCopy.size(); i++) {
@@ -57,14 +63,14 @@ public class PhysicEngine extends Engine{
     }
 
 
-    public void setPositionAfterCollision(Physic physical, Coordinate beforeCollsionCoord, Coordinate CollisonCoord, List<Collision> collisions){
+    private void setPositionAfterCollision(Physic physical, Coordinate beforeCollsionCoord, Coordinate CollisonCoord, List<Collision> collisions){
         physical.getReaction().setPositionAfterCollision(physical, beforeCollsionCoord, CollisonCoord, collisions);
     }
 
 
 
 
-    public void placerCorrectementToutLeMonde(List<Physic> physicalObjectsCopy , long elapsedTime) {
+    private void placerCorrectementToutLeMonde(List<Physic> physicalObjectsCopy , long elapsedTime) {
         List<PositionAfterCollisionData> doiventEtreReplaces = new ArrayList<>();
         
         for (int i = 0; i < physicalObjectsCopy.size(); i++) {
@@ -120,7 +126,9 @@ public class PhysicEngine extends Engine{
 
 
 
-
+    /*
+     * méthode principe du moteur, met à jour les données physiques des objets, selon le temps écoulé
+     */
     public void update(){
         //System.out.println("len="+physicalObjects.size());
         //if (System.nanoTime()-previousTime<10_000_000) return;

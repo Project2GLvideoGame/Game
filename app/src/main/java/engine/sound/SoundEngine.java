@@ -9,15 +9,25 @@ import engine.event.*;
 public class SoundEngine extends Engine{
     
     public List<Soundable> soundables = new ArrayList<>();
-
+    
+    /**
+     * Constructeur de la classe SoundEngine
+     * @param eventsManager
+     * Recevra la liste des évènements auquels il est abonné
+     */
     public SoundEngine(EventsManager eventsManager) {
         super(eventsManager);
     }
-
+    /**
+     * Ajouter un soundable à la liste sound
+     * @param sound
+     */
     public void addSoundableObject(Soundable sound){
         soundables.add(sound);
     }
-
+    /** Supprimer un soundable de la liste sound
+     * @param sound
+     */
     public void removeSoundableObject(Soundable sound){
         soundables.remove(sound);
     }
@@ -32,40 +42,27 @@ public class SoundEngine extends Engine{
                 continue;
             event.getGameObject().getComponent(Soundable.class).playSoundEffect(event.getTrackName());
         }
+        soundEvents.clear();
 
     }
 
-    public void handleShootEvents(){
-        List<ShootEvent> shootEvents = getEvents(ShootEvent.class);
-        if (shootEvents == null) return;
-        for (ShootEvent event : shootEvents) {
-            if( event.getGameObject().getComponent(Soundable.class) == null || shootEvents.size() == 0)
-                continue;
-            if(event.getGameObject().getComponent(Soundable.class).getClips().get(ShootEvent.class.getName())==null)
-                continue;
-            event.getGameObject().getComponent(Soundable.class).playSoundEffect(ShootEvent.class.getName());
-
-        }
-        shootEvents.clear();
-
-    }
-
-
-
+    /**
+     * Arreter la musique de tous les objets
+     */
     public void stopAllmusic(){
         for (Soundable soundable : soundables) {
             soundable.stopAllMusic();
-            
         }
     }
-
+    /**
+     * Traite les evenements soundEvent
+     */
     public void update(){
-//        handleCollisionEvents();
-//        handleDestroyEvents();
-//        handleDeadEnemyEvents();
-        handleShootEvents();
         handleSoundEvent();
-
     }
 
+
+
+
+    
 }

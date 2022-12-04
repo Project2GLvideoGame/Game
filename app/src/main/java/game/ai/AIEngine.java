@@ -3,16 +3,11 @@ package game.ai;
 import java.util.ArrayList;
 import java.util.List;
 import engine.Engine;
-import engine.GameObject;
 import engine.event.EventsManager;
-import engine.physics.Physic;
-import game.entity.PlayerShoot;
-import game.entity.enemies.Crab;
-import game.entity.enemies.Enemies;
 import engine.event.CollisionEvent;
 
 /**
- * IAEngine
+ * IAEngine control Intelligent Objects
  */
 public class AIEngine extends Engine {
 
@@ -20,20 +15,32 @@ public class AIEngine extends Engine {
    long previousTime;
    final long DeltaBetweenCall = 200_000_000; //in ns
 
+   /**
+    * Constructor of AI engine
+    * @param eventsManager Manager to create or receive Event
+    */
    public AIEngine(EventsManager eventsManager) {
       super(eventsManager);
       previousTime = System.nanoTime();
    }
 
+   /** To add an intelligent object to the engine
+    * @param intelligent Object intelligent to add
+    */
    public void addIAObjectIntelligent(Intelligent intelligent) {
       intelligents.add(intelligent);
    }
-
+   /** To remove an intelligent object to the engine
+    * @param intelligent Object intelligent to remove
+    */
    public void removeIAObjectIntelligent(Intelligent intelligent) {
       intelligents.remove(intelligent);
    }
 
 
+   /**
+    * Manage Collision Event and Timing
+    */
    public void update() {
       ManageCollisionEvents();   
       ManageTiming();

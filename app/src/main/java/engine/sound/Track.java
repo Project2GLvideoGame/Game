@@ -1,13 +1,19 @@
 package engine.sound;
 
 import javax.sound.sampled.*;
-import java.io.File;
-import java.io.IOException;
+
 
 public class Track {
     private String name;
     private Clip clip;
 
+    /**
+     * Initialisation des pistes à partir d'un chemin
+     * @param name
+     * Le nom de la piste
+     * @param clipPath
+     * Le chemin de la piste
+     */
     public Track(String name, String clipPath) {
 
         AudioInputStream audioInputStream = null;

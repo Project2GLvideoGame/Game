@@ -28,6 +28,8 @@ public class Kernel implements Runnable  {
     private InputEngine   inputEngine;
     public  EventsManager eventsManager;
     public boolean gameOver = false;
+    private int score = 0;
+
 
     /**
      * Permet d'initialiser un Kernel en créant tous les moteurs associés et en les abonnant aux bons
@@ -53,7 +55,6 @@ public class Kernel implements Runnable  {
         this.eventsManager.subscribe(inputEngine, StateEvent.class);
         this.eventsManager.subscribe(graphicEngine, StateEvent.class);
         this.eventsManager.subscribe(graphicEngine, MoveEvent.class);
-        this.eventsManager.subscribe(soundEngine,ShootEvent.class);
         this.eventsManager.subscribe(soundEngine,SoundEvent.class);
 
 
@@ -91,6 +92,18 @@ public class Kernel implements Runnable  {
             SwingUtilities.invokeLater(()->graphicEngine.update());
             game.update();
         }
+    }
+
+
+
+
+
+    public int getScore(){
+        return this.score;
+    }
+
+    public void addToScore(int points){
+        this.score += points;
     }
 
 

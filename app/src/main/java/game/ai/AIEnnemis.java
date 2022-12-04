@@ -16,6 +16,9 @@ import game.entity.enemies.Crab;
 import game.entity.enemies.Enemies;
 import java.lang.Math;
 
+    /**
+     * AI for basic ennemis
+     **/
 public class AIEnnemis extends AI {
 
     final Random rd = new Random();
@@ -27,6 +30,10 @@ public class AIEnnemis extends AI {
     long lastShootSalvoTime = System.nanoTime();
 
 
+    /**
+     * Create AI for basic ennemis then can communicate beetween all of them 
+     * @param crabs list of all basics ennemis
+     */
     public AIEnnemis(List<Crab> crabs) {
         this.crabs = crabs;
     }
@@ -79,6 +86,7 @@ public class AIEnnemis extends AI {
             else if (collision.getObstacle().getGameObject() instanceof PlayerShoot) {
                 System.out.println("Collid plyershoot");
                 this.crabs.remove(collision.getObj().getGameObject());
+                Kernel.getInstance().addToScore(((Enemies)collision.getObj().getGameObject()).getPoint());
                 Kernel.getInstance().removeGameObject(collision.getObj().getGameObject());
             }
 
