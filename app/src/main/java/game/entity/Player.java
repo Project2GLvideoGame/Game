@@ -8,7 +8,7 @@ import engine.physics.Physic;
 public class Player extends GameObject{
 
     final private int speed;
-    private int lifePoint = 1; //TODO mettre 3
+    private int lifePoint = 3;
     private PlayerLifePoint lifePointGameObject;
 
     public Player(int speed, Component... components){
