@@ -8,7 +8,9 @@ import engine.physics.Collision;
 import engine.physics.Coordinate;
 import engine.physics.Physic;
 
-
+/**
+ * L'objet disparait apres une collision
+ */
 public class DisappearReaction implements CollisionReaction {
 
     @Override

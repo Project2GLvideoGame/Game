@@ -10,6 +10,11 @@ import engine.physics.Physic;
 import engine.physics.Rectangle;
 
 //TODO Bug pour les petits obstacles
+/**
+ * Apres une collision on replace l'objet
+ * à la position que l'ont déduit etre celle avant collision
+ * Permet de s'arreter contre un mur de manière tres precise
+ */
 public class RollBackSmartReaction implements CollisionReaction {
 
     @Override

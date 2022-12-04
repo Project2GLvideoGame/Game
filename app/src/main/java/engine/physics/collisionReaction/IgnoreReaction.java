@@ -8,7 +8,9 @@ import engine.physics.Collision;
 import engine.physics.Coordinate;
 import engine.physics.Physic;
 
-
+/**
+ * On ignore la collsion pour la calcul de la position
+ */
 public class IgnoreReaction implements CollisionReaction {
 
     @Override
