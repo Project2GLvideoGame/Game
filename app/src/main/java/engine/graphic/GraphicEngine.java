@@ -148,6 +148,7 @@ public class GraphicEngine extends Engine {
 
 
     public class Scene extends JPanel {
+
         private List<Displayable> displayables = new ArrayList<>();
         private String score = "";
         public Scene() {
