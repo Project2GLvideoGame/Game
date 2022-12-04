@@ -49,6 +49,12 @@ public class Rectangle {
         this.y = coord.getY();
     }
 
+    /**
+     * Retourne vrai si les 2 rectangles sont en collsion,
+     * c'est a dire qu'ils se superposent
+     * @param other l'autre rectangle de la collision
+     * @return
+     */
     public boolean intersects(Rectangle other){
         double x1 = this.x;
         double y1 = this.y;
@@ -68,6 +74,11 @@ public class Rectangle {
         return (x5<x6) && (y5<y6);
     }
 
+    /**
+     * Permet d'btenir le rectangle de superposition entre 2 rect en collision
+     * @param other l'autre rectangle de la collision
+     * @return
+     */
     public Rectangle intersection(Rectangle other){
         double x1 = this.x;
         double y1 = this.y;
@@ -86,7 +97,11 @@ public class Rectangle {
         return new Rectangle(x5, y5, x6-x5, y6-y5);
     }
 
-    /*Adjacent and not overlaping considering normalized rectangles*/
+    /**
+     * return true if rectangles are adjacent and not overlaping considering normalized rectangles
+     * @param other
+     * @return
+     */
     public boolean isTouching(Rectangle other){
         return (
             isEquals(this.x, other.getX()+other.getWidth()) ||

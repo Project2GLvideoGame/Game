@@ -1,8 +1,5 @@
 package engine.event;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import engine.graphic.Displayable;
 import engine.input.State;
 
@@ -23,6 +20,4 @@ public class StateEvent implements Event {
     public Displayable[] getDisplayables(){
         return this.displayables;
     }
-
-
 }

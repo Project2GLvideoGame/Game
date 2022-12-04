@@ -5,6 +5,12 @@ import java.math.RoundingMode;
 
 public class Utils {
 
+    /**
+     * arondir un double a une precison donnée
+     * @param value le double
+     * @param places la precision = nb de decimals
+     * @return
+     */
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
         BigDecimal bd = new BigDecimal(Double.toString(value));
@@ -12,25 +18,50 @@ public class Utils {
         return bd.doubleValue();
     }
 
+    /**
+     * retourne -1 ou 1 selon le signe de n
+     * @param n
+     * @return
+     */
     public static int oppositeSign(double n){
         return (n>0)? -1:1;
     }
 
+    /**
+     * déduire le deltaY connaisant deltaX et l'angle
+     * @param deltaCorrectionX
+     * @param alpha
+     * @return
+     */
     public static double deltaYFromDeltaX(double deltaCorrectionX, double alpha){
         double alphaRad = Math.toRadians(alpha);
+        if (alphaRad==0) return 0;
         double r = Math.abs(deltaCorrectionX/Math.cos(alphaRad));
         double delta_y = r*Math.sin(alphaRad);
         return delta_y;
     }
 
+    /**
+     * déduire le deltaX connaisant deltaY et l'angle
+     * @param deltaCorrectionY
+     * @param alpha
+     * @return
+     */
     public static double deltaXFromDeltaY(double deltaCorrectionY, double alpha){
         double alphaRad = Math.toRadians(alpha);
+        if (alphaRad==0) return 0;
         double r = Math.abs(deltaCorrectionY/Math.sin(alphaRad));
         double delta_x = r*Math.cos(alphaRad);
         return delta_x;
     }
 
-    /* Déf mathématique*/
+
+    /**
+     *  Déf mathématique
+     * @param angleDeg
+     * @param radius
+     * @return
+     */
     protected static Coordinate polarToCartesianMath(double angleDeg, double radius){
         double angleInRadians = Math.toRadians(angleDeg);
         double x = radius * Math.cos(angleInRadians);
@@ -38,12 +69,19 @@ public class Utils {
         return new Coordinate(x, y);
     }
 
-    /* Adaptation à notre origine au nord */
+    /**
+     *  Adaptation à notre origine au nord
+     */
     protected static Coordinate polarToCartesian(double direction, double radius){
         return polarToCartesianMath(direction+90, radius);
     }
 
-
+    /**
+     * déduire une direction (0...360) en connaisant 2 coordonnés
+     * @param source
+     * @param destination
+     * @return
+     */
     protected static double computeDirectionMath(Coordinate source, Coordinate destination){
         // calculate the angle theta from the deltaY and deltaX values
         // (atan2 returns radians values from [-PI,PI])
@@ -63,6 +101,13 @@ public class Utils {
         return (angle<0)? angle+360:angle;
     }
 
+    /**
+     * déduire une direction (0...360) en connaisant 2 coordonnés
+     * direction adapté a notre 0 au nord
+     * @param source
+     * @param destination
+     * @return
+     */
     protected static double computeDirectionForJavaFx(Coordinate source, Coordinate destination){
         // calculate the angle theta from the deltaY and deltaX values
         // (atan2 returns radians values from [-PI,PI])
@@ -91,13 +136,25 @@ public class Utils {
         return (angle<0)? angle+360:angle;
     }
     
+    /**
+     * calcul la distance2 entre 2 points
+     * @param a
+     * @param b
+     * @return
+     */
     protected static double distance(Coordinate a, Coordinate b){
         return Math.hypot(b.getX()-a.getX(), b.getY()-a.getY());
     }
 
 
+    //TODO return (angle%360>0)? angle%360:angle+360;
+    /**
+     * convertir tout angle en une valeur entre 0 et 360
+     * @param angle
+     * @return
+     */
     static public double normalizeAngle(double angle){
-        return (angle%360>0)? angle:angle+360;
+        return (angle>0)? angle%360:angle%360+360;
     }
 
     

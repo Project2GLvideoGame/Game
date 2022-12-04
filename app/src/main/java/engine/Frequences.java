@@ -8,6 +8,10 @@ public class Frequences{
     private static double delta = 0;
     private static long currentTime;
 
+    /**
+     * determine if should refresh according to the variable FPS
+     * @return
+     */
     public static boolean shouldRefresh(){
         currentTime = System.nanoTime();
         delta += (currentTime - lastTime) / DRAWINTERNAL;
