@@ -9,15 +9,25 @@ import engine.event.*;
 public class SoundEngine extends Engine{
     
     public List<Soundable> soundables = new ArrayList<>();
-
+    
+    /**
+     * Constructeur de la classe SoundEngine
+     * @param eventsManager
+     * Recevra la liste des évènements auquels il est abonné
+     */
     public SoundEngine(EventsManager eventsManager) {
         super(eventsManager);
     }
-
+    /**
+     * Ajouter un soundable à la liste sound
+     * @param sound
+     */
     public void addSoundableObject(Soundable sound){
         soundables.add(sound);
     }
-
+    /** Supprimer un soundable de la liste sound
+     * @param sound
+     */
     public void removeSoundableObject(Soundable sound){
         soundables.remove(sound);
     }
@@ -36,13 +46,17 @@ public class SoundEngine extends Engine{
 
     }
 
-
+    /**
+     * Arreter la musique de tous les objets
+     */
     public void stopAllmusic(){
         for (Soundable soundable : soundables) {
             soundable.stopAllMusic();
         }
     }
-
+    /**
+     * Traite les evenements soundEvent
+     */
     public void update(){
         handleSoundEvent();
     }
