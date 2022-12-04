@@ -1,4 +1,4 @@
-package game.kernel;
+package engine;
 
 import static org.junit.Assert.*;
 

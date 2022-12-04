@@ -1,4 +1,4 @@
-package game.input;
+package engine.input;
 
 import static org.junit.Assert.*;
 

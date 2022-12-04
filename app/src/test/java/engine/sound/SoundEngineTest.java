@@ -15,7 +15,7 @@ public class SoundEngineTest {
 
      EventsManager eventsManager = new EventsManager();
      SoundEngine soundEngine = new SoundEngine(eventsManager);
-     Soundable soundable = new Soundable(new Track("test","shoot.wav"));
+     Soundable soundable = new Soundable(new Track("test","/audio/shoot.wav"));
 
     @Test
     public void testAddSoundableObject() {
