@@ -14,7 +14,9 @@ public class GameState implements State {
     
     @Override
     public void upReleased(Game game) {
+
         game.onlyOnePlayerShootAtTime();
+
     }
 
     @Override
@@ -50,8 +52,7 @@ public class GameState implements State {
 
     @Override
     public void pPressed(Game game) {
-        //System.out.println("pause");
-        game.changeState(new MainMenuState());
+
     }
 
     @Override

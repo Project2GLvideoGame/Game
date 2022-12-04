@@ -7,6 +7,7 @@ import java.util.Random;
 import engine.Kernel;
 import engine.event.CollisionEvent;
 import engine.event.Event;
+import engine.graphic.Displayable;
 import engine.physics.Collision;
 import game.entity.EnemyShoot;
 import game.entity.InvisibleWall;
@@ -16,6 +17,9 @@ import game.entity.enemies.Crab;
 import game.entity.enemies.Enemies;
 import java.lang.Math;
 
+    /**
+     * AI for basic ennemis
+     **/
 public class AIEnnemis extends AI {
 
     final Random rd = new Random();
@@ -27,6 +31,10 @@ public class AIEnnemis extends AI {
     long lastShootSalvoTime = System.nanoTime();
 
 
+    /**
+     * Create AI for basic ennemis then can communicate beetween all of them 
+     * @param crabs list of all basics ennemis
+     */
     public AIEnnemis(List<Crab> crabs) {
         this.crabs = crabs;
     }
@@ -116,6 +124,12 @@ public class AIEnnemis extends AI {
             int xShoot = (int)crab.getComponent(Physic.class).getX();
             double speedShoot = (crab.getID()<10)? 8:(crab.getID()<30)? 5:2;
             EnemyShoot enemyShoot = new EnemyShoot(xShoot, yShoot, speedShoot);
+            if(speedShoot == 2)
+                enemyShoot.getComponent(Displayable.class).setAssets(5,"/enemies/Alien_1/alien1Shoot_1.png","/enemies/Alien_1/alien1Shoot_2.png","/enemies/Alien_1/alien1Shoot_3.png","/enemies/Alien_1/alien1Shoot_4.png","/enemies/Alien_1/alien1Shoot_5.png");
+            if(speedShoot == 5)
+                enemyShoot.getComponent(Displayable.class).setAssets(5,"/enemies/Alien_2/alien2Shoot_1.png","/enemies/Alien_2/alien2Shoot_2.png","/enemies/Alien_2/alien2Shoot_3.png","/enemies/Alien_2/alien2Shoot_4.png");
+            if(speedShoot == 8)
+                enemyShoot.getComponent(Displayable.class).setAssets(5,"/enemies/Alien_3/alien3Shoot_1.png","/enemies/Alien_3/alien3Shoot_2.png","/enemies/Alien_3/alien3Shoot_3.png","/enemies/Alien_3/alien3Shoot_4.png");
             Kernel.getInstance().addGameObject(enemyShoot);
         }
     

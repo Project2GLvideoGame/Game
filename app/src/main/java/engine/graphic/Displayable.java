@@ -97,6 +97,10 @@ public class Displayable extends Component {
         }
     }
 
+    public void setAssets(int framerate, String... spritePaths){
+        this.animationFrames = new AnimationFrames(framerate, width, height, spritePaths);
+    }
+
     public void setVisibility(boolean visibility){
         this.visibility = visibility;
     }

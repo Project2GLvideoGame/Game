@@ -14,6 +14,12 @@ public class Physic extends Component {
     private boolean useDestination;
     CollisionReaction reaction;
 
+    /**
+     * @param x la coord physique x
+     * @param y la cood physique y
+     * @param width la largeur du box collider rectangulaire
+     * @param height la hauteur du box collider rectangulaire
+     */
     public Physic(double x, double y, double width, double height) {
         this.boxCollider = new Rectangle(x, y, width, height);
         this.speed=0;
@@ -22,7 +28,14 @@ public class Physic extends Component {
         direction = 0;
         reaction = new RollBackReaction();
     }
-
+    /**
+     * 
+     * @param x la coord physique x
+     * @param y la cood physique y
+     * @param width la largeur du box collider rectangulaire
+     * @param height la hauteur du box collider rectangulaire
+     * @param reaction le type de rection apres une collision, ex: Rollback, Ignore etc
+     */
     public Physic(double x, double y, double width, double height, CollisionReaction reaction) {
         this.boxCollider = new Rectangle(x, y, width, height);
         this.speed=0;
@@ -98,6 +111,10 @@ public class Physic extends Component {
         return this.useDestination;
     }
 
+    /**
+     * chosir si l'objet à une destination ou si il se deplace a l'infini dans une direction
+     * @param value
+     */
     public void setUseDestination(boolean value){
         this.useDestination = value;
     }
