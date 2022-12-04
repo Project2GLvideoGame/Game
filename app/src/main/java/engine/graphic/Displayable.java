@@ -3,11 +3,8 @@ package engine.graphic;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-
 import engine.Component;
-
 import java.awt.Graphics2D;
 
 public class Displayable extends Component {
@@ -18,7 +15,7 @@ public class Displayable extends Component {
     private boolean visibility = true;
 
     private AnimationFrames animationFrames = null;
-
+    
     public Displayable(int x, int y, int width, int height, String spritePaths) {
 
         BufferedImage tempAsset;
@@ -34,7 +31,14 @@ public class Displayable extends Component {
         this.width = width;
         this.height = height;
     }
-    
+    /**
+     * Créer une nouvelle instance de Displayable avec plusieurs sprites
+     * et la vitesse d'animation afin de créer une boucle d'animation.
+     * @param framerate
+     * Délai entre le changement de sprite
+     * @param spritePaths
+     * Liste de chemin des images (chemin relatif ou absolu)
+    */
     public Displayable(int x, int y, int width, int height, int framerate, String... spritePaths) {
 
         this.animationFrames = new AnimationFrames(framerate, width, height, spritePaths);
@@ -101,6 +105,12 @@ public class Displayable extends Component {
         this.visibility = visibility;
     }
 
+    /**
+     * Dessine l'image sur l'interface graphique et met a jour si nécessaire
+     * l'image actuelle par rapport a l'animationFrame
+     * @param g2
+     * La composante graphique 2D de java
+    */
     public void draw(Graphics2D g2){
         if(this.animationFrames != null){
             this.asset = this.animationFrames.getCurrentSprite();
