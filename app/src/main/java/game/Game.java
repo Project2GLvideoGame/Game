@@ -132,7 +132,7 @@ public class Game extends Engine{
         List<DestroyEvent> destroyEvents = getEvents(DestroyEvent.class);
         if(destroyEvents==null || destroyEvents.size()==0) return;
         for (DestroyEvent destroyEvent : destroyEvents)
-            if(destroyEvent.getGameObject() instanceof PlayerShoot);
+            if(destroyEvent.getGameObject() instanceof PlayerShoot)
                 PlayerShootAlive = false;
         destroyEvents.clear();
     }
