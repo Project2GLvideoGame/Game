@@ -3,6 +3,11 @@ package engine.physics;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Permet au moteur physique de connaitre les coordonées passées des objets
+ * une fois qu'il les a placés en collision,
+ * indispensable pour un RollBack
+ */
 public class PreviousWorld {
 
     List<PreviousPhysical> previousPhysicals = new ArrayList<>();

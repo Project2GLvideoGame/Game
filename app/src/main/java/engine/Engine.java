@@ -19,11 +19,19 @@ public abstract class Engine {
         this.eventsManager = eventsManager;
     }
 
+    /**
+     * Emettre un evenement event
+     * @param event
+     */
     protected <T extends Event> void submit(T event){
         eventsManager.submit(event);
     }
 
-
+    /**
+     * Utilisé par l'Event Manager afin de distribuer les nouveaux evenements
+     * auquels le moteur est abonné
+     * @param event
+     */
     public <T extends Event> void notifyEvent(T event){
         List<T> l = (List<T>)events.get(event.getClass());
         if(l==null){
@@ -35,6 +43,11 @@ public abstract class Engine {
         }
     }
 
+    /**
+     * Permet d'acceder à la liste d'evenement associée au type class1
+     * @param class1
+     * @return
+     */
     protected <T extends Event> List<T> getEvents(Class<T> class1){
         //if(events.get(class1)!=null) System.out.println(events.get(class1).size());
         return (List<T>)events.get(class1);

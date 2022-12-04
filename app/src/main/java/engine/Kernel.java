@@ -47,6 +47,10 @@ public class Kernel implements Runnable  {
         this.eventsManager.subscribe(inputEngine, StateEvent.class);
         this.eventsManager.subscribe(graphicEngine, StateEvent.class);
         this.eventsManager.subscribe(graphicEngine, MoveEvent.class);
+        this.eventsManager.subscribe(soundEngine,SoundEvent.class);
+
+
+
     }
 
     public static synchronized void start() {
@@ -66,6 +70,7 @@ public class Kernel implements Runnable  {
             physicalEngine.update();
             inputEngine.update();
             aiEngine.update();
+            soundEngine.update();
             SwingUtilities.invokeLater(()->graphicEngine.update());
             game.update();
         }
@@ -99,7 +104,7 @@ public class Kernel implements Runnable  {
             Component component = gameObject.getComponents().get(i);
             if(component instanceof Displayable) graphicEngine.addDisplayable((Displayable)component);
             if(component instanceof Physic)      physicalEngine.addPhysicalObject((Physic)component);
-            if(component instanceof Soundable)   soundEngine.addSoundableObject((Soundable)component);
+            if(component instanceof Soundable){   soundEngine.addSoundableObject((Soundable)component);}
             if(component instanceof Intelligent) aiEngine.addIAObjectIntelligent((Intelligent)component);
         }
     }
