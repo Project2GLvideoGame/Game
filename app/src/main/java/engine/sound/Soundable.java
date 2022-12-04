@@ -13,7 +13,8 @@ public class Soundable extends Component  {
     HashMap<String,Clip> clips = new HashMap<>();
 
     public Soundable(Track...tracks) {
-        for(Track track: tracks){
+        for (int i = 0; i < tracks.length; i++) {
+            Track track = tracks[i];
             addTrack(track);
         }
     }
