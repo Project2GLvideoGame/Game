@@ -16,7 +16,7 @@ public class AIEngine extends Engine {
    final long DeltaBetweenCall = 200_000_000; //in ns
 
    /**
-    * Constructor of
+    * Constructor of AI engine
     * @param eventsManager Manager to create or receive Event
     */
    public AIEngine(EventsManager eventsManager) {
