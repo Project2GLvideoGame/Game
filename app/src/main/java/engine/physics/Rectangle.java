@@ -26,7 +26,6 @@ public class Rectangle {
     public void setY(double y) {
         this.y = y;
     }
-
     public double getWidth() {
         return width;
     }
@@ -50,7 +49,6 @@ public class Rectangle {
         this.y = coord.getY();
     }
 
-
     public boolean intersects(Rectangle other){
         double x1 = this.x;
         double y1 = this.y;
@@ -67,10 +65,7 @@ public class Rectangle {
         double x6 = Math.min(x2, x4);
         double y6 = Math.min(y2, y4);
 
-        // rectangleIntersection = (x5, y5)-(x6, y6)
-        //do not intersect ==> "degenerate" rectangle
-        //intersect ==> "normal" rectangle
-        return (x5<x6) && (y5<y6); //TODO: < ou <=
+        return (x5<x6) && (y5<y6);
     }
 
     public Rectangle intersection(Rectangle other){
@@ -91,7 +86,6 @@ public class Rectangle {
         return new Rectangle(x5, y5, x6-x5, y6-y5);
     }
 
-
     /*Adjacent and not overlaping considering normalized rectangles*/
     public boolean isTouching(Rectangle other){
         return (
@@ -103,7 +97,6 @@ public class Rectangle {
     }
 
     private boolean isEquals(double d1, double d2){
-        //return d1-d2 < ((d1+d2)/2)*(1/1_000_000d);
         return d1==d2;
     }
 }
