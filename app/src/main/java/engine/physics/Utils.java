@@ -8,7 +8,7 @@ public class Utils {
     /**
      * arondir un double a une precison donnée
      * @param value le double
-     * @param places la precision 
+     * @param places la precision = nb de decimals
      * @return
      */
     public static double round(double value, int places) {
@@ -35,6 +35,7 @@ public class Utils {
      */
     public static double deltaYFromDeltaX(double deltaCorrectionX, double alpha){
         double alphaRad = Math.toRadians(alpha);
+        if (alphaRad==0) return 0;
         double r = Math.abs(deltaCorrectionX/Math.cos(alphaRad));
         double delta_y = r*Math.sin(alphaRad);
         return delta_y;
@@ -48,6 +49,7 @@ public class Utils {
      */
     public static double deltaXFromDeltaY(double deltaCorrectionY, double alpha){
         double alphaRad = Math.toRadians(alpha);
+        if (alphaRad==0) return 0;
         double r = Math.abs(deltaCorrectionY/Math.sin(alphaRad));
         double delta_x = r*Math.cos(alphaRad);
         return delta_x;
@@ -152,7 +154,7 @@ public class Utils {
      * @return
      */
     static public double normalizeAngle(double angle){
-        return (angle%360>0)? angle:angle+360;
+        return (angle>0)? angle%360:angle%360+360;
     }
 
     
