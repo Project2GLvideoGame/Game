@@ -2,7 +2,7 @@ package game;
 
 import engine.event.*;
 import game.entity.PlayerShoot;
-
+import game.entity.Shield;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +56,14 @@ public class Game extends Engine{
         initializeEnemies();
         initializeInvisibleWall();
         initializeUI();
+        initializeShield();
+    }
+
+    private void initializeShield(){
+        Kernel.getInstance().addGameObject(new Shield(100, 460));
+        Kernel.getInstance().addGameObject(new Shield(350, 460));
+        Kernel.getInstance().addGameObject(new Shield(600, 460));
+        Kernel.getInstance().addGameObject(new Shield(850, 460));
         initializeSound();
     }
     
@@ -142,11 +150,15 @@ public class Game extends Engine{
                 endGame();
             else if(collisionEvent.getGameObject() instanceof Enemies && gameObject instanceof BottomWall)
                 endGame();
+
+            else if(collisionEvent.getGameObject() instanceof EnemyShoot && collisionEvent.getCollisions().get(0).getObstacle().getGameObject() instanceof Shield){
+                Shield shield = (Shield)collisionEvent.getCollisions().get(0).getObstacle().getGameObject();
+                shield.takeDamage();
+                Kernel.getInstance().removeGameObject(collisionEvent.getGameObject());
+                if(shield.isDestroyed()) Kernel.getInstance().removeGameObject(shield);
+            }    
             else if (collisionEvent.getGameObject() instanceof PlayerShoot  && gameObject instanceof Enemies) {
                 submit(new SoundEvent(gameObject,"enemyDead"));
-            }
-            else if (collisionEvent.getGameObject() instanceof Player  && gameObject instanceof PlayerShoot) {
-
             }
         }
 
@@ -175,14 +187,10 @@ public class Game extends Engine{
 
     private void endGame(){
         submit(new SoundEvent(player,"gameOver"));
-        //System.out.println("KILLLLLLLLLLL PLAYER");
         player.getComponent(Soundable.class).stopAllMusic();
         Kernel.getInstance().removeGameObject(player);
         StateEvent stateEvent = new StateEvent(new GameOverState(), new Displayable(0, 0, Kernel.getInstance().getScreenWidth(), Kernel.getInstance().getScreenHeight(), "/gameOver.png") );
         submit(stateEvent);
-        //Kernel.getInstance().graphicEngine.update();
-        //Kernel.getInstance().gameOver = true;
-        //Kernel.getInstance().addGameObject(new GameObject());
     }
 
     
