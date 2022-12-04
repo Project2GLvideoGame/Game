@@ -32,40 +32,23 @@ public class SoundEngine extends Engine{
                 continue;
             event.getGameObject().getComponent(Soundable.class).playSoundEffect(event.getTrackName());
         }
+        soundEvents.clear();
 
     }
-
-    public void handleShootEvents(){
-        List<ShootEvent> shootEvents = getEvents(ShootEvent.class);
-        if (shootEvents == null) return;
-        for (ShootEvent event : shootEvents) {
-            if( event.getGameObject().getComponent(Soundable.class) == null || shootEvents.size() == 0)
-                continue;
-            if(event.getGameObject().getComponent(Soundable.class).getClips().get(ShootEvent.class.getName())==null)
-                continue;
-            event.getGameObject().getComponent(Soundable.class).playSoundEffect(ShootEvent.class.getName());
-
-        }
-        shootEvents.clear();
-
-    }
-
 
 
     public void stopAllmusic(){
         for (Soundable soundable : soundables) {
             soundable.stopAllMusic();
-            
         }
     }
 
     public void update(){
-//        handleCollisionEvents();
-//        handleDestroyEvents();
-//        handleDeadEnemyEvents();
-        handleShootEvents();
         handleSoundEvent();
-
     }
 
+
+
+
+    
 }
