@@ -21,50 +21,17 @@ public class SoundEngine extends Engine{
     public void removeSoundableObject(Soundable sound){
         soundables.remove(sound);
     }
-    public void handleCollisionEvents(){
-        List<CollisionEvent> collisionEvents = getEvents(CollisionEvent.class);
-        if (collisionEvents == null) return;
-        for (CollisionEvent event : collisionEvents) {
-            if( event.getGameObject().getComponent(Soundable.class) == null || collisionEvents.size() == 0)
-                continue;
-            if(event.getGameObject().getComponent(Soundable.class).getClips().get(CollisionEvent.class.getName())==null)
-                continue;
-            System.out.println(event.getGameObject().getClass().getName());
-            event.getGameObject().getComponent(Soundable.class).playSoundEffect(CollisionEvent.class.getName());
 
+    public void handleSoundEvent(){
+        List<SoundEvent> soundEvents = getEvents(SoundEvent.class);
+        if (soundEvents == null) return;
+        for (SoundEvent event : soundEvents) {
+            if (event.getGameObject().getComponent(Soundable.class) == null )
+                continue;
+            if (event.getGameObject().getComponent(Soundable.class).getClips().get(event.getTrackName()) == null)
+                continue;
+            event.getGameObject().getComponent(Soundable.class).playSoundEffect(event.getTrackName());
         }
-        collisionEvents.clear();
-
-    }
-    public void handleDestroyEvents(){
-        List<DestroyEvent> destroyEvents = getEvents(DestroyEvent.class);
-        if (destroyEvents == null) return;
-        for (DestroyEvent event : destroyEvents) {
-            if( event.getGameObject().getComponent(Soundable.class) == null || destroyEvents.size() == 0)
-                continue;
-            if(event.getGameObject().getComponent(Soundable.class).getClips().get(DestroyEvent.class.getName())==null)
-                continue;
-            System.out.println(event.getGameObject().getClass().getName());
-            event.getGameObject().getComponent(Soundable.class).playSoundEffect(DestroyEvent.class.getName());
-
-        }
-        destroyEvents.clear();
-
-    }
-
-    public void handleDeadEnemyEvents(){
-        List<DeadEnemyEvent> deadEnemyEvents = getEvents(DeadEnemyEvent.class);
-        if (deadEnemyEvents == null) return;
-        for (DeadEnemyEvent event : deadEnemyEvents) {
-            if( event.getGameObject().getComponent(Soundable.class) == null || deadEnemyEvents.size() == 0)
-                continue;
-            if(event.getGameObject().getComponent(Soundable.class).getClips().get(DeadEnemyEvent.class.getName())==null)
-                continue;
-            System.out.println(event.getGameObject().getClass().getName());
-            event.getGameObject().getComponent(Soundable.class).playSoundEffect(DeadEnemyEvent.class.getName());
-
-        }
-        deadEnemyEvents.clear();
 
     }
 
@@ -76,7 +43,6 @@ public class SoundEngine extends Engine{
                 continue;
             if(event.getGameObject().getComponent(Soundable.class).getClips().get(ShootEvent.class.getName())==null)
                 continue;
-            System.out.println(event.getGameObject().getClass().getName());
             event.getGameObject().getComponent(Soundable.class).playSoundEffect(ShootEvent.class.getName());
 
         }
@@ -94,10 +60,11 @@ public class SoundEngine extends Engine{
     }
 
     public void update(){
-        handleCollisionEvents();
-        handleDestroyEvents();
-        handleDeadEnemyEvents();
+//        handleCollisionEvents();
+//        handleDestroyEvents();
+//        handleDeadEnemyEvents();
         handleShootEvents();
+        handleSoundEvent();
 
     }
 

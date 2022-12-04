@@ -46,7 +46,7 @@ public class Game extends Engine{
         int playerSize = 75;
         player = new Player(5, new Physic(Kernel.getInstance().getScreenWidth()/2+playerSize, Kernel.getInstance().getScreenHeight()-playerSize, playerSize, playerSize),
                 new Displayable(Kernel.getInstance().getScreenWidth()/2+playerSize, Kernel.getInstance().getScreenHeight()-playerSize, playerSize, playerSize, 6, "/player/PlayerSpaceShip1.png", "/player/PlayerSpaceShip2.png", "/player/PlayerSpaceShip3.png", "/player/PlayerSpaceShip4.png")
-                ,new Soundable(new Track(StateEvent.class.getName(), "/audio/music.wav"),new Track(DestroyEvent.class.getName(), "/audio/gameOver.wav"))
+                ,new Soundable(new Track(StateEvent.class.getName(), "/audio/music.wav"),new Track("gameOver", "/audio/gameOver.wav"))
 
         );
 
@@ -77,7 +77,7 @@ public class Game extends Engine{
             Crab crab = new Crab(rang,
                 new Physic     (offsetInitial+ offset*rangEffectif, offsetInitial + offset*column, enemiesSize-10, enemiesSize-10, new IgnoreReaction()),
                 new Displayable(offsetInitial+ offset*rangEffectif, offsetInitial + offset*column, enemiesSize, enemiesSize, 8, path+"/alien_1.png", path+"/alien_2.png", path+"/alien_3.png", path+"/alien_4.png"),
-                new Soundable(new Track(DeadEnemyEvent.class.getName(),"/audio/enemyDead.wav" )),
+                new Soundable(new Track("enemyDead","/audio/enemyDead.wav" )),
                 new Intelligent(aiEnnemis)
                 );
             crabs.add(crab);
@@ -143,10 +143,10 @@ public class Game extends Engine{
             else if(collisionEvent.getGameObject() instanceof Enemies && gameObject instanceof BottomWall)
                 endGame();
             else if (collisionEvent.getGameObject() instanceof PlayerShoot  && gameObject instanceof Enemies) {
-                submit(new DeadEnemyEvent(gameObject));
+                submit(new SoundEvent(gameObject,"enemyDead"));
             }
             else if (collisionEvent.getGameObject() instanceof Player  && gameObject instanceof PlayerShoot) {
-                submit(new ShootEvent(gameObject));
+
             }
         }
 
@@ -160,6 +160,7 @@ public class Game extends Engine{
         Displayable playerGraphic = player.getComponent(Displayable.class);
         PlayerShoot ps = new PlayerShoot(playerGraphic.getX(), playerGraphic.getY()-20);
         submit(new ShootEvent(ps));
+        //submit(new SoundEvent(ps,"shoot"));
         Kernel.getInstance().addGameObject(ps);
     }
 
@@ -167,7 +168,8 @@ public class Game extends Engine{
     private void handlePlayerShootColl(CollisionEvent collisionEvent){
         Kernel.getInstance().removeGameObject(collisionEvent.getCollisions().get(0).getObstacle().getGameObject());
         player.takeDamage();
-        if(! player.isDead()) return; 
+        if(! player.isDead()) return;
+        submit(new SoundEvent(player,"gameOver"));
         endGame();
     }
 
@@ -185,9 +187,6 @@ public class Game extends Engine{
     }
 
     
-    public void changeState(State state) {
-        Kernel.getInstance().eventsManager.submit(new StateEvent(state));
-    }
 
 
 

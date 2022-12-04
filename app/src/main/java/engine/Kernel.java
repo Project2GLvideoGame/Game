@@ -42,14 +42,14 @@ public class Kernel implements Runnable  {
         
         this.eventsManager.subscribe(aiEngine, CollisionEvent.class);
         this.eventsManager.subscribe(game, CollisionEvent.class);
-        this.eventsManager.subscribe(soundEngine, CollisionEvent.class);
         this.eventsManager.subscribe(game, DestroyEvent.class);
-        this.eventsManager.subscribe(soundEngine, DestroyEvent.class);
         this.eventsManager.subscribe(inputEngine, StateEvent.class);
         this.eventsManager.subscribe(graphicEngine, StateEvent.class);
         this.eventsManager.subscribe(graphicEngine, MoveEvent.class);
-        this.eventsManager.subscribe(soundEngine,DeadEnemyEvent.class);
         this.eventsManager.subscribe(soundEngine,ShootEvent.class);
+        this.eventsManager.subscribe(soundEngine,SoundEvent.class);
+
+
 
     }
 
