@@ -8,6 +8,7 @@ import engine.event.StateEvent;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class GraphicEngine extends Engine {
@@ -60,7 +62,6 @@ public class GraphicEngine extends Engine {
         window.setLocationRelativeTo(null); //init the window to center on the screen
         window.setVisible(true);
     }
-
 
 
     public void setPosition(Displayable displayable, int x, int y) {
@@ -118,6 +119,7 @@ public class GraphicEngine extends Engine {
         for (StateEvent stateEvent : stateEvents) {
             System.out.println("recoir state event");
             createScene(stateEvent.getDisplayables());
+            scene.setScore(Kernel.getInstance().getScore());
         }
         stateEvents.clear();
     }
@@ -147,12 +149,16 @@ public class GraphicEngine extends Engine {
 
     public class Scene extends JPanel {
         private List<Displayable> displayables = new ArrayList<>();
-
+        private String score = "";
         public Scene() {
             this.setPreferredSize(new Dimension(screenWidth, screenHeight));
             this.setBackground(Color.black);
             this.setDoubleBuffered(true);
             this.setFocusable(true);
+        }
+
+        public void setScore(int score){
+            this.score = ""+score;
         }
 
         @Override
@@ -163,7 +169,16 @@ public class GraphicEngine extends Engine {
                 if(displayables.get(i).getVisibility())
                     displayables.get(i).draw(g2);
             }
+
+            if(this.score != "") this.seeScore(g2);
+
             g2.dispose();
+        }
+
+        public void seeScore(Graphics2D g2){
+            g2.setColor(Color.BLACK);
+            g2.setFont(new Font("Pill Gothic 600mg Light",1,80));
+            g2.drawString(""+this.score, 565, 425);
         }
 
 

@@ -79,6 +79,7 @@ public class AIEnnemis extends AI {
             else if (collision.getObstacle().getGameObject() instanceof PlayerShoot) {
                 System.out.println("Collid plyershoot");
                 this.crabs.remove(collision.getObj().getGameObject());
+                Kernel.getInstance().addToScore(((Enemies)collision.getObj().getGameObject()).getPoint());
                 Kernel.getInstance().removeGameObject(collision.getObj().getGameObject());
             }
 
