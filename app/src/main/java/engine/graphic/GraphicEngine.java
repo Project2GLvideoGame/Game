@@ -52,7 +52,7 @@ public class GraphicEngine extends Engine {
 
     private void initWindow(){
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(true);
+        window.setResizable(false);
         window.setTitle("Game");
         
         window.add(scene);
