@@ -99,15 +99,18 @@ public class GraphicEngine extends Engine {
         return screenHeight;
     }
 
-    private void handleMoveEvents(){
+    private void handleMoveEvents() {
         List<MoveEvent> moveEvents = getEvents(MoveEvent.class);
-        if(moveEvents != null){
-            for (int i = 0; i < moveEvents.size(); i++) {
-                if(moveEvents.get(i).getGameObject().getComponent(Displayable.class)==null) continue;
-                setPosition(moveEvents.get(i).getGameObject().getComponent(Displayable.class), (int)moveEvents.get(i).getDestination().getX(), (int)moveEvents.get(i).getDestination().getY());
+        if (moveEvents == null) return;
+        for (int i=0; i<moveEvents.size(); i++) {
+            if(moveEvents.get(i)==null){
+                System.out.println("||||||||||||||||||||||||||||||||||||||||||||||"+i);
+                continue;
             }
-            moveEvents.clear();
+            if (moveEvents.get(i).getGameObject().getComponent(Displayable.class) == null) continue;
+            setPosition(moveEvents.get(i).getGameObject().getComponent(Displayable.class),  (int) moveEvents.get(i).getDestination().getX(), (int) moveEvents.get(i).getDestination().getY());
         }
+        moveEvents.clear();
     }
 
     private void handleStateEvents(){
@@ -122,8 +125,8 @@ public class GraphicEngine extends Engine {
     }
 
     public void update(){
-        handleMoveEvents();
         handleStateEvents();
+        handleMoveEvents();
         this.scene.validate();
         this.scene.repaint();
     }

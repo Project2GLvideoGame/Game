@@ -15,29 +15,36 @@ import game.entity.PlayerShoot;
 import game.entity.enemies.Crab;
 import game.entity.enemies.Enemies;
 import java.lang.Math;
-import java.util.Random.*;
 
 public class AIEnnemis extends AI {
 
+    final Random rd = new Random();
     final List<Crab> crabs;
-    final double mid = Kernel.getInstance().getScreenWidth() / 2;
+    final double MID = Kernel.getInstance().getScreenWidth() / 2;
     final long DELAYBETWEENSHOOT = 2000000000; //ns
-    final int MAXSALVOSHOOT = 7;
+    final int MAXSALVOSHOOT = 8;
     boolean lastCollisonLeft = true;
     long lastShootSalvoTime = System.nanoTime();
 
 
-
     public AIEnnemis(List<Crab> crabs) {
         this.crabs = crabs;
-        // System.out.println(mid);
     }
+
 
     @Override
     public void apply(Event event) {
         if (event instanceof CollisionEvent)
             GererDeplacement(event);
     }
+
+
+    @Override
+    void apply(Intelligent intelligent, long currentTime, long previousTime) {
+        GererMissiles(intelligent, currentTime, previousTime);
+    }
+
+
 
     private void GererDeplacement(Event event) {
         CollisionEvent collisionEvent = (CollisionEvent) event;
@@ -49,9 +56,9 @@ public class AIEnnemis extends AI {
             // si ennemi touche un bord de l'ecran
             if (collision.getObstacle().getGameObject() instanceof InvisibleWall) {
 
-                if (collision.getObj().getX() > mid && lastCollisonLeft == false)
+                if (collision.getObj().getX() > MID && lastCollisonLeft == false)
                     return;
-                if (collision.getObj().getX() < mid && lastCollisonLeft == true)
+                if (collision.getObj().getX() < MID && lastCollisonLeft == true)
                     return;
 
                 lastCollisonLeft = !lastCollisonLeft;
@@ -70,32 +77,29 @@ public class AIEnnemis extends AI {
 
             // si ennemi touche un misible du player
             else if (collision.getObstacle().getGameObject() instanceof PlayerShoot) {
-                //System.out.println("remove");
+                System.out.println("Collid plyershoot");
                 this.crabs.remove(collision.getObj().getGameObject());
                 Kernel.getInstance().addToScore(((Enemies)collision.getObj().getGameObject()).getPoint());
                 Kernel.getInstance().removeGameObject(collision.getObj().getGameObject());
             }
 
             else if (collision.getObstacle().getGameObject() instanceof Player) {
-                // TODO
+                Player player = (Player)(collision.getObstacle().getGameObject());
+                player.kill();
             } else {
-                //System.out.println("else ai crab");
+                //System.out.println("ELSEEEEEEEE ai crab");
             }
 
         }
     }
 
-    @Override
-    void apply(Intelligent intelligent, long currentTime, long previousTime) {
-        GererMissiles(intelligent, currentTime, previousTime);
-    }
+
 
     private void GererMissiles(Intelligent intelligent, long currentTime, long previousTime) {
         if(currentTime-lastShootSalvoTime<DELAYBETWEENSHOOT) return;
         lastShootSalvoTime = currentTime;
         
         int possibleNbShootPerSalvo = Math.min(crabs.size(), MAXSALVOSHOOT);
-        Random rd = new Random();
         int nbShootPerSalvo = rd.nextInt(possibleNbShootPerSalvo);
         
         List<Integer> crabShooterIDs = new ArrayList<>(nbShootPerSalvo);
@@ -108,12 +112,18 @@ public class AIEnnemis extends AI {
             //System.out.println(crabShooterIDs+" "+crab.getID());
             if(!crabShooterIDs.contains(crab.getID())) continue;
             //System.out.println("on va tirer");
-            int y = (int)crab.getComponent(Physic.class).getY()+25;
-            int x = (int)crab.getComponent(Physic.class).getX();
-            EnemyShoot enemyShoot = new EnemyShoot(x, y);
+            int yShoot = (int)crab.getComponent(Physic.class).getY()+25;
+            int xShoot = (int)crab.getComponent(Physic.class).getX();
+            double speedShoot = (crab.getID()<10)? 8:(crab.getID()<30)? 5:2;
+            EnemyShoot enemyShoot = new EnemyShoot(xShoot, yShoot, speedShoot);
             Kernel.getInstance().addGameObject(enemyShoot);
         }
     
     }
+
+
+
+
+
 
 }

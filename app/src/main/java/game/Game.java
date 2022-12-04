@@ -17,10 +17,12 @@ import engine.physics.collisionReaction.IgnoreReaction;
 import game.ai.AI;
 import game.ai.AIEnnemis;
 import game.ai.Intelligent;
+import game.entity.BottomWall;
 import game.entity.EnemyShoot;
 import game.entity.InvisibleWall;
 import game.entity.Player;
 import game.entity.enemies.Crab;
+import game.entity.enemies.Enemies;
 import game.state.GameOverState;
 
 public class Game extends Engine{
@@ -89,7 +91,7 @@ public class Game extends Engine{
         
         InvisibleWall wallTop = new InvisibleWall(new Physic(0, -100, screenWidth, 50));
         
-        InvisibleWall wallBottom = new InvisibleWall(new Physic(0,  screenHeight, screenWidth, 50));
+        InvisibleWall wallBottom = new BottomWall(new Physic(0,  screenHeight, screenWidth, 50));
 
         Kernel.getInstance().addGameObject(wallLeft);
         Kernel.getInstance().addGameObject(wallRight);
@@ -115,36 +117,50 @@ public class Game extends Engine{
         destroyEvents.clear();
     }
 
+
     private void handleCollisionEvents(){
         List<CollisionEvent> collisionEvents = getEvents(CollisionEvent.class);
-        if(collisionEvents==null || collisionEvents.size()==0) return;
+        if(collisionEvents==null || collisionEvents.isEmpty()) return;
 
         for (CollisionEvent collisionEvent : collisionEvents) {
-            if(collisionEvent.getGameObject() instanceof Player &&
-            collisionEvent.getCollisions().get(0).getObstacle().getGameObject() instanceof EnemyShoot){
-
-                Kernel.getInstance().removeGameObject(collisionEvent.getCollisions().get(0).getObstacle().getGameObject());
-                player.takeDamage();
-
-                if(player.isDead()){
-                    StateEvent stateEvent = new StateEvent(new GameOverState(), new Displayable(0, 0, Kernel.getInstance().getScreenWidth(), Kernel.getInstance().getScreenHeight(), "/gameOver.png") );
-                    submit(stateEvent);
-                    Kernel.getInstance().removeGameObject(player);
-                    Kernel.getInstance().graphicEngine.update();
-                    Kernel.getInstance().gameOver = true;
-                }
-            }
+            if(collisionEvent.getGameObject() instanceof Player && collisionEvent.getCollisions().get(0).getObstacle().getGameObject() instanceof EnemyShoot)
+                handlePlayerShootColl(collisionEvent);
+            else if(collisionEvent.getGameObject() instanceof Player && collisionEvent.getCollisions().get(0).getObstacle().getGameObject() instanceof Enemies)
+                endGame();
+            else if(collisionEvent.getGameObject() instanceof Enemies && collisionEvent.getCollisions().get(0).getObstacle().getGameObject() instanceof BottomWall)
+                endGame();
         }
 
         collisionEvents.clear();
     }
     
-    public void PlayerShoot(){
+
+    public void onlyOnePlayerShootAtTime(){
         if(PlayerShootAlive) return;
         PlayerShootAlive = true;
         Displayable playerGraphic = player.getComponent(Displayable.class);
         PlayerShoot ps = new PlayerShoot(playerGraphic.getX(), playerGraphic.getY()-20);
         Kernel.getInstance().addGameObject(ps);
+    }
+
+
+    private void handlePlayerShootColl(CollisionEvent collisionEvent){
+        Kernel.getInstance().removeGameObject(collisionEvent.getCollisions().get(0).getObstacle().getGameObject());
+        player.takeDamage();
+        if(! player.isDead()) return;
+        endGame();
+    }
+
+
+
+    private void endGame(){
+        //System.out.println("KILLLLLLLLLLL PLAYER");
+        Kernel.getInstance().removeGameObject(player);
+        StateEvent stateEvent = new StateEvent(new GameOverState(), new Displayable(0, 0, Kernel.getInstance().getScreenWidth(), Kernel.getInstance().getScreenHeight(), "/gameOver.png") );
+        submit(stateEvent);
+        //Kernel.getInstance().graphicEngine.update();
+        //Kernel.getInstance().gameOver = true;
+        //Kernel.getInstance().addGameObject(new GameObject());
     }
 
     

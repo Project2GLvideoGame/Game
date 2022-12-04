@@ -42,12 +42,9 @@ public class AIEngine extends Engine {
 
    private void ManageCollisionEvents(){
       List<CollisionEvent> collisionEvents = getEvents(CollisionEvent.class);
-      if (collisionEvents == null) return;
+      if (collisionEvents == null|| collisionEvents.isEmpty()) return;
       for (CollisionEvent collisionEvent : collisionEvents) {
-         if(collisionEvent.getGameObject().getComponent(Intelligent.class)==null){
-            collisionEvents.clear();
-            return;
-         }
+         if(collisionEvent.getGameObject().getComponent(Intelligent.class)==null) continue;
          collisionEvent.getGameObject().getComponent(Intelligent.class).getIA().apply(collisionEvent);
       }
       collisionEvents.clear();

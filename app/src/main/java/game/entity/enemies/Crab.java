@@ -8,7 +8,7 @@ public class Crab extends Enemies{
     public Crab(int id, Component... components){
         super(components);
         this.id = id;
-        this.getComponent(Physic.class).setSpeed(1);
+        this.getComponent(Physic.class).setSpeed(5);
         this.getComponent(Physic.class).setDirection(270);
     }
 
