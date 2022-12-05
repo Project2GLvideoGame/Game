@@ -9,6 +9,7 @@ import engine.event.CollisionEvent;
 import engine.event.Event;
 import engine.graphic.Displayable;
 import engine.physics.Collision;
+import game.Game;
 import game.entity.EnemyShoot;
 import game.entity.InvisibleWall;
 import game.entity.Player;
@@ -22,6 +23,7 @@ import java.lang.Math;
      **/
 public class AIEnnemis extends AI {
 
+    Game game;
     final Random rd = new Random();
     final List<Crab> crabs;
     final double MID = Kernel.getInstance().getScreenWidth() / 2;
@@ -35,8 +37,9 @@ public class AIEnnemis extends AI {
      * Create AI for basic ennemis then can communicate beetween all of them 
      * @param crabs list of all basics ennemis
      */
-    public AIEnnemis(List<Crab> crabs) {
+    public AIEnnemis(List<Crab> crabs, Game game) {
         this.crabs = crabs;
+        this.game = game;
     }
 
 
@@ -86,8 +89,8 @@ public class AIEnnemis extends AI {
             // si ennemi touche un misible du player
             else if (collision.getObstacle().getGameObject() instanceof PlayerShoot) {
                 System.out.println("Collid plyershoot");
-                this.crabs.remove(collision.getObj().getGameObject());
-                Kernel.getInstance().addToScore(((Enemies)collision.getObj().getGameObject()).getPoint());
+                this.crabs.remove(collision.getObj().getGameObject());                
+                this.game.score+=((Enemies)collision.getObj().getGameObject()).getPoint();
                 Kernel.getInstance().removeGameObject(collision.getObj().getGameObject());
             }
 

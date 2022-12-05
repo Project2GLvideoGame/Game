@@ -6,6 +6,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import engine.Component;
 import java.awt.Graphics2D;
+import java.awt.Color;
+import java.awt.Font;
 
 public class Displayable extends Component {
 
@@ -13,6 +15,8 @@ public class Displayable extends Component {
     private int x, y;
     private int width, height;
     private boolean visibility = true;
+    private boolean isText;
+    private String text;
 
     private AnimationFrames animationFrames = null;
     
@@ -31,6 +35,14 @@ public class Displayable extends Component {
         this.width = width;
         this.height = height;
     }
+
+    public Displayable(int x, int y, String text) {
+        this.x = x;
+        this.y = y;
+        this.isText = true;
+        this.text = text;
+    }
+
     /**
      * Créer une nouvelle instance de Displayable avec plusieurs sprites
      * et la vitesse d'animation afin de créer une boucle d'animation.
@@ -120,7 +132,12 @@ public class Displayable extends Component {
             this.asset = this.animationFrames.getCurrentSprite();
             this.animationFrames.updateSprite();
         }
-
+        if(isText){
+            g2.setColor(Color.BLACK);
+            g2.setFont(new Font("Pill Gothic 600mg Light",1,80));
+            g2.drawString(this.text, this.x, this.y);
+            return;
+        }
         g2.drawImage(this.asset, this.x, this.y, null);
     }
 }
