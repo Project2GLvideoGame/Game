@@ -31,6 +31,7 @@ public class Game extends Engine{
 
     public Player player;
     public boolean PlayerShootAlive = false;
+    public int score = 0;
 
 
     public Game(EventsManager eventsManager){
@@ -73,7 +74,7 @@ public class Game extends Engine{
         int maxParLigne = 10;
         int offsetInitial = 10;
         List<Crab> crabs = new ArrayList<>();
-        AI aiEnnemis = new AIEnnemis(crabs);
+        AI aiEnnemis = new AIEnnemis(crabs, this);
         List<String> pngs = new ArrayList<>(List.of("3","2","2","1","1"));
 
         for (int rang = 0; rang < 50; rang++) {
@@ -132,7 +133,7 @@ public class Game extends Engine{
         List<DestroyEvent> destroyEvents = getEvents(DestroyEvent.class);
         if(destroyEvents==null || destroyEvents.size()==0) return;
         for (DestroyEvent destroyEvent : destroyEvents)
-            if(destroyEvent.getGameObject() instanceof PlayerShoot);
+            if(destroyEvent.getGameObject() instanceof PlayerShoot)
                 PlayerShootAlive = false;
         destroyEvents.clear();
     }
@@ -189,7 +190,11 @@ public class Game extends Engine{
         submit(new SoundEvent(player,"gameOver"));
         player.getComponent(Soundable.class).stopAllMusic();
         Kernel.getInstance().removeGameObject(player);
-        StateEvent stateEvent = new StateEvent(new GameOverState(), new Displayable(0, 0, Kernel.getInstance().getScreenWidth(), Kernel.getInstance().getScreenHeight(), "/gameOver.png") );
+        StateEvent stateEvent = new StateEvent(
+            new GameOverState(),
+            new Displayable(0, 0, Kernel.getInstance().getScreenWidth(), Kernel.getInstance().getScreenHeight(), "/gameOver.png"),
+            new Displayable(565, 425, ""+score)
+            );
         submit(stateEvent);
     }
 

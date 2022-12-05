@@ -28,7 +28,7 @@ public class Kernel implements Runnable  {
     private InputEngine   inputEngine;
     public  EventsManager eventsManager;
     public boolean gameOver = false;
-    private int score = 0;
+
 
 
     /**
@@ -98,13 +98,7 @@ public class Kernel implements Runnable  {
 
 
 
-    public int getScore(){
-        return this.score;
-    }
 
-    public void addToScore(int points){
-        this.score += points;
-    }
 
 
     /**
