@@ -33,12 +33,14 @@ public class GraphicEngine extends Engine {
     final int screenHeight = tileSize * maxScreenRow;
     
     JFrame window = new JFrame();
-    
 
-    
     private Scene scene;
     
-
+    /**
+     * Initialise une nouvelle scène et la dimensionne
+     * @param eventsManager
+     * Recevra la liste des évènements auquels il est abonné
+     */
     public GraphicEngine(EventsManager eventsManager){
         super(eventsManager);
         this.scene = new Scene();
@@ -62,14 +64,9 @@ public class GraphicEngine extends Engine {
         window.setVisible(true);
     }
 
-
     public void setPosition(Displayable displayable, int x, int y) {
         displayable.setX(x);
         displayable.setY(y);
-    }
-
-    private void rotate(Displayable displayable, double angle) {
-        //displayable.getAsset().setRotate(angle);
     }
 
     public void scale(Displayable displayable, double percentage) {
@@ -89,13 +86,23 @@ public class GraphicEngine extends Engine {
         this.scene.displayables.remove(displayable);
     }
 
-
     public int getScreenWidth(){
         return screenWidth;
     }
 
     public int getScreenHeight(){
         return screenHeight;
+    }
+
+    /**
+     * Vérifie les évènements concernant MoveEvent ou StateEvent
+     * et les traites, puis met a jour la scène.
+    */
+    public void update(){
+        handleStateEvents();
+        handleMoveEvents();
+        this.scene.validate();
+        this.scene.repaint();
     }
 
     private void handleMoveEvents() {
@@ -122,30 +129,18 @@ public class GraphicEngine extends Engine {
         stateEvents.clear();
     }
 
-    public void update(){
-        handleStateEvents();
-        handleMoveEvents();
-        this.scene.validate();
-        this.scene.repaint();
-    }
-
-
     private void createScene(Displayable... displayables){
         scene.displayables.addAll(Arrays.asList(displayables));
         Kernel.getInstance().gameOver = true;
         System.out.println("scene size=== "+displayables.length);
         System.out.println(displayables[1].getX());
-        //window.validate();
-        //window.repaint();
-        
-        // for (Displayable displayable : displayables) {
-        //     addDisplayable(displayable);
-        // }
-        //window.removeAll();
-        //window.add(this.scene);
     }
 
-
+    /**
+     * Une Scène est composé d'une liste de Displayable, elle
+     * étend JPanel et donc peut être mis a jour en appelant
+     * la fonction repaint().
+    */
     public class Scene extends JPanel {
 
         public List<Displayable> displayables = new ArrayList<>();
